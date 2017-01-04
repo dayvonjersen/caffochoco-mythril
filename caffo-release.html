@@ -1,0 +1,83 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel='import' href='/bower_components/paper-tabs/paper-tabs.html'>
+<link rel="import" href='/bower_components/paper-styles/color.html'>
+<link rel="import" href='/bower_components/paper-styles/default-theme.html'>
+<link rel="import" href='/bower_components/paper-styles/shadow.html'>
+<link rel="import" href='/bower_components/paper-styles/typography.html'>
+<link rel='import' href='/bower_components/iron-pages/iron-pages.html'>
+<link rel='import' href='/bower_components/app-route/app-route.html'>
+
+<dom-module id='caffo-release'>
+  <template>
+    <style>
+      paper-tabs {
+        text-transform: uppercase;
+        --paper-tab-ink: aqua;
+        --paper-tabs-selection-bar-color: aqua;
+      }
+    </style>
+    <app-route route="{{route}}" pattern="/:tabName" data="{{data}}"></app-route>
+
+    <h1 id="releaseTitle"></h1>
+
+    <paper-tabs selected="{{selectedTab}}">
+      <paper-tab>info</paper-tab>
+      <dom-repeat items="{{tracklists}}">
+        <template>
+          <paper-tab>{{item.title}}</paper-tab>
+        </template>
+      </dom-repeat>
+    </paper-tabs>
+    <iron-pages selected="{{selectedTab}}">
+
+      <div id="releaseInfo"></div>
+      <dom-repeat items="{{tracklists}}">
+        <template>
+          <div>
+            <ol>
+              <dom-repeat items="{{item.tracks}}">
+                <template>
+                  <li>{{item.title}}</li>
+                </template>
+              </dom-repeat>
+            </ol>
+          </div>
+        </template>
+      </dom-repeat>
+    </iron-pages>
+  </template>
+  <script>
+class CaffoRelease extends Polymer.Element {
+  static get is() { return 'caffo-release' }
+  static get config() {
+    return {
+      properties: {
+        route: {
+          type: Object,
+          notify: true
+        },
+        tracklists: {
+          type: Array,
+        }
+      },
+      observers: [
+        'pageChanged(data.tabName)'
+      ],
+    }
+  }
+
+  pageChanged(name) {
+    if(!('_caffoCache' in window && name in window._caffoCache)) return;
+    this.$.releaseTitle.textContent = _caffoCache[name].title;
+    this.$.releaseInfo.innerHTML = _caffoCache[name].info;
+    this.tracklists = _caffoCache[name].tracklists;
+    this.selectedTab = _caffoCache[name].defaultTracklist+1;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+  }
+}
+customElements.define(CaffoRelease.is, CaffoRelease);
+  </script>
+</dom-module>

@@ -1,0 +1,37 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<link rel='import' href='/caffo-release.html'>
+<dom-module id="caffo-crate">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        overflow: hidden;
+      }
+    </style>
+    <ul id="crate"></ul>
+</template>
+<script>
+class CaffoCrate extends Polymer.Element {
+  static get is() { return 'caffo-crate' }
+  static get config() {
+    return {
+      properties: {
+
+      }
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    for(let release in window._caffoCache) {
+      this.$.crate.innerHTML += `<li><a href="/release/${release}">${_caffoCache[release].title} (${_caffoCache[release].year})</a></li>`;
+    }
+
+
+  }
+}
+customElements.define(CaffoCrate.is, CaffoCrate);
+</script>
+</dom-module>

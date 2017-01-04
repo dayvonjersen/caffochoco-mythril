@@ -1,0 +1,62 @@
+<link rel='import' href='/bower_components/polymer/polymer-element.html'>
+<link rel='import' href='/bower_components/app-route/app-location.html'>
+<link rel='import' href='/bower_components/app-route/app-route.html'>
+<!--<link rel='import' href='bower_components/paper-tabs/paper-tabs.html'>-->
+<link rel='import' href='/bower_components/iron-pages/iron-pages.html'>
+<link rel="import" href="/bower_components/iron-selector/iron-selector.html">
+
+<link rel='import' href='/caffo-crate.html'>
+
+<dom-module id='caffo-app'>
+  <template>
+  <style>
+  :host {
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+  </style>
+
+  <dom-bind>
+    <template>
+      <app-location route="{{route}}"></app-location>
+      <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+
+      <iron-pages selected="[[routeData.page]]" attr-for-selected="name" fallback-selection="index">
+        <div name="index"><caffo-crate></caffo-crate></div>
+        <div name="release"><caffo-release route="{{subroute}}"></caffo-release></div>
+      </iron-pages>
+
+    </template>
+  </dom-bind>
+</template>
+<script>
+class CaffoApp extends Polymer.Element {
+  static get is() { return 'caffo-app' }
+  static get config() {
+    return {
+      properties: {
+        page: {
+          type: String,
+          reflectToAttribute: true,
+        },
+
+        observers: [
+          '_routePageChanged(routeData.page)',
+        ],
+      }
+    }
+  }
+
+  _routePageChanged(page) {
+    this.page = page;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    // ...
+  }
+}
+customElements.define(CaffoApp.is, CaffoApp);
+</script>
+</dom-module>

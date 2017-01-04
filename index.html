@@ -1,0 +1,61 @@
+<!--
+%
+-->
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes'>
+
+  <title>discograph</title>
+
+  <script src='/bower_components/webcomponentsjs/webcomponents-lite.js'></script>
+
+  <link rel='import' href='/caffo-app.html'>
+</head>
+
+<body>
+  LOADING...
+  <script defer>
+  fetch("/data.json")
+  .then(response=>response.json())
+  .then(data => {
+    window._caffoCache = {};
+
+    let tracks = {};
+    data.tracks.forEach(track => {
+      tracks[track.id] = track;
+    });
+
+    let tracklists = {};
+    data.tracklists.forEach(tracklist => {
+      let _tracks = [];
+      tracklist.tracks.forEach(t => {
+        _tracks[_tracks.length] = tracks[t];
+      });
+      tracklist.tracks = _tracks;
+      tracklists[tracklist.id] = tracklist;
+    });
+
+    data.releases.forEach(release => {
+      let _tracklists = [];
+      let _defaultTracklist;
+      release.tracklists.forEach((tl,i) => {
+        let tracklist = tracklists[tl];
+        if(release.defaultTracklist === tracklist.id) {
+          _defaultTracklist = i;
+        }
+        _tracklists[_tracklists.length] = tracklist;
+      });
+      release.defaultTracklist = _defaultTracklist;
+      release.tracklists = _tracklists;
+      window._caffoCache[release.url] = release;
+    });
+
+    document.body.innerHTML = '<caffo-app></caffo-app>';
+
+  })
+  .catch(err => console.error(err));
+  </script>
+</body>
+</html>
