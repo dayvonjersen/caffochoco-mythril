@@ -29,7 +29,10 @@
     "iron-pages": "PolymerElements/iron-pages#2.0-preview",
     "app-layout": "PolymerElements/app-layout#2.0-preview",
     "app-route": "PolymerElements/app-route#2.0-preview",
-    "iron-selector": "PolymerElements/iron-selector#2.0-preview"
+    "iron-selector": "PolymerElements/iron-selector#2.0-preview",
+    "iron-iconset": "PolymerElements/iron-iconset#2.0-preview",
+    "paper-fab": "PolymerElements/paper-fab#2.0-preview",
+    "iron-iconset-svg": "PolymerElements/iron-iconset-svg#2.0-preview"
   },
   "devDependencies": {
     "web-component-tester": "*",
