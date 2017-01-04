@@ -11,7 +11,15 @@
       }
     </style>
 
-    <ul id="crate"></ul>
+    <ul>
+      <dom-repeat items="{{releases}}">
+        <template>
+          <li>
+            <a href="/release/{{item.url}}">{{item.title}} - {{item.year}}</a>
+          </li>
+        </template>
+      </dom-repeat>
+    </ul>
 </template>
 <script>
 class CaffoCrate extends Polymer.Element {
@@ -36,9 +44,11 @@ class CaffoCrate extends Polymer.Element {
 
   connectedCallback() {
     super.connectedCallback();
+    let releases = [];
     for(let release in window._caffoCache) {
-      this.$.crate.innerHTML += `<li><a href="/release/${release}">${_caffoCache[release].title} (${_caffoCache[release].year})</a></li>`;
+      releases[releases.length] = window._caffoCache[release];
     }
+    this.releases = releases;
   }
 }
 customElements.define(CaffoCrate.is, CaffoCrate);
