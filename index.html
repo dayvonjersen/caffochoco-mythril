@@ -17,15 +17,39 @@
     background-image: url(/background.jpg);
     background-attachment: fixed;
     background-size: cover;
+    margin: 0;
+    padding: 0;
   }
   caffo-app {
     background: rgba(255,255,255,0.7);
+  }
+
+  .loader {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.9);
+    transition: all 1s cubic-bezier(0, 1.38, 0.57, 0.38);
+  }
+  .loader img {
+    width: 100%;
+    transition: all 333ms linear;
+  }
+  .loader.loaded, .loader.loaded img {
+    opacity: 0;
   }
   </style>
 </head>
 
 <body>
-  LOADING...
+  <div class='loader'>
+    <img src='/rings.svg' />
+  </div>
+
   <script defer>
   fetch("/data.json")
   .then(response=>response.json())
@@ -62,7 +86,9 @@
       window._caffoCache[release.url] = release;
     });
 
-    document.body.innerHTML = '<caffo-app></caffo-app>';
+    let loader = document.querySelector('.loader');
+    loader.classList.add('loaded');
+    document.body.appendChild(document.createElement('caffo-app'));
 
   })
   .catch(err => console.error(err));
