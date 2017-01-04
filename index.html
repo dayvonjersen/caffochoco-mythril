@@ -89,9 +89,12 @@
     let loader = document.querySelector('.loader');
     loader.classList.add('loaded');
     document.body.appendChild(document.createElement('caffo-app'));
-
   })
   .catch(err => console.error(err));
+
+  function setBackground(image='/background.jpg') {
+    document.body.style.backgroundImage = `url(${image})`;
+  };
   </script>
 </body>
 </html>

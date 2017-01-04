@@ -61,13 +61,14 @@ class CaffoRelease extends Polymer.Element {
         }
       },
       observers: [
-        'pageChanged(data.tabName)'
+        '_pageChanged(data.tabName)'
       ],
     }
   }
 
-  pageChanged(name) {
+  _pageChanged(name) {
     if(!('_caffoCache' in window && name in window._caffoCache)) return;
+    setBackground(_caffoCache[name].albumArt);
     this.$.releaseTitle.textContent = _caffoCache[name].title;
     this.$.releaseInfo.innerHTML = _caffoCache[name].info;
     this.tracklists = _caffoCache[name].tracklists;

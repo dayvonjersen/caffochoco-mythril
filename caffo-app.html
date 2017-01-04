@@ -32,13 +32,13 @@
   }
   </style>
 
-  <dom-bind>
-    <template>
       <app-location route="{{route}}"></app-location>
       <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
       <iron-pages selected="[[routeData.page]]" attr-for-selected="name" fallback-selection="index">
-        <div name="index"><caffo-crate></caffo-crate></div>
+        <div name="index">
+          <caffo-crate page="[[routeData.page]]"></caffo-crate>
+        </div>
         <div name="release">
           <caffo-release route="{{subroute}}"></caffo-release>
           <a href='/' class='caffo-app__home'><paper-fab icon='caffo-icons:crate' elevation='5'></paper-fab></a>
@@ -46,8 +46,6 @@
       </iron-pages>
 
 
-    </template>
-  </dom-bind>
 </template>
 <script>
 class CaffoApp extends Polymer.Element {
@@ -55,20 +53,9 @@ class CaffoApp extends Polymer.Element {
   static get config() {
     return {
       properties: {
-        page: {
-          type: String,
-          reflectToAttribute: true,
-        },
 
-        observers: [
-          '_routePageChanged(routeData.page)',
-        ],
       }
     }
-  }
-
-  _routePageChanged(page) {
-    this.page = page;
   }
 
   connectedCallback() {

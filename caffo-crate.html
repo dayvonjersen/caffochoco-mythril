@@ -10,6 +10,7 @@
         overflow: hidden;
       }
     </style>
+
     <ul id="crate"></ul>
 </template>
 <script>
@@ -18,9 +19,19 @@ class CaffoCrate extends Polymer.Element {
   static get config() {
     return {
       properties: {
-
-      }
+        page: {
+          type: Object,
+          notify: true
+        }
+      },
+      observers: [
+        '_pageChanged(page)'
+      ],
     }
+  }
+
+  _pageChanged(page) {
+    if(!page)  setBackground('/background.jpg');
   }
 
   connectedCallback() {
@@ -28,8 +39,6 @@ class CaffoCrate extends Polymer.Element {
     for(let release in window._caffoCache) {
       this.$.crate.innerHTML += `<li><a href="/release/${release}">${_caffoCache[release].title} (${_caffoCache[release].year})</a></li>`;
     }
-
-
   }
 }
 customElements.define(CaffoCrate.is, CaffoCrate);
