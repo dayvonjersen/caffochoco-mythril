@@ -18,6 +18,18 @@
     position: relative;
     overflow: hidden;
   }
+  .caffo-app__home {
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+  }
+  .caffo-app__home paper-fab {
+    --size: 96px;
+    width: var(--size);
+    height: var(--size);
+    --iron-icon-width: var(--size);
+    --iron-icon-height: var(--size);
+  }
   </style>
 
   <dom-bind>
@@ -27,10 +39,12 @@
 
       <iron-pages selected="[[routeData.page]]" attr-for-selected="name" fallback-selection="index">
         <div name="index"><caffo-crate></caffo-crate></div>
-        <div name="release"><caffo-release route="{{subroute}}"></caffo-release></div>
+        <div name="release">
+          <caffo-release route="{{subroute}}"></caffo-release>
+          <a href='/' class='caffo-app__home'><paper-fab icon='caffo-icons:crate' elevation='5'></paper-fab></a>
+        </div>
       </iron-pages>
 
-      <paper-fab icon="caffo-icons:crate"></paper-fab>
 
     </template>
   </dom-bind>
