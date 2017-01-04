@@ -30,7 +30,7 @@ releases:
       info: |
         dunno
       tracklists: [3]
-      defaultTracklist: [3]
+      defaultTracklist: 3
 
 tracklists:
     - id: 1
