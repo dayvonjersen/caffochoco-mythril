@@ -46,5 +46,8 @@
   "bugs": {
     "url": "https://github.com/Polymer/polymer/issues"
   },
-  "homepage": "https://github.com/Polymer/polymer"
+  "homepage": "https://github.com/Polymer/polymer",
+  "dependencies": {
+    "gulp-sass": "^3.0.0"
+  }
 }

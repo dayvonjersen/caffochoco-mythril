@@ -1,0 +1,29 @@
+.stack > *:last-child {
+  transform: scale(1); }
+
+.stack > *:nth-last-child(10) {
+  transform: scale(0.2); }
+
+.stack > *:nth-last-child(9) {
+  transform: scale(0.36); }
+
+.stack > *:nth-last-child(8) {
+  transform: scale(0.488); }
+
+.stack > *:nth-last-child(7) {
+  transform: scale(0.5904); }
+
+.stack > *:nth-last-child(6) {
+  transform: scale(0.67232); }
+
+.stack > *:nth-last-child(5) {
+  transform: scale(0.73786); }
+
+.stack > *:nth-last-child(4) {
+  transform: scale(0.79028); }
+
+.stack > *:nth-last-child(3) {
+  transform: scale(0.83223); }
+
+.stack > *:nth-last-child(2) {
+  transform: scale(0.86578); }

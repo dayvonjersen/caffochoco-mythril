@@ -5,11 +5,16 @@
 
 @import "reset.css";
 @import "vinyl.css";
+@import "stack.css";
 
 @font-face {
     font-family: "akkurat";
     font-weight: 400;
     src: url("akkurat.otf");
+}
+
+* {
+  box-sizing: border-box;
 }
 
 .topbar-right, .tabbar, body > footer {
@@ -22,7 +27,7 @@ body {
     background-size: cover;
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
     height: 100%;
     margin: 0;
     padding-bottom: 6.6667vmin;
@@ -126,17 +131,6 @@ body > footer {
 	backface-visibility: hidden;
 	transform-origin: 50% -22%;
 }
-
-.stack >*:last-child { transform: scale(1); }
-.stack >*:nth-last-child(2) { transform: scale(.8888); }
-.stack >*:nth-last-child(3) { transform: scale(.79); }
-.stack >*:nth-last-child(4) { transform: scale(.7); }
-.stack >*:nth-last-child(5) { transform: scale(.624); }
-.stack >*:nth-last-child(6) { transform: scale(.5549); }
-.stack >*:nth-last-child(7) { transform: scale(.4932); }
-.stack >*:nth-last-child(8) { transform: scale(.4385); }
-.stack >*:nth-last-child(9) { transform: scale(.3897); }
-.stack >*:nth-last-child(10) { transform: scale(.3464); }
 
 .flipforward__container {
     perspective: 1000px;
