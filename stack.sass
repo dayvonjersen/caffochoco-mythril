@@ -1,22 +1,8 @@
-// Sass exponent support
-@function exponent($base, $exponent)
-  // reset value
-  $value: $base
-  // positive intergers get multiplied
-  @if $exponent > 1
-    @for $i from 2 through $exponent
-      $value: $value * $base
-  // negitive intergers get divided. A number divided by itself is 1
-  @if $exponent < 1
-    @for $i from 0 through -$exponent
-      $value: $value / $base
-  // return the last value written
-  @return ($value)
+@import "bower_components/mathsass/dist/math"
 
 .stack > *:last-child
   transform: scale(1);
 
-@for $i from 2 through 10 
-  .stack > *:nth-last-child(#{12 - $i})
-    transform: scale(1 - exponent(.8, $i - 1));
-
+@for $i from 1 through 10 
+  .stack > *:nth-last-child(#{$i})
+    transform: scale(log(2 * $i + 1));
