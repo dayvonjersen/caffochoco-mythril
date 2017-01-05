@@ -2,31 +2,31 @@
   transform: scale(1); }
 
 .stack > *:nth-last-child(1) {
-  transform: scale(1.09861); }
+  transform: scale(1); }
 
 .stack > *:nth-last-child(2) {
-  transform: scale(1.60944); }
+  transform: scale(0.8); }
 
 .stack > *:nth-last-child(3) {
-  transform: scale(1.94591); }
+  transform: scale(0.64); }
 
 .stack > *:nth-last-child(4) {
-  transform: scale(2.19722); }
+  transform: scale(0.512); }
 
 .stack > *:nth-last-child(5) {
-  transform: scale(2.3979); }
+  transform: scale(0.4096); }
 
 .stack > *:nth-last-child(6) {
-  transform: scale(2.56495); }
+  transform: scale(0.32768); }
 
 .stack > *:nth-last-child(7) {
-  transform: scale(2.70805); }
+  transform: scale(0.26214); }
 
 .stack > *:nth-last-child(8) {
-  transform: scale(2.83321); }
+  transform: scale(0.20972); }
 
 .stack > *:nth-last-child(9) {
-  transform: scale(2.94444); }
+  transform: scale(0.16777); }
 
 .stack > *:nth-last-child(10) {
-  transform: scale(3.04452); }
+  transform: scale(0.13422); }
