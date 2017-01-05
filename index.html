@@ -54,7 +54,9 @@
   fetch("/data.json")
   .then(response=>response.json())
   .then(data => {
-    window._caffoCache = {};
+    let _caffoCache = new Map();
+    let releases = [];
+    let categories = new Map();
 
     let tracks = {};
     data.tracks.forEach(track => {
@@ -83,8 +85,18 @@
       });
       release.defaultTracklist = _defaultTracklist;
       release.tracklists = _tracklists;
-      window._caffoCache[release.url] = release;
+      releases.push(release);
+
+      _caffoCache.set(release.url, release);
+
+      let cat = categories.has(release.category) ? categories.get(release.category) :  [];
+      cat.push(release.url);
+      categories.set(release.category, cat);
     });
+
+    window._caffoCache = _caffoCache;
+    window.releases = releases;
+    window.categories = categories;
 
     let loader = document.querySelector('.loader');
     loader.classList.add('loaded');

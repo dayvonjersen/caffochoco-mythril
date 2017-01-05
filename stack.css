@@ -5,28 +5,28 @@
   transform: scale(1); }
 
 .stack > *:nth-last-child(2) {
-  transform: scale(0.8); }
+  transform: scale(0.9); }
 
 .stack > *:nth-last-child(3) {
-  transform: scale(0.64); }
+  transform: scale(0.81); }
 
 .stack > *:nth-last-child(4) {
-  transform: scale(0.512); }
+  transform: scale(0.729); }
 
 .stack > *:nth-last-child(5) {
-  transform: scale(0.4096); }
+  transform: scale(0.6561); }
 
 .stack > *:nth-last-child(6) {
-  transform: scale(0.32768); }
+  transform: scale(0.59049); }
 
 .stack > *:nth-last-child(7) {
-  transform: scale(0.26214); }
+  transform: scale(0.53144); }
 
 .stack > *:nth-last-child(8) {
-  transform: scale(0.20972); }
+  transform: scale(0.4783); }
 
 .stack > *:nth-last-child(9) {
-  transform: scale(0.16777); }
+  transform: scale(0.43047); }
 
 .stack > *:nth-last-child(10) {
-  transform: scale(0.13422); }
+  transform: scale(0.38742); }

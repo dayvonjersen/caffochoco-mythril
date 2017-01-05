@@ -11,12 +11,12 @@
       }
     </style>
 
-<paper-tabs selected="0">
-  <paper-tab>ALL</paper-tab>
-  <paper-tab>ALBUMS</paper-tab>
-  <paper-tab>EPs</paper-tab>
-  <paper-tab>SINGLES</paper-tab>
-  <paper-tab>REMIXES</paper-tab>
+<paper-tabs selected="{{selectedTab}}" on-iron-select="_tabChanged">
+  <paper-tab data-category="all">ALL</paper-tab>
+  <paper-tab data-category="album">ALBUMS</paper-tab>
+  <paper-tab data-category="ep">EPs</paper-tab>
+  <paper-tab data-category="single">SINGLES</paper-tab>
+  <paper-tab data-category="remix">REMIXES</paper-tab>
 </paper-tabs>
 
 <button on-click="test">ff</button>
@@ -43,12 +43,17 @@ class CaffoCrate extends Polymer.Element {
         releases: {
           type: Array,
           notify: true
-        }
+        },
       },
       observers: [
         '_pageChanged(page)'
       ],
     }
+  }
+
+  _tabChanged(event, details) {
+    let category = details.item.dataset.category;
+    this.releases = category == 'all' ? window.releases : window.releases.filter(r=>r.category===category);
   }
 
   test() {
@@ -62,11 +67,8 @@ class CaffoCrate extends Polymer.Element {
 
   connectedCallback() {
     super.connectedCallback();
-    let releases = [];
-    for(let release in window._caffoCache) {
-      releases[releases.length] = window._caffoCache[release];
-    }
-    this.releases = releases;
+    this.releases = window.releases;
+    this.selectedTab = 0;
   }
 }
 customElements.define(CaffoCrate.is, CaffoCrate);

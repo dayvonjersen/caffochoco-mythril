@@ -18,7 +18,7 @@
     </style>
     <app-route route="{{route}}" pattern="/:tabName" data="{{data}}"></app-route>
 
-    <h1 id="releaseTitle"></h1>
+    <h1 id="releaseTitle">[[release.title]]</h1>
 
     <paper-tabs selected="{{selectedTab}}">
       <paper-tab>info</paper-tab>
@@ -67,12 +67,12 @@ class CaffoRelease extends Polymer.Element {
   }
 
   _pageChanged(name) {
-    if(!('_caffoCache' in window && name in window._caffoCache)) return;
-    setBackground(_caffoCache[name].albumArt);
-    this.$.releaseTitle.textContent = _caffoCache[name].title;
-    this.$.releaseInfo.innerHTML = _caffoCache[name].info;
-    this.tracklists = _caffoCache[name].tracklists;
-    this.selectedTab = _caffoCache[name].defaultTracklist+1;
+    if(!('_caffoCache' in window && window._caffoCache.has(name)))  return;
+    this.release = _caffoCache.get(name);
+    setBackground(this.release.albumArt);
+    this.tracklists = this.release.tracklists;
+    this.selectedTab = this.release.defaultTracklist+1;
+    this.$.releaseInfo.innerHTML = this.release.info;
   }
 
   connectedCallback() {
