@@ -1,0 +1,258 @@
+<html>
+    <head>
+<style>
+@charset "utf-8";
+
+@import "reset.css";
+@import "vinyl.css";
+
+@font-face {
+    font-family: "akkurat";
+    font-weight: 400;
+    src: url("akkurat.otf");
+}
+
+.topbar-right, .tabbar, body > footer {
+}
+
+body {
+    font-family: "akkurat", sans-serif;
+    letter-spacing: 0.6667px;
+    background: url("background.jpg");
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100%;
+    margin: 0;
+    padding-bottom: 6.6667vmin;
+}
+
+body > footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    font-size: 11px;
+    padding: 0.25em 2em 0 2em;
+    background: #ddd;
+    border-top-left-radius: 5px
+}
+
+.content {
+    flex: 1;
+    filter: drop-shadow(0px -1px 1px) drop-shadow(0px -2px 2px rgba(0,0,0,0.1)) drop-shadow(0px -3px 3px rgba(0,0,0,0.1)) drop-shadow(0px -4px 4px rgba(0,0,0,0.1));
+}
+
+.topbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    background: rgba(0,0,0,0.7);
+    box-shadow: 0 10px 10px rgba(0,0,0,0.7);
+    color: #fff;
+    padding: 0.15rem 1rem;
+}
+.topbar-left, .topbar-right {
+    flex: 1;
+}
+.topbar-left img {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: calc(-12.5%);
+    margin-right: 0.25em;
+}
+.topbar-left h1 {
+    font-family: "lao ui", sans-serif;
+    font-weight: normal;
+    letter-spacing: -0.33px;
+}
+.topbar-right {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+.topbar-right a {
+    margin: 0 0.5em;
+}
+.tabbar {
+    color: #fff;
+    margin: 1em;
+}
+
+/*.crate .record {
+    box-shadow: 0 0 40px 17px rgba(255,255,255, 0.3),
+    0 0 55px -10px rgba(255,255,255, 0.7);
+    }*/
+
+.stack {
+	margin: 20px auto;
+	width: 400px;
+	padding: 0;
+	position: relative;
+    max-width: 100%;
+    transform: translateY(10.6%);
+}
+
+.stack > * /*img*/ {
+	max-width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	transition: all 0.3s;
+	outline: 1px solid transparent;
+}
+
+.stack > *:last-child {
+    position: relative;
+    width: 24rem;
+}
+.stack:hover > :nth-last-child(2) {
+    transform:scale(.8888) translateY(-8.8888%);
+}
+
+/* Queue */
+.stack {
+	transition: all 0.3s;
+}
+
+/*.stack {
+	-webkit-transform: scale(0.9);
+	transform: scale(0.9);
+}*/
+
+.stack > * /*img*/ {
+	backface-visibility: hidden;
+	transform-origin: 50% -22%;
+}
+
+.stack >*:last-child { transform: scale(1); }
+.stack >*:nth-last-child(2) { transform: scale(.8888); }
+.stack >*:nth-last-child(3) { transform: scale(.79); }
+.stack >*:nth-last-child(4) { transform: scale(.7); }
+.stack >*:nth-last-child(5) { transform: scale(.624); }
+.stack >*:nth-last-child(6) { transform: scale(.5549); }
+.stack >*:nth-last-child(7) { transform: scale(.4932); }
+.stack >*:nth-last-child(8) { transform: scale(.4385); }
+.stack >*:nth-last-child(9) { transform: scale(.3897); }
+.stack >*:nth-last-child(10) { transform: scale(.3464); }
+
+.flipforward__container {
+    perspective: 1000px;
+}
+
+.flipforward__item {
+  transform-origin: center bottom;
+  transform-style: preserve-3d;
+  transition: 1s transform;
+}
+
+.flipforward__edge {
+  width: 100%;
+  height: 5px;
+  background: hotpink;
+  position: relative;
+  top: 0;
+  transform-origin: center top;
+  transform: rotateX(-90deg);
+}
+
+.flipforward__item::before /* shadow */ {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+	box-shadow: 0 0 100px 50px rgba(0, 0, 0, 0.1), inset 0 0 250px 250px rgba(0, 0, 0, 0.1);
+	transition: 1s;
+	transform: rotateX(95deg) translateZ(-80px) scale(0.75);
+	transform-origin: inherit;
+}
+
+.flipforward__container:hover .flipforward__item,
+.flipforward__container--animate .flipforward__item {
+  transform: rotateX(-75deg) translateZ(5vw);
+}
+.flipforward__container:hover .flipforward__item::before,
+.flipforward__container--animate .flipforward__item::before {
+	box-shadow: 0 0 25px 25px rgba(0, 0, 0, 0.5), inset 0 0 250px 250px rgba(0, 0, 0, 0.5);
+	transform: rotateX(-5deg) translateZ(80px) scale(1);
+}
+</style>
+
+</head>
+<body>
+
+
+<div class='content'>
+
+<div class='crate stack '>
+    <div>
+        <div class='record' style='background-image:url("mailbox05.jpg");background-size:cover'>
+            <div class='record-center-label'></div>
+            <div class='record-bottom-label'>d.j.r. &mdash; &ldquo;amherst&rdquo;</div>
+        </div>
+    </div>
+
+    <div>
+        <div class='record' style='background-image:url("mailbox05.jpg");background-size:cover'>
+            <div class='record-center-label'></div>
+            <div class='record-bottom-label'>d.j.r. &mdash; &ldquo;amherst&rdquo;</div>
+        </div>
+    </div>
+    <div>
+        <div class='record' style='background-image:url("mailbox05.jpg");background-size:cover'>
+            <div class='record-center-label'></div>
+            <div class='record-bottom-label'>d.j.r. &mdash; &ldquo;amherst&rdquo;</div>
+        </div>
+    </div>
+    <div>
+        <div class='record' style='background-image:url("mailbox05.jpg");background-size:cover'>
+            <div class='record-center-label'></div>
+            <div class='record-bottom-label'>d.j.r. &mdash; &ldquo;amherst&rdquo;</div>
+        </div>
+    </div>
+
+    <div>
+        <div class='record' style='background-image:url("mailbox05.jpg");background-size:cover'>
+            <div class='record-center-label'></div>
+            <div class='record-bottom-label'>d.j.r. &mdash; &ldquo;amherst&rdquo;</div>
+        </div>
+    </div>
+    <div>
+        <div class='record' style='background-image:url("mailbox05.jpg");background-size:cover'>
+            <div class='record-center-label'></div>
+            <div class='record-bottom-label'>d.j.r. &mdash; &ldquo;amherst&rdquo;</div>
+        </div>
+    </div>
+    <div>
+        <div class='record' style='background-image:url("mailbox05.jpg");background-size:cover'>
+            <div class='record-center-label'></div>
+            <div class='record-bottom-label'>d.j.r. &mdash; &ldquo;amherst&rdquo;</div>
+        </div>
+    </div>
+
+    <div>
+        <div class='record' style='background-image:url("mailbox05.jpg");background-size:cover'>
+            <div class='record-center-label'></div>
+            <div class='record-bottom-label'>d.j.r. &mdash; &ldquo;amherst&rdquo;</div>
+        </div>
+    </div>
+    <div>
+        <div class='record' style='background-image:url("mailbox05.jpg");background-size:cover'>
+            <div class='record-center-label'></div>
+            <div class='record-bottom-label'>d.j.r. &mdash; &ldquo;amherst&rdquo;</div>
+        </div>
+    </div>
+    <div class='flipforward__container'>
+        <div class='record flipforward__item' style='background-image:url("mailbox05.jpg");background-size:cover'>
+            <div class='record-center-label'></div>
+            <div class='record-bottom-label'>d.j.r. &mdash; &ldquo;amherst&rdquo;</div>
+            <div class='flipforward__edge'></div>
+        </div>
+    </div>
+</div>
+</div>
+
+<footer>WITH <span style='color:#f39'>&lt;3</span> FROM NJ</footer>
+</body>
+</html>

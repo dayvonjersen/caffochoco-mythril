@@ -21,6 +21,7 @@ releases:
           </dl>
       tracklists: [1, 2]
       defaultTracklist: 1
+      category: "album"
 
     - id: 2
       title: "d.j.r. - Untitled E.P."
@@ -31,6 +32,7 @@ releases:
         dunno
       tracklists: [3]
       defaultTracklist: 3
+      category: "ep"
 
 tracklists:
     - id: 1
