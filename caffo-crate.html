@@ -11,8 +11,9 @@
       }
     </style>
 
+<button on-click="test">ff</button>
     <ul>
-      <dom-repeat items="{{releases}}">
+      <dom-repeat id="list" items="{{releases}}">
         <template>
           <li>
             <a href="/release/{{item.url}}">{{item.title}} - {{item.year}}</a>
@@ -30,12 +31,21 @@ class CaffoCrate extends Polymer.Element {
         page: {
           type: Object,
           notify: true
+        },
+        releases: {
+          type: Array,
+          notify: true
         }
       },
       observers: [
         '_pageChanged(page)'
       ],
     }
+  }
+
+  test() {
+    this.releases.sort((a,b)=>a.title.localeCompare(b.title))
+    this.$.list.render();
   }
 
   _pageChanged(page) {
