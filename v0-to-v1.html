@@ -1,0 +1,78 @@
+
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta name='viewport' content='width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes'>
+
+  <title>v0 to v1</title>
+
+  <script src='/bower_components/webcomponentsjs/webcomponents-lite.js'></script>
+</head>
+<body>
+  <script>
+  function OldRegister(elementName, elementTag, elementPrototype, elementTemplate) {
+    var protoDef = {};
+    for(func in elementPrototype) {
+        if(elementPrototype.hasOwnProperty(func)) {
+            protoDef[func] = {
+                enumerable: true,
+                value: elementPrototype[func]
+            };
+        }
+    }
+    var protoObj = Object.create(HTMLElement.prototype, protoDef);
+    window[elementName] = document.registerElement(elementTag, {
+        prototype: protoObj
+    });
+    Object.defineProperty(protoObj, 'template', {
+        get: function() {
+            var fragment = document.createDocumentFragment();
+            var div = fragment.appendChild(document.createElement('div'));
+            div.innerHTML = elementTemplate;
+            while(child = div.firstChild) {
+                fragment.insertBefore(child,div);
+            }
+            fragment.removeChild(div);
+            return {
+                content: fragment
+            };
+        }
+    });
+  }
+  function Register(elementName, elementTag, elementPrototype, elementTemplate) {
+  customElements.define(elementTag, class extends HTMLElement {
+    get template() {
+      let fragment = document.createDocumentFragment();
+      let div = fragment.appendChild(document.createElement('div'));
+      div.innerHTML = elementTemplate;
+      let child;
+      while(child = div.firstChild) {
+          fragment.insertBefore(child,div);
+      }
+      fragment.removeChild(div);
+      return {
+          content: fragment
+      };
+    }
+
+    constructor() {
+      super();
+      elementPrototype.createdCallback.call(this);
+    }
+    connectedCallback() {
+      elementPrototype.attachedCallback.call(this);
+    }
+    disconnectedCallback() {
+      elementPrototype.detachedCallback.call(this);
+    }
+    // TODO: attributeChangedCallback
+    // TODO: childListChangedCallback
+
+  });
+}
+  </script>
+  <script src="/sorbetto/tmp/sorbetto-spektrum.js"></script>
+    <sorbetto-spektrum style='display:block'><audio controls src='/preview.ogg'></audio></sorbetto-spektrum>
+</body>
+</html>
