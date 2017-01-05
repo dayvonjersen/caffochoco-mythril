@@ -19,7 +19,7 @@
   <paper-tab data-category="remix">REMIXES</paper-tab>
 </paper-tabs>
 
-<button on-click="test">ff</button>
+<button on-click="test">sort</button>
     <ul>
       <dom-repeat id="list" items="{{releases}}">
         <template>
@@ -57,12 +57,17 @@ class CaffoCrate extends Polymer.Element {
   }
 
   test() {
-    this.releases.sort((a,b)=>a.title.localeCompare(b.title))
+    this.sortDirection = !this.sortDirection;
+    let d = this.sortDirection ? 1 : -1;
+    this.releases.sort((a,b)=>d*a.title.localeCompare(b.title))
     this.$.list.render();
   }
 
   _pageChanged(page) {
-    if(!page)  setBackground('/background.jpg');
+    if(!page) {
+      setBackground('/background.jpg');
+      document.title = 'caffoCrate++'
+    }
   }
 
   connectedCallback() {

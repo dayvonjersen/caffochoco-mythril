@@ -73,6 +73,7 @@ class CaffoRelease extends Polymer.Element {
     this.tracklists = this.release.tracklists;
     this.selectedTab = this.release.defaultTracklist+1;
     this.$.releaseInfo.innerHTML = this.release.info;
+    document.title = this.release.title;
   }
 
   connectedCallback() {
