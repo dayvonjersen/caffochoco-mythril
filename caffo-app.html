@@ -9,6 +9,7 @@
 
 <link rel='import' href='/caffo-icons.html'>
 <link rel='import' href='/caffo-crate.html'>
+<link rel='import' href='/caffo-pages.html'>
 
 <dom-module id='caffo-app'>
   <template>
@@ -30,12 +31,21 @@
     --iron-icon-width: var(--size);
     --iron-icon-height: var(--size);
   }
+
+  caffo-pages > * {
+    transition: all 1s ease-in-out;
+  }
+  caffo-pages > :not(.iron-selected) {
+    opacity: 0;
+  }
   </style>
 
       <app-location route="{{route}}"></app-location>
       <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
-      <iron-pages selected="[[routeData.page]]" attr-for-selected="name" fallback-selection="index">
+      <caffo-pages selected="[[routeData.page]]" attr-for-selected="name" fallback-selection="index"
+      on-iron-select="testFn"
+      >
         <div name="index">
           <caffo-crate page="[[routeData.page]]"></caffo-crate>
         </div>
@@ -43,7 +53,7 @@
           <caffo-release route="{{subroute}}"></caffo-release>
           <a href='/' class='caffo-app__home'><paper-fab icon='caffo-icons:crate' elevation='5'></paper-fab></a>
         </div>
-      </iron-pages>
+      </caffo-pages>
 
 
 </template>
@@ -56,6 +66,11 @@ class CaffoApp extends Polymer.Element {
 
       }
     }
+  }
+
+  testFn(event, details) {
+    console.log("page changed", this.routeData)
+    //console.log(event, details)
   }
 
   connectedCallback() {
