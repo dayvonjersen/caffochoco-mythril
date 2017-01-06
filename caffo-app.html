@@ -38,6 +38,7 @@
   }
   caffo-pages > :not(.iron-selected) {
     opacity: 0;
+    pointer-events: none;
   }
   </style>
 
@@ -48,10 +49,10 @@
       on-iron-select="testFn"
       >
         <div name="index">
-          <caffo-crate page="[[routeData.page]]"></caffo-crate>
+          <caffo-crate class="mdl-card mdl-shadow--8dp" page="[[routeData.page]]"></caffo-crate>
         </div>
         <div name="release">
-          <caffo-release route="{{subroute}}"></caffo-release>
+          <caffo-release class="mdl-shadow--24dp" route="{{subroute}}"></caffo-release>
           <a href='/' class='caffo-app__home'><paper-fab icon='caffo-icons:crate' elevation='5'></paper-fab></a>
         </div>
       </caffo-pages>
