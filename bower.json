@@ -15,7 +15,9 @@
     "iron-iconset": "PolymerElements/iron-iconset#2.0-preview",
     "paper-fab": "PolymerElements/paper-fab#2.0-preview",
     "iron-iconset-svg": "PolymerElements/iron-iconset-svg#2.0-preview",
-    "mathsass": "terkel/mathsass#^0.9.5"
+    "mathsass": "terkel/mathsass#^0.9.5",
+    "paper-dialog": "PolymerElements/paper-dialog#2.0-preview",
+    "paper-button": "PolymerElements/paper-button#2.0-preview"
   },
   "private": true,
   "resolutions": {
