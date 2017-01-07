@@ -22,20 +22,20 @@
     display: flex;
     min-height: 0;
   }
-  .tracklist {
+  iron-pages > * {
     width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     scroll-behavior: smooth;
   }
 
-  header {
-    padding: 0 2em;
-    border-bottom: 1px #ccc solid;
+  header div {
+    padding: 0 1em;
   }
   .tracklist ol {
     list-style: none;
     padding: 0;
+    margin: 0;
   }
   .tracklist li  {
     display: flex;
@@ -44,6 +44,7 @@
     align-items: center;
     padding: 1em 0.5em;
     position: relative;
+    overflow: hidden;
   }
   .tracklist li paper-slider {
     position: absolute;
@@ -63,24 +64,24 @@
   </style>
   <app-route route="{{route}}" pattern="/:tabName" data="{{data}}"></app-route>
 
-<header>
-  <h1 id="releaseTitle">[[release.title]]</h1>
-  <span class="year">[[release.year]]</span>
+  <header>
+    <div>
 
-  <paper-icon-button src="/download.svg"></paper-icon-button>
+    <h1 id="releaseTitle">[[release.title]]</h1>
+    <span class="year">[[release.year]]</span>
 
-  <hr />
+    <paper-icon-button src="/download.svg"></paper-icon-button>
+  </div>
 
-
-  <paper-tabs selected="{{selectedTab}}">
-    <paper-tab>info</paper-tab>
-    <dom-repeat items="{{tracklists}}">
-      <template>
-        <paper-tab>{{item.title}}</paper-tab>
-      </template>
-    </dom-repeat>
-  </paper-tabs>
-</header>
+    <paper-tabs selected="{{selectedTab}}">
+      <paper-tab>info</paper-tab>
+      <dom-repeat items="{{tracklists}}">
+        <template>
+          <paper-tab>{{item.title}}</paper-tab>
+        </template>
+      </dom-repeat>
+    </paper-tabs>
+  </header>
   <iron-pages selected="{{selectedTab}}">
 
     <div id="releaseInfo"></div>
