@@ -91,7 +91,7 @@
           <ol>
             <dom-repeat items="{{item.tracks}}">
               <template>
-                <li><img src='/play.svg' /><span class='title'>{{item.title}}</span><span>0:00</span></li>
+                <li><img src='/play.svg' /><span class='title'>{{item.title}}</span><span>[[_formatTime(item.length)]]</span></li>
               </template>
             </dom-repeat>
             <li>
@@ -129,10 +129,14 @@ class CaffoRelease extends Polymer.Element {
     }
   }
 
+  _formatTime(time) {
+    return formatTime(time);
+  }
+
   _pageChanged(name) {
     if(!('_caffoCache' in window && window._caffoCache.has(name)))  return;
     this.release = _caffoCache.get(name);
-    setBackground(this.release.albumArt);
+    setBackground('/image/'+this.release.url+'.jpg');
     this.tracklists = this.release.tracklists;
     this.selectedTab = this.release.defaultTracklist+1;
     this.$.releaseInfo.innerHTML = this.release.info;

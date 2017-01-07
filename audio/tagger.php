@@ -14,10 +14,16 @@ foreach($argv as $arg) {
     }
     echo 'ID3v2:',"\n";
     $read = $write = [];
-    foreach($t->getID3v2() as $frame) {
-        echo "\t", $id3v2[$frame['frameID']], ': ', $frame['data'], "\n";
-        $read[$frame['frameID']] = $frame['data'];
-    }
+    if($t->hasID3v2()) {
+        foreach($t->getID3v2() as $frame) {
+            if($frame['frameID'] == 'APIC') {
+                echo "\tAlbum Art: (yes)\n";
+            } else {
+               echo "\t", $id3v2[$frame['frameID']], ': ', $frame['data'], "\n";
+            }
+            $read[$frame['frameID']] = $frame['data'];
+        }
+    } 
     if(empty($read)) echo '(empty)';
     echo "\n";
     foreach($frames as $frameID) {
@@ -27,6 +33,14 @@ foreach($argv as $arg) {
         fclose($stdin);
         if($input == '' && isset($read[$frameID])) $input = $read[$frameID];
         $write[$frameID] = $input;
+    }
+    if(file_exists('../image/' . dirname($arg) . '.jpg')) {
+        echo "Found Album Art.\n";
+        $write['APIC'] = [
+            'data' => base64_encode(file_get_contents('../image/' . dirname($arg) . '.jpg')),
+            'mime' => 'image/jpeg',
+            'type' => TagLib::APIC_FRONTCOVER,
+        ];
     }
     $t->stripTags();
     $t->setID3v2($write);

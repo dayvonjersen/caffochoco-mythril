@@ -2,8 +2,7 @@ releases:
     - id: 1
       title: "deadHipsters - LOVE COMPUTER"
       year: 2012
-      albumArt: "/index.png"
-      url: "deadhipsters-love-computer"
+      url: "deadhipsters-lovecomputer"
       info: |
           <dl>
           <dt>visiv</dt>
@@ -26,7 +25,6 @@ releases:
     - id: 2
       title: "d.j.r. - Untitled E.P."
       year: 2011
-      albumArt: ""
       url: "djr-untitled-ep"
       info: |
         dunno
@@ -59,7 +57,7 @@ tracks:
     - id: 6
       title: deadHipsters - "error free/meow chi (edit)"
     - id: 7
-      title: deadHipsters - ∑≐&lt;3 ∗ ∞
+      title: deadHipsters - ∑≐<3 ∗ ∞
 
     - id: 8
       title: the bf project & d.j.r. - "Beginnings" [Extended Mix]
@@ -68,9 +66,21 @@ tracks:
 
     - id: 10
       title: midnight on e houston
+      file: midnight-on-e-houston.mp3
+      length: 392      
+      
     - id: 11
       title: glaston error
+      file: glaston-error.mp3
+      length: 472
+          
     - id: 12
       title: wookie puss
+      file: wookie-puss.mp3
+      length: 408
+
     - id: 13
-      title: drake - "over" [d.j.r. remix]
+      title: over
+      file: over.mp3
+      length: 497
+
