@@ -22,19 +22,51 @@
     display: flex;
   }
   .tracklist {
-    overflow-y: scroll;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
-  .pin.expand.paper-slider > .slider-knob.paper-slider > .slider-knob-inner.paper-slider::after {
-    content: attr(data-value);
+
+  header {
+    padding: 0 2em;
+    border-bottom: 1px #ccc solid;
+  }
+  .tracklist ol {
+    list-style: none;
+    padding: 0;
+  }
+  .tracklist li  {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 0.5em;
+    position: relative;
+  }
+  .tracklist li paper-slider {
+    position: absolute;
+    width: calc(100% + 32px);
+    left: -16px;
+    bottom: -16px;
+    --paper-slider-height: 3px;
+  }
+  .tracklist li img {
+    width: 2.3333em;
+    height: 2.3333em;
+  }
+  .tracklist .title {
+    flex: 1;
+    padding: 0 .5em;
   }
   </style>
   <app-route route="{{route}}" pattern="/:tabName" data="{{data}}"></app-route>
 
+<header>
   <h1 id="releaseTitle">[[release.title]]</h1>
   <span class="year">[[release.year]]</span>
 
   <paper-icon-button src="/download.svg"></paper-icon-button>
-  <hr />
+</header>
 
 
   <paper-tabs selected="{{selectedTab}}">
@@ -50,17 +82,19 @@
     <div id="releaseInfo"></div>
     <dom-repeat items="{{tracklists}}">
       <template>
-
         <div class='tracklist'>
           <ol>
             <dom-repeat items="{{item.tracks}}">
               <template>
-                <li>{{item.title}}</li>
+                <li><img src='/play.svg' /><span class='title'>{{item.title}}</span><span>0:00</span></li>
               </template>
             </dom-repeat>
-            <paper-slider pin min="10" max="200" value="110"></paper-slider>
-
-
+            <li>
+              <img src='/pause.svg' />
+              <span class='title'>example</span>
+              <span>4:20</span>
+              <paper-slider pin min="10" max="200" value="110"></paper-slider>
+            </li>
           </ol>
         </div>
       </template>

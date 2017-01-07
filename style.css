@@ -19,10 +19,9 @@ caffo-release {
   margin-right: 3%;
   height: 66.6667%;
   width: 33.3333%;
-  padding: 2em;
   border-radius: 2px;
   position: relative;
-  font-size: 16px; 
+  font-size: 16px;
 }
 caffo-release h1 {
   font-size: 2em !important;
