@@ -42,22 +42,21 @@
   }
   </style>
 
-      <app-location route="{{route}}"></app-location>
-      <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+  <app-location route="{{route}}"></app-location>
+  <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
-      <caffo-pages selected="[[routeData.page]]" attr-for-selected="name" fallback-selection="index"
-      on-iron-select="testFn"
-      >
-        <div name="index">
-          <caffo-crate class="mdl-card mdl-shadow--8dp" page="[[routeData.page]]"></caffo-crate>
-        </div>
-        <div name="release">
-          <caffo-release class="mdl-shadow--24dp" route="{{subroute}}"></caffo-release>
-          <a href='/' class='caffo-app__home'><paper-fab icon='caffo-icons:crate' elevation='5'></paper-fab></a>
-        </div>
-      </caffo-pages>
+  <caffo-pages selected="[[routeData.page]]" attr-for-selected="name" fallback-selection="index"
+  on-iron-select="testFn">
+    <div name="index">
+      <caffo-crate class="mdl-card mdl-shadow--8dp" page="[[routeData.page]]"></caffo-crate>
+    </div>
+    <div name="release">
+      <caffo-release class="mdl-shadow--24dp" route="{{subroute}}"></caffo-release>
+      <a href='/' class='caffo-app__home'><paper-fab icon='caffo-icons:crate' elevation='5'></paper-fab></a>
+    </div>
+  </caffo-pages>
 
-      <caffo-license></caffo-license>
+<caffo-license></caffo-license>
 </template>
 <script>
 class CaffoApp extends Polymer.Element {

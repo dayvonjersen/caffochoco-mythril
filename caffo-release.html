@@ -1,13 +1,11 @@
 <link rel="import" href="/bower_components/polymer/polymer-element.html">
-<link rel='import' href='/bower_components/paper-tabs/paper-tabs.html'>
-<link rel="import" href='/bower_components/paper-styles/color.html'>
-<link rel="import" href='/bower_components/paper-styles/default-theme.html'>
-<link rel="import" href='/bower_components/paper-styles/shadow.html'>
-<link rel="import" href='/bower_components/paper-styles/typography.html'>
 
-<link rel="import" href='/bower_components/paper-button/paper-button.html' />
-<link rel='import' href='/bower_components/iron-pages/iron-pages.html'>
+<link rel='import' href='/bower_components/paper-tabs/paper-tabs.html'>
+<link rel="import" href='/bower_components/paper-icon-button/paper-icon-button.html' />
+<link rel="import" href='/bower_components/paper-slider/paper-slider.html' />
+
 <link rel='import' href='/bower_components/app-route/app-route.html'>
+<link rel='import' href='/bower_components/iron-pages/iron-pages.html'>
 
 <dom-module id='caffo-release'>
   <template>
@@ -26,12 +24,16 @@
   .tracklist {
     overflow-y: scroll;
   }
+  .pin.expand.paper-slider > .slider-knob.paper-slider > .slider-knob-inner.paper-slider::after {
+    content: attr(data-value);
+  }
   </style>
   <app-route route="{{route}}" pattern="/:tabName" data="{{data}}"></app-route>
 
   <h1 id="releaseTitle">[[release.title]]</h1>
   <span class="year">[[release.year]]</span>
-  <paper-button><u>&darr;</u></paper-button>
+
+  <paper-icon-button src="/download.svg"></paper-icon-button>
   <hr />
 
 
@@ -56,6 +58,9 @@
                 <li>{{item.title}}</li>
               </template>
             </dom-repeat>
+            <paper-slider pin min="10" max="200" value="110"></paper-slider>
+
+
           </ol>
         </div>
       </template>
