@@ -100,9 +100,15 @@
     window.releases = releases;
     window.categories = categories;
 
-    let loader = document.querySelector('.loader');
-    loader.classList.add('loaded');
+    let removeLoader = () => {
+      let loader = document.querySelector('.loader');
+      loader.classList.add('loaded');
+    };
+    window.addEventListener('WebComponentsReady', removeLoader);
     document.body.appendChild(document.createElement('caffo-app'));
+    if(window.chrome) {
+      removeLoader();
+    }
   })
   .catch(err => console.error(err));
 
