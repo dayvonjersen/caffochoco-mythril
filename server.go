@@ -85,7 +85,7 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 		r, g, b := c.RGB()
 		n := strings.ToLower(swatch.Name)
 		fmt.Fprintf(w,
-			"    --%s: rgba(%d,%d,%d,0.8);\n    --%s-text: %s;\n",
+			"    --%s: rgba(%d,%d,%d,1);\n    --%s-text: %s;\n",
 			n, r, g, b, n, c.TitleTextColor(),
 		)
 	}
