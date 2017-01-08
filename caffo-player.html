@@ -1,0 +1,49 @@
+<link rel='import' href='/bower_components/polymer/polymer-element.html'>
+<dom-module id='caffo-player'>
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        overflow: hidden;
+      }
+    </style>
+    <audio id="audioElement" controls></audio>
+    <ol>
+      <dom-repeat items='{{playlist}}'>
+        <template>
+          <li>
+            {{item}}
+          </li>
+        </template>
+      </dom-repeat>
+    </ol>
+  </template>
+  <script src='player.js'></script>
+  <script>
+var player;
+class CaffoPlayer extends Polymer.Element {
+  static get is() { return 'caffo-player'; }
+  static get config() {
+    return {
+      properties: {
+        playlist: {
+          type: Array
+        }
+      }
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    player = new PlayerModel(this.$.audioElement);
+    player.subject.add(this)
+  }
+
+  notify(playerState) {
+    this.playlist = playerState.playlist;
+  }
+}
+customElements.define(CaffoPlayer.is, CaffoPlayer);
+  </script>
+</dom-module>

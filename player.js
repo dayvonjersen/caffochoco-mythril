@@ -93,7 +93,7 @@ class PlayerModel {
     this.update();
   }
 
-  clear(srcUrl) {
+  clear() {
     this.state.playlist = [];
     this.state.nowPlayingIndex = 0;
     this.load();

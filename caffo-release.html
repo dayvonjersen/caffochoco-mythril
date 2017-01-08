@@ -96,11 +96,11 @@
       </div>
 
       <!-- tabs -->
-      <paper-tabs selected='{{selectedTab}}'>
+      <paper-tabs selected='{{selectedTab}}' on-iron-select='_tabChanged'>
         <paper-tab>info</paper-tab>
         <dom-repeat items='{{tracklists}}'>
           <template>
-            <paper-tab>{{item.title}}</paper-tab>
+            <paper-tab data-tracklist$='[[item.id]]'>[[item.title]]</paper-tab>
           </template>
         </dom-repeat>
       </paper-tabs>
@@ -169,6 +169,17 @@ class CaffoRelease extends Polymer.Element {
     this.selectedTab = this.release.defaultTracklist+1;
     this.$.releaseInfo.innerHTML = this.release.info;
     document.title = this.release.title;
+  }
+
+  _tabChanged(event, details) {
+    let tracklist = details.item.dataset.tracklist;
+    if(tracklist === "") return;
+    for(let i = 0; i < this.tracklists.length; i++) {
+      if(this.tracklists[i].id == tracklist) {
+        player.clear();
+        this.tracklists[i].tracks.forEach(t => player.add(`/audio/${this.release.url}/${t.file}`));
+      }
+    }
   }
 
   connectedCallback() {
