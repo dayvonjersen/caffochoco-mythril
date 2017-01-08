@@ -1,7 +1,8 @@
-<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel='import' href='/bower_components/polymer/polymer-element.html'>
 
 <link rel='import' href='/caffo-release.html'>
-<dom-module id="caffo-crate">
+
+<dom-module id='caffo-crate'>
   <template>
     <style>
       :host {
@@ -11,28 +12,28 @@
       }
     </style>
 
-<paper-tabs selected="{{selectedTab}}" on-iron-select="_tabChanged" scrollable>
-  <paper-tab data-category="all">ALL</paper-tab>
-  <paper-tab data-category="album">ALBUMS</paper-tab>
-  <paper-tab data-category="ep">EPs</paper-tab>
-  <paper-tab data-category="single">SINGLES</paper-tab>
-  <paper-tab data-category="remix">REMIXES</paper-tab>
-  <paper-tab data-category="mashup">MASHUPS</paper-tab>
-  <paper-tab data-category="sketch">SKETCHES</paper-tab>
-</paper-tabs>
+    <paper-tabs selected='{{selectedTab}}' on-iron-select='_tabChanged' scrollable>
+      <paper-tab data-category='all'>ALL</paper-tab>
+      <paper-tab data-category='album'>ALBUMS</paper-tab>
+      <paper-tab data-category='ep'>EPs</paper-tab>
+      <paper-tab data-category='single'>SINGLES</paper-tab>
+      <paper-tab data-category='remix'>REMIXES</paper-tab>
+      <paper-tab data-category='mashup'>MASHUPS</paper-tab>
+      <paper-tab data-category='sketch'>SKETCHES</paper-tab>
+    </paper-tabs>
 
-<button on-click="test">sort</button>
+    <button on-click='test'>sort</button>
     <ul>
-      <dom-repeat id="list" items="{{releases}}">
+      <dom-repeat id='list' items='{{releases}}'>
         <template>
           <li>
-            <a href="/release/{{item.url}}">{{item.title}} - {{item.year}}</a>
+            <a href='/release/{{item.url}}'>{{item.title}} - {{item.year}}</a>
           </li>
         </template>
       </dom-repeat>
     </ul>
-</template>
-<script>
+  </template>
+  <script>
 class CaffoCrate extends Polymer.Element {
   static get is() { return 'caffo-crate' }
   static get config() {
@@ -79,5 +80,5 @@ class CaffoCrate extends Polymer.Element {
   }
 }
 customElements.define(CaffoCrate.is, CaffoCrate);
-</script>
+  </script>
 </dom-module>

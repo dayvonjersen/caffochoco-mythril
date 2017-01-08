@@ -1,19 +1,18 @@
-<link rel="import" href="/bower_components/polymer/polymer-element.html">
-<link rel='import' href='/bower_components/paper-dialog/paper-dialog.html'>
-<link rel="import" href="/bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
-<link rel='import' href='/bower_components/paper-button/paper-button.html'>
+<link rel='import' href='/bower_components/polymer/polymer-element.html'>
 
-<dom-module id="caffo-license">
+<link rel='import' href='/bower_components/paper-button/paper-button.html'>
+<link rel='import' href='/bower_components/paper-dialog/paper-dialog.html'>
+<link rel='import' href='/bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html'>
+
+<dom-module id='caffo-license'>
   <template>
     <style>
       :host {
         display: block;
         position: relative;
         overflow: hidden;
-
         font-size: 14px;
         font-weight: normal;
-
       }
       paper-dialog {
         padding: 0 2em;
@@ -48,24 +47,27 @@
       blockquote:after {
         content: none;
       }
-
-      ol { list-style-type: lower-latin; }
-      ol ol { list-style-type: lower-roman; }
+      ol {
+        list-style-type: lower-latin;
+      }
+      ol ol {
+        list-style-type: lower-roman;
+      }
     </style>
 
-    <paper-button onclick="modal.open()">license ☭</paper-button>
+    <paper-button onclick='modal.open()'>license ☭</paper-button>
 
-    <paper-dialog id="modal">
-      <h1 id="peer-production-license-a-model-for-copyfarleft">Peer Production License</h1>
+    <paper-dialog id='modal'>
+      <h1 id='peer-production-license-a-model-for-copyfarleft'>Peer Production License</h1>
       <h2>A Model for Copyfarleft</h2>
         <paper-dialog-scrollable>
 <blockquote>
 <p>Created by John Magyar, B.A., J.D. and Dmytri Kleiner, the following <em>Peer Production License</em>, a model for a
-copyfarleft license, has been derived from the <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img style='vertical-align:sub;margin-right:.2em' src='/cc_by-nc-sa80x15.png' />‘Attribution-NonCommercial-ShareAlike’ Creative Commons
+copyfarleft license, has been derived from the <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/'><img style='vertical-align:sub;margin-right:.2em' src='/cc_by-nc-sa80x15.png'>‘Attribution-NonCommercial-ShareAlike’ Creative Commons
 license</a>.</p>
 </blockquote>
-<h2 id="license">LICENSE</h2>
-<pre class="editor-colors lang-text"><div class="line"><span class="text plain"><span class="meta paragraph text"><span>THE&nbsp;WORK&nbsp;(AS&nbsp;DEFINED&nbsp;BELOW)&nbsp;IS&nbsp;PROVIDED&nbsp;UNDER&nbsp;THE&nbsp;TERMS</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>OF&nbsp;THIS&nbsp;COPYFARLEFT&nbsp;PUBLIC&nbsp;LICENSE&nbsp;(“LICENSE”).&nbsp;THE&nbsp;WORK</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>IS&nbsp;PROTECTED&nbsp;BY&nbsp;COPYRIGHT&nbsp;AND&nbsp;ALL&nbsp;OTHER&nbsp;APPLICABLE&nbsp;LAWS.</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>ANY&nbsp;USE&nbsp;OF&nbsp;THE&nbsp;WORK&nbsp;OTHER&nbsp;THAN&nbsp;AS&nbsp;AUTHORIZED&nbsp;UNDER&nbsp;THIS</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>LICENSE&nbsp;OR&nbsp;COPYRIGHT&nbsp;LAW&nbsp;IS&nbsp;PROHIBITED.</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>BY&nbsp;EXERCISING&nbsp;ANY&nbsp;RIGHTS&nbsp;TO&nbsp;THE&nbsp;WORK&nbsp;PROVIDED&nbsp;IN&nbsp;THIS&nbsp;LI-</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>CENSE,&nbsp;YOU&nbsp;AGREE&nbsp;TO&nbsp;BE&nbsp;BOUND&nbsp;BY&nbsp;THE&nbsp;TERMS&nbsp;OF&nbsp;THIS&nbsp;LICENSE.</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>TO&nbsp;THE&nbsp;EXTENT&nbsp;THIS&nbsp;LICENSE&nbsp;MAY&nbsp;BE&nbsp;CONSIDERED&nbsp;TO&nbsp;BE&nbsp;A&nbsp;CON-</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>TRACT,&nbsp;THE&nbsp;LICENSOR&nbsp;GRANTS&nbsp;YOU&nbsp;THE&nbsp;RIGHTS&nbsp;CONTAINED&nbsp;HERE</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>IN&nbsp;AS&nbsp;CONSIDERATION&nbsp;FOR&nbsp;ACCEPTING&nbsp;THE&nbsp;TERMS&nbsp;AND&nbsp;CONDI-</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>TIONS&nbsp;OF&nbsp;THIS&nbsp;LICENSE&nbsp;AND&nbsp;FOR&nbsp;AGREEING&nbsp;TO&nbsp;BE&nbsp;BOUND&nbsp;BY&nbsp;THE</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>TERMS&nbsp;AND&nbsp;CONDITIONS&nbsp;OF&nbsp;THIS&nbsp;LICENSE.</span></span></span></div></pre><h3 id="1-definitions">1. DEFINITIONS</h3>
+<h2 id='license'>LICENSE</h2>
+<pre class='editor-colors lang-text'><div class='line'><span class='text plain'><span class='meta paragraph text'><span>THE&nbsp;WORK&nbsp;(AS&nbsp;DEFINED&nbsp;BELOW)&nbsp;IS&nbsp;PROVIDED&nbsp;UNDER&nbsp;THE&nbsp;TERMS</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>OF&nbsp;THIS&nbsp;COPYFARLEFT&nbsp;PUBLIC&nbsp;LICENSE&nbsp;(“LICENSE”).&nbsp;THE&nbsp;WORK</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>IS&nbsp;PROTECTED&nbsp;BY&nbsp;COPYRIGHT&nbsp;AND&nbsp;ALL&nbsp;OTHER&nbsp;APPLICABLE&nbsp;LAWS.</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>ANY&nbsp;USE&nbsp;OF&nbsp;THE&nbsp;WORK&nbsp;OTHER&nbsp;THAN&nbsp;AS&nbsp;AUTHORIZED&nbsp;UNDER&nbsp;THIS</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>LICENSE&nbsp;OR&nbsp;COPYRIGHT&nbsp;LAW&nbsp;IS&nbsp;PROHIBITED.</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>BY&nbsp;EXERCISING&nbsp;ANY&nbsp;RIGHTS&nbsp;TO&nbsp;THE&nbsp;WORK&nbsp;PROVIDED&nbsp;IN&nbsp;THIS&nbsp;LI-</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>CENSE,&nbsp;YOU&nbsp;AGREE&nbsp;TO&nbsp;BE&nbsp;BOUND&nbsp;BY&nbsp;THE&nbsp;TERMS&nbsp;OF&nbsp;THIS&nbsp;LICENSE.</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>TO&nbsp;THE&nbsp;EXTENT&nbsp;THIS&nbsp;LICENSE&nbsp;MAY&nbsp;BE&nbsp;CONSIDERED&nbsp;TO&nbsp;BE&nbsp;A&nbsp;CON-</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>TRACT,&nbsp;THE&nbsp;LICENSOR&nbsp;GRANTS&nbsp;YOU&nbsp;THE&nbsp;RIGHTS&nbsp;CONTAINED&nbsp;HERE</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>IN&nbsp;AS&nbsp;CONSIDERATION&nbsp;FOR&nbsp;ACCEPTING&nbsp;THE&nbsp;TERMS&nbsp;AND&nbsp;CONDI-</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>TIONS&nbsp;OF&nbsp;THIS&nbsp;LICENSE&nbsp;AND&nbsp;FOR&nbsp;AGREEING&nbsp;TO&nbsp;BE&nbsp;BOUND&nbsp;BY&nbsp;THE</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>TERMS&nbsp;AND&nbsp;CONDITIONS&nbsp;OF&nbsp;THIS&nbsp;LICENSE.</span></span></span></div></pre><h3 id='1-definitions'>1. DEFINITIONS</h3>
 <style>
 </style>
 
@@ -132,11 +134,11 @@ by sound or visual recordings and the right of fixation and reproducing fixation
 of the Work, including storage of a protected performance or phonogram in digital
 form or other electronic medium.</li>
 </ol>
-<h3 id="2-fair-dealing-rights-">2. FAIR DEALING RIGHTS.</h3>
+<h3 id='2-fair-dealing-rights-'>2. FAIR DEALING RIGHTS.</h3>
 <p>Nothing in this License is intended to reduce, limit, or restrict any uses free from copyright
 or rights arising from limitations or exceptions that are provided for in connection with the
 copyright protection under copyright law or other applicable laws.</p>
-<h3 id="3-license-grant-">3. LICENSE GRANT.</h3>
+<h3 id='3-license-grant-'>3. LICENSE GRANT.</h3>
 <p>Subject to the terms and conditions of this License, Licensor hereby grants You a worldwide,
 royalty-free, non-exclusive, perpetual (for the duration of the applicable copyright) license
 to exercise the rights in the Work as stated below:
@@ -147,7 +149,7 @@ to exercise the rights in the Work as stated below:
 <li>to Distribute and Publicly Perform the Work including as incorporated in Collections; and,</li>
 <li>to Distribute and Publicly Perform Adaptations. The above rights may be exercised in all media and formats whether now known or hereafter devised. The above rights include the right to make such modifications as are technically necessary to exercise the rights in other media and formats. Subject to Section 8(f), all rights not expressly granted by Licensor are hereby reserved, including but not limited to the rights set forth in Section 4(f).</li>
 </ol>
-<h3 id="4-restrictions-">4. RESTRICTIONS.</h3>
+<h3 id='4-restrictions-'>4. RESTRICTIONS.</h3>
 <p>The license granted in Section 3 above is expressly made subject to and limited by the following restrictions:</p>
 <ol>
 <li>You may Distribute or Publicly Perform the Work only under the terms of this License.
@@ -237,9 +239,9 @@ fullest extent permitted by the applicable national law, to enable You to reason
 Your right under Section 3(b) of this License (right to make Adaptations) but not
 otherwise.</li>
 </ol>
-<h3 id="5-representations-warranties-and-disclaimer">5. REPRESENTATIONS, WARRANTIES AND DISCLAIMER</h3>
-<pre class="editor-colors lang-text"><div class="line"><span class="text plain"><span class="meta paragraph text"><span>UNLESS&nbsp;OTHERWISE&nbsp;MUTUALLY&nbsp;AGREED&nbsp;TO&nbsp;BY&nbsp;THE&nbsp;PARTIES&nbsp;IN</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>WRITING,&nbsp;LICENSOR&nbsp;OFFERS&nbsp;THE&nbsp;WORK&nbsp;AS-IS&nbsp;AND&nbsp;MAKES&nbsp;NO&nbsp;REP-</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>RESENTATIONS&nbsp;OR&nbsp;WARRANTIES&nbsp;OF&nbsp;ANY&nbsp;KIND&nbsp;CONCERNING&nbsp;THE</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>WORK,&nbsp;EXPRESS,&nbsp;IMPLIED,&nbsp;STATUTORY&nbsp;OR&nbsp;OTHERWISE,&nbsp;INCLUD-</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>ING,&nbsp;WITHOUT&nbsp;LIMITATION,&nbsp;WARRANTIES&nbsp;OF&nbsp;TITLE,&nbsp;MERCHANTI-</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>BILITY,&nbsp;FITNESS&nbsp;FOR&nbsp;A&nbsp;PARTICULAR&nbsp;PURPOSE,&nbsp;NONINFRINGEMENT,</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>OR&nbsp;THE&nbsp;ABSENCE&nbsp;OF&nbsp;LATENT&nbsp;OR&nbsp;OTHER&nbsp;DEFECTS,&nbsp;ACCURACY,&nbsp;OR</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>THE&nbsp;PRESENCE&nbsp;OF&nbsp;ABSENCE&nbsp;OF&nbsp;ERRORS,&nbsp;WHETHER&nbsp;OR&nbsp;NOT&nbsp;DIS-</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>COVERABLE.&nbsp;SOME&nbsp;JURISDICTIONS&nbsp;DO&nbsp;NOT&nbsp;ALLOW&nbsp;THE&nbsp;EXCLU-</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>SION&nbsp;OF&nbsp;IMPLIED&nbsp;WARRANTIES,&nbsp;SO&nbsp;SUCH&nbsp;EXCLUSION&nbsp;MAY&nbsp;NOT&nbsp;AP-</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>PLY&nbsp;TO&nbsp;YOU.</span></span></span></div></pre><h3 id="6-limitation-on-liability-">6. LIMITATION ON LIABILITY.</h3>
-<pre class="editor-colors lang-text"><div class="line"><span class="text plain"><span class="meta paragraph text"><span>EXCEPT&nbsp;TO&nbsp;THE&nbsp;EXTENT&nbsp;REQUIRED&nbsp;BY&nbsp;APPLICABLE&nbsp;LAW,&nbsp;IN&nbsp;NO</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>EVENT&nbsp;WILL&nbsp;LICENSOR&nbsp;BE&nbsp;LIABLE&nbsp;TO&nbsp;YOU&nbsp;ON&nbsp;ANY&nbsp;LEGAL&nbsp;THEORY</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>FOR&nbsp;ANY&nbsp;SPECIAL,&nbsp;INCIDENTAL,&nbsp;CONSEQUENTIAL,&nbsp;PUNITIVE&nbsp;OR</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>EXEMPLARY&nbsp;DAMAGES&nbsp;ARISING&nbsp;OUT&nbsp;OF&nbsp;THIS&nbsp;LICENSE&nbsp;OR&nbsp;THE&nbsp;USE</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>OF&nbsp;THE&nbsp;WORK,&nbsp;EVEN&nbsp;IF&nbsp;LICENSOR&nbsp;HAS&nbsp;BEEN&nbsp;ADVISED&nbsp;OF&nbsp;THE&nbsp;POS-</span></span></span></div><div class="line"><span class="text plain"><span class="meta paragraph text"><span>SIBILITY&nbsp;OF&nbsp;SUCH&nbsp;DAMAGES.</span></span></span></div></pre><h3 id="7-termination">7. TERMINATION</h3>
+<h3 id='5-representations-warranties-and-disclaimer'>5. REPRESENTATIONS, WARRANTIES AND DISCLAIMER</h3>
+<pre class='editor-colors lang-text'><div class='line'><span class='text plain'><span class='meta paragraph text'><span>UNLESS&nbsp;OTHERWISE&nbsp;MUTUALLY&nbsp;AGREED&nbsp;TO&nbsp;BY&nbsp;THE&nbsp;PARTIES&nbsp;IN</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>WRITING,&nbsp;LICENSOR&nbsp;OFFERS&nbsp;THE&nbsp;WORK&nbsp;AS-IS&nbsp;AND&nbsp;MAKES&nbsp;NO&nbsp;REP-</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>RESENTATIONS&nbsp;OR&nbsp;WARRANTIES&nbsp;OF&nbsp;ANY&nbsp;KIND&nbsp;CONCERNING&nbsp;THE</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>WORK,&nbsp;EXPRESS,&nbsp;IMPLIED,&nbsp;STATUTORY&nbsp;OR&nbsp;OTHERWISE,&nbsp;INCLUD-</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>ING,&nbsp;WITHOUT&nbsp;LIMITATION,&nbsp;WARRANTIES&nbsp;OF&nbsp;TITLE,&nbsp;MERCHANTI-</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>BILITY,&nbsp;FITNESS&nbsp;FOR&nbsp;A&nbsp;PARTICULAR&nbsp;PURPOSE,&nbsp;NONINFRINGEMENT,</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>OR&nbsp;THE&nbsp;ABSENCE&nbsp;OF&nbsp;LATENT&nbsp;OR&nbsp;OTHER&nbsp;DEFECTS,&nbsp;ACCURACY,&nbsp;OR</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>THE&nbsp;PRESENCE&nbsp;OF&nbsp;ABSENCE&nbsp;OF&nbsp;ERRORS,&nbsp;WHETHER&nbsp;OR&nbsp;NOT&nbsp;DIS-</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>COVERABLE.&nbsp;SOME&nbsp;JURISDICTIONS&nbsp;DO&nbsp;NOT&nbsp;ALLOW&nbsp;THE&nbsp;EXCLU-</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>SION&nbsp;OF&nbsp;IMPLIED&nbsp;WARRANTIES,&nbsp;SO&nbsp;SUCH&nbsp;EXCLUSION&nbsp;MAY&nbsp;NOT&nbsp;AP-</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>PLY&nbsp;TO&nbsp;YOU.</span></span></span></div></pre><h3 id='6-limitation-on-liability-'>6. LIMITATION ON LIABILITY.</h3>
+<pre class='editor-colors lang-text'><div class='line'><span class='text plain'><span class='meta paragraph text'><span>EXCEPT&nbsp;TO&nbsp;THE&nbsp;EXTENT&nbsp;REQUIRED&nbsp;BY&nbsp;APPLICABLE&nbsp;LAW,&nbsp;IN&nbsp;NO</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>EVENT&nbsp;WILL&nbsp;LICENSOR&nbsp;BE&nbsp;LIABLE&nbsp;TO&nbsp;YOU&nbsp;ON&nbsp;ANY&nbsp;LEGAL&nbsp;THEORY</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>FOR&nbsp;ANY&nbsp;SPECIAL,&nbsp;INCIDENTAL,&nbsp;CONSEQUENTIAL,&nbsp;PUNITIVE&nbsp;OR</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>EXEMPLARY&nbsp;DAMAGES&nbsp;ARISING&nbsp;OUT&nbsp;OF&nbsp;THIS&nbsp;LICENSE&nbsp;OR&nbsp;THE&nbsp;USE</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>OF&nbsp;THE&nbsp;WORK,&nbsp;EVEN&nbsp;IF&nbsp;LICENSOR&nbsp;HAS&nbsp;BEEN&nbsp;ADVISED&nbsp;OF&nbsp;THE&nbsp;POS-</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>SIBILITY&nbsp;OF&nbsp;SUCH&nbsp;DAMAGES.</span></span></span></div></pre><h3 id='7-termination'>7. TERMINATION</h3>
 <ol>
 <li>This License and the rights granted hereunder will terminate automatically upon any
 breach by You of the terms of this License. Individuals or entities who have received
@@ -255,7 +257,7 @@ serve to withdraw this License (or any other license that has been, or is requir
 granted under the terms of this License), and this License will continue in full force
 and effect unless terminated as stated above.</li>
 </ol>
-<h3 id="8-miscellaneous">8. MISCELLANEOUS</h3>
+<h3 id='8-miscellaneous'>8. MISCELLANEOUS</h3>
 <ol>
 <li>Each time You Distribute or Publicly Perform the Work or a Collection, the Licensor
 offers to the recipient a license to the Work on the same terms and conditions as the
@@ -289,14 +291,14 @@ this License is not intended to restrict the license of any rights under applica
 </ol>
 
 </paper-dialog-scrollable>
-<div class="buttons">
+  <div class='buttons'>
     <paper-button dialog-confirm autofocus>Okay</paper-button>
   </div>
 </paper-dialog>
 </template>
-<script>
+  <script>
 class CaffoLicense extends Polymer.Element {
-  static get is() { return 'caffo-license' }
+  static get is() { return 'caffo-license'; }
 
   connectedCallback() {
     super.connectedCallback();
@@ -304,5 +306,5 @@ class CaffoLicense extends Polymer.Element {
   }
 }
 customElements.define(CaffoLicense.is, CaffoLicense);
-</script>
+  </script>
 </dom-module>

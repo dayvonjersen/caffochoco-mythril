@@ -1,134 +1,145 @@
-<link rel="import" href="/bower_components/polymer/polymer-element.html">
-
-<link rel='import' href='/bower_components/paper-tabs/paper-tabs.html'>
-<link rel="import" href='/bower_components/paper-icon-button/paper-icon-button.html' />
-<link rel="import" href='/bower_components/paper-slider/paper-slider.html' />
+<link rel='import' href='/bower_components/polymer/polymer-element.html'>
 
 <link rel='import' href='/bower_components/app-route/app-route.html'>
+
 <link rel='import' href='/bower_components/iron-pages/iron-pages.html'>
+
+<link rel='import' href='/bower_components/paper-icon-button/paper-icon-button.html'>
+<link rel='import' href='/bower_components/paper-tabs/paper-tabs.html'>
+<link rel='import' href='/bower_components/paper-slider/paper-slider.html'>
 
 <dom-module id='caffo-release'>
   <template>
-  <style>
-  :host{
-    background: var(--darkmuted, rgba(252,252,252,0.8));
-    color: var(--darkmuted-text, #000);
+    <style>
+      :host{
+        background: var(--darkmuted, rgba(252,252,252,0.8));
+        color: var(--darkmuted-text, #000);
+      }
+      paper-slider {
+        --paper-slider-container-color: var(--vibrant-text);
+        --paper-slider-active-color: var(--vibrant);
+        --paper-slider-knob-color: var(--vibrant);
+        --paper-slider-pin-color: var(--vibrant);
+        --paper-slider-font-color: var(--vibrant-text);
+      }
+      paper-tabs {
+        text-transform: uppercase;
+        --paper-tab-ink: var(--vibrant, #000);
+        --paper-tabs-selection-bar-color: var(--vibrant, #000);
+      }
+      paper-icon-button {
+        --paper-icon-button-ink-color: var(--vibrant);
+      }
+      .year {
+        color: #aaa;
+      }
+      iron-pages {
+        display: flex;
+        min-height: 0;
+      }
+      iron-pages > * {
+        width: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+        padding: 16px;
+      }
+      header div {
+        padding: 0 1em;
+      }
+      .tracklist ol {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .tracklist li  {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1em 0.5em;
+        position: relative;
+      }
+      .tracklist li paper-slider {
+        position: absolute;
+        width: calc(100% + 32px);
+        left: -16px;
+        bottom: -16px;
+        --paper-slider-height: 3px;
+      }
+      .tracklist li img {
+        width: 2.3333em;
+        height: 2.3333em;
+      }
+      .tracklist .title {
+        flex: 1;
+        padding: 0 .5em;
+      }
+    </style>
 
-  }
-  paper-slider {
-    --paper-slider-container-color: var(--vibrant-text);
-    --paper-slider-active-color: var(--vibrant);
-    --paper-slider-knob-color: var(--vibrant);
-    --paper-slider-pin-color: var(--vibrant);
-    --paper-slider-font-color: var(--vibrant-text);
-  }
-  paper-tabs {
-    text-transform: uppercase;
-    --paper-tab-ink: var(--vibrant, #000);
-    --paper-tabs-selection-bar-color: var(--vibrant, #000);
-  }
-  paper-icon-button {
-    --paper-icon-button-ink-color: var(--vibrant);
-  }
-  .year {
-    color: #aaa;
-  }
-  iron-pages {
-    display: flex;
-    min-height: 0;
-  }
-  iron-pages > * {
-    width: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-    padding: 16px;
-  }
+    <link rel='stylesheet' href='/image/[[release.url]].jpg.css'>
+    <app-route
+      route='{{route}}'
+      pattern='/:tabName'
+      data='{{data}}'>
+    </app-route>
 
-  header div {
-    padding: 0 1em;
-  }
-  .tracklist ol {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .tracklist li  {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1em 0.5em;
-    position: relative;
-  }
-  .tracklist li paper-slider {
-    position: absolute;
-    width: calc(100% + 32px);
-    left: -16px;
-    bottom: -16px;
-    --paper-slider-height: 3px;
-  }
-  .tracklist li img {
-    width: 2.3333em;
-    height: 2.3333em;
-  }
-  .tracklist .title {
-    flex: 1;
-    padding: 0 .5em;
-  }
-  </style>
-  <link rel='stylesheet' href='/image/[[release.url]].jpg.css' />
-  <app-route route="{{route}}" pattern="/:tabName" data="{{data}}"></app-route>
+    <header class='mdl-shadow--2dp'>
+      <div>
+        <!-- info -->
+        <h1 id='releaseTitle'>[[release.title]]</h1>
+        <span class='year'>[[release.year]]</span>
+        <span class='genre'>[[release.genre]]</span>
 
-  <header class='mdl-shadow--2dp'>
-    <div>
+        <!-- actions -->
+        <paper-icon-button src='/download.svg'></paper-icon-button>
+      </div>
 
-    <h1 id="releaseTitle">[[release.title]]</h1>
-    <span class="year">[[release.year]]</span>
-    <span class="genre">[[release.genre]]</span>
+      <!-- tabs -->
+      <paper-tabs selected='{{selectedTab}}'>
+        <paper-tab>info</paper-tab>
+        <dom-repeat items='{{tracklists}}'>
+          <template>
+            <paper-tab>{{item.title}}</paper-tab>
+          </template>
+        </dom-repeat>
+      </paper-tabs>
+    </header>
 
-    <paper-icon-button src="/download.svg"></paper-icon-button>
-  </div>
-
-    <paper-tabs selected="{{selectedTab}}">
-      <paper-tab>info</paper-tab>
-      <dom-repeat items="{{tracklists}}">
+    <iron-pages selected='{{selectedTab}}'>
+      <div id='releaseInfo'></div>
+      <dom-repeat items='{{tracklists}}'>
         <template>
-          <paper-tab>{{item.title}}</paper-tab>
+          <div class='tracklist'>
+            <ol>
+              <dom-repeat items='{{item.tracks}}'>
+                <template>
+                  <li>
+                    <img src='/play.svg'>
+                    <span class='title'>{{item.title}}</span>
+                    <span>[[_formatTime(item.length)]]</span>
+                  </li>
+                </template>
+              </dom-repeat>
+              <li class='mdl-shadow--dp8'>
+                <img src='/pause.svg'>
+                <span class='title'>example</span>
+                <span>4:20</span>
+                <paper-slider pin min='10' max='200' value='110'></paper-slider>
+              </li>
+            </ol>
+          </div>
         </template>
       </dom-repeat>
-    </paper-tabs>
-  </header>
-  <iron-pages selected="{{selectedTab}}">
+    </iron-pages>
 
-    <div id="releaseInfo"></div>
-    <dom-repeat items="{{tracklists}}">
-      <template>
-        <div class='tracklist'>
-          <ol>
-            <dom-repeat items="{{item.tracks}}">
-              <template>
-                <li><img src='/play.svg' /><span class='title'>{{item.title}}</span><span>[[_formatTime(item.length)]]</span></li>
-              </template>
-            </dom-repeat>
-            <li class='mdl-shadow--dp8'>
-              <img src='/pause.svg' />
-              <span class='title'>example</span>
-              <span>4:20</span>
-              <paper-slider pin min="10" max="200" value="110"></paper-slider>
-            </li>
-          </ol>
-        </div>
-      </template>
-    </dom-repeat>
-  </iron-pages>
-  <footer>
-
-  </footer>
-</template>
-<script>
+    <footer>
+      <!-- total time, volume controls? etc... -->
+    </footer>
+  </template>
+  <script>
 class CaffoRelease extends Polymer.Element {
-  static get is() { return 'caffo-release' }
+  static get is() { return 'caffo-release'; }
   static get config() {
     return {
       properties: {
@@ -165,5 +176,5 @@ class CaffoRelease extends Polymer.Element {
   }
 }
 customElements.define(CaffoRelease.is, CaffoRelease);
-</script>
+  </script>
 </dom-module>

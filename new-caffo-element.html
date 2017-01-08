@@ -1,5 +1,5 @@
-<link rel="import" href="/bower_components/polymer/polymer-element.html">
-<dom-module id="caffo-app">
+<link rel='import' href='/bower_components/polymer/polymer-element.html'>
+<dom-module id='caffo-app'>
   <template>
     <style>
       :host {
@@ -8,10 +8,10 @@
         overflow: hidden;
       }
     </style>
-</template>
-<script>
+  </template>
+  <script>
 class CaffoApp extends Polymer.Element {
-  static get is() { return 'caffo-app' }
+  static get is() { return 'caffo-app'; }
   static get config() {
     return {
       properties: {
@@ -26,5 +26,5 @@ class CaffoApp extends Polymer.Element {
   }
 }
 customElements.define(CaffoApp.is, CaffoApp);
-</script>
+  </script>
 </dom-module>

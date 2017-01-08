@@ -7,72 +7,80 @@
 
 <link rel='import' href='/bower_components/paper-fab/paper-fab.html'>
 
-<link rel='import' href='/caffo-icons.html'>
 <link rel='import' href='/caffo-crate.html'>
-<link rel='import' href='/caffo-pages.html'>
 <link rel='import' href='/caffo-license.html'>
+<link rel='import' href='/caffo-pages.html'>
 
 <dom-module id='caffo-app'>
   <template>
-  <style>
-  :host {
-    display: block;
-    position: relative;
-    overflow: hidden;
-  }
-  .caffo-app__home {
-    position: fixed;
-    bottom: 12px;
-    left: 12px;
-  }
-  .caffo-app__home paper-fab {
-    --size: 96px;
-    width: var(--size);
-    height: var(--size);
-    --iron-icon-width: var(--size);
-    --iron-icon-height: var(--size);
-  }
-
-  caffo-pages > * {
-    transition: all 1s ease-in-out;
-  }
-  caffo-pages > :not(.iron-selected) {
-    opacity: 0;
-    pointer-events: none;
-  }
-  </style>
-
-  <app-location route="{{route}}"></app-location>
-  <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
-
-  <caffo-pages selected="[[routeData.page]]" attr-for-selected="name" fallback-selection="index"
-  on-iron-select="testFn">
-  <div name="index">
-    <caffo-crate class="mdl-card mdl-shadow--8dp" page="[[routeData.page]]"></caffo-crate>
-  </div>
-  <div name="release">
-    <caffo-release class="mdl-shadow--24dp" route="{{subroute}}"></caffo-release>
-    <a href='/' class='caffo-app__home'>
-      <paper-icon-button src='/crate.svg'></paper-icon-button>
-    </a>
-  </div>
-</caffo-pages>
-
-<caffo-license></caffo-license>
-</template>
-<script>
-class CaffoApp extends Polymer.Element {
-  static get is() { return 'caffo-app' }
-  static get config() {
-    return {
-      properties: {
-
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        overflow: hidden;
       }
-    }
-  }
+      .caffo-app__home {
+        position: fixed;
+        bottom: 12px;
+        left: 12px;
+      }
+      .caffo-app__home paper-fab {
+        --paper-fab-background: #000;
+        --size: 96px;
+        width: var(--size);
+        height: var(--size);
+        --iron-icon-width: var(--size);
+        --iron-icon-height: var(--size);
+      }
+
+      caffo-pages > * {
+        transition: all 1s ease-in-out;
+      }
+      caffo-pages > :not(.iron-selected) {
+        opacity: 0;
+        pointer-events: none;
+      }
+    </style>
+
+    <app-location route='{{route}}'></app-location>
+    <app-route
+      route='{{route}}'
+      pattern='/:page'
+      data='{{routeData}}'
+      tail='{{subroute}}'>
+    </app-route>
+
+    <caffo-pages
+      selected='[[routeData.page]]'
+      attr-for-selected='name'
+      fallback-selection='index'
+      on-iron-select='testFn'>
+      <div name='index'>
+        <caffo-crate
+          class='mdl-card mdl-shadow--8dp'
+          page='[[routeData.page]]'>
+        </caffo-crate>
+      </div>
+      <div name='release'>
+        <caffo-release
+          class='mdl-shadow--24dp'
+          route='{{subroute}}'>
+        </caffo-release>
+        <a href='/' class='caffo-app__home'>
+          <paper-fab src='/crate.svg' elevation='4'></paper-fab>
+        </a>
+      </div>
+    </caffo-pages>
+
+    <caffo-license></caffo-license>
+  </template>
+  <script>
+class CaffoApp extends Polymer.Element {
+  static get is() { return 'caffo-app'; }
+  static get config() { return {};  }
 
   testFn(event, details) {
-    console.log("page changed", this.routeData)
+    //console.log('page changed', this.routeData)
     //console.log(event, details)
   }
 
@@ -82,5 +90,5 @@ class CaffoApp extends Polymer.Element {
   }
 }
 customElements.define(CaffoApp.is, CaffoApp);
-</script>
+  </script>
 </dom-module>
