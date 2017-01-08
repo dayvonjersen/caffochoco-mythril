@@ -11,14 +11,14 @@
       }
     </style>
 
-<paper-tabs selected="{{selectedTab}}" on-iron-select="_tabChanged">
+<paper-tabs selected="{{selectedTab}}" on-iron-select="_tabChanged" scrollable>
   <paper-tab data-category="all">ALL</paper-tab>
   <paper-tab data-category="album">ALBUMS</paper-tab>
   <paper-tab data-category="ep">EPs</paper-tab>
   <paper-tab data-category="single">SINGLES</paper-tab>
   <paper-tab data-category="remix">REMIXES</paper-tab>
   <paper-tab data-category="mashup">MASHUPS</paper-tab>
-  <paper-tab data-category="sketch">SKETCHES</paper-tab>  
+  <paper-tab data-category="sketch">SKETCHES</paper-tab>
 </paper-tabs>
 
 <button on-click="test">sort</button>

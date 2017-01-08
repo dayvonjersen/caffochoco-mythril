@@ -11,12 +11,24 @@
   <template>
   <style>
   :host{
-    background: #eee;
+    background: var(--darkmuted, rgba(252,252,252,0.8));
+    color: var(--darkmuted-text, #000);
+
+  }
+  paper-slider {
+    --paper-slider-container-color: var(--vibrant-text);
+    --paper-slider-active-color: var(--vibrant);
+    --paper-slider-knob-color: var(--vibrant);
+    --paper-slider-pin-color: var(--vibrant);
+    --paper-slider-font-color: var(--vibrant-text);
   }
   paper-tabs {
     text-transform: uppercase;
-    --paper-tab-ink: aqua;
-    --paper-tabs-selection-bar-color: aqua;
+    --paper-tab-ink: var(--vibrant, #000);
+    --paper-tabs-selection-bar-color: var(--vibrant, #000);
+  }
+  paper-icon-button {
+    --paper-icon-button-ink-color: var(--vibrant);
   }
   .year {
     color: #aaa;
@@ -65,6 +77,7 @@
     padding: 0 .5em;
   }
   </style>
+  <link rel='stylesheet' href='/image/[[release.url]].jpg.css' />
   <app-route route="{{route}}" pattern="/:tabName" data="{{data}}"></app-route>
 
   <header class='mdl-shadow--2dp'>

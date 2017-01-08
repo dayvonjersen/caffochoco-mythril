@@ -79,16 +79,17 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 	palette, err := vibrant.NewPaletteFromImage(img)
 	checkErr(err)
 	w.Header().Set("Content-Type", "text/css; charset=UTF-8")
+	fmt.Fprintf(w, ":root {\n")
 	for _, swatch := range palette.ExtractAwesome() {
 		c := swatch.Color
 		r, g, b := c.RGB()
-		fmt.Fprintf(w, `
-.%s {
-	background-color: %s;
-	color: %s;
-/*	box-shadow: 0 0 10px rgba(%d,%d,%d,1); */
-}`, strings.ToLower(swatch.Name), c, c.TitleTextColor(), r, g, b)
+		n := strings.ToLower(swatch.Name)
+		fmt.Fprintf(w,
+			"    --%s: rgba(%d,%d,%d,0.8);\n    --%s-text: %s;\n",
+			n, r, g, b, n, c.TitleTextColor(),
+		)
 	}
+	fmt.Fprintf(w, "}")
 }
 
 func fileExists(filename string) bool {

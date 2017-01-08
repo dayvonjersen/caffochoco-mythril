@@ -41,7 +41,7 @@
     pointer-events: none;
   }
   </style>
-  
+
   <app-location route="{{route}}"></app-location>
   <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
@@ -52,7 +52,9 @@
   </div>
   <div name="release">
     <caffo-release class="mdl-shadow--24dp" route="{{subroute}}"></caffo-release>
-    <a href='/' class='caffo-app__home'><paper-fab icon='caffo-icons:crate' elevation='5'></paper-fab></a>
+    <a href='/' class='caffo-app__home'>
+      <paper-icon-button src='/crate.svg'></paper-icon-button>
+    </a>
   </div>
 </caffo-pages>
 
