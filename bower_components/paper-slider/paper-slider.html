@@ -170,6 +170,7 @@ Custom property | Description | Default
         margin-left: calc(-15px - var(--calculated-paper-slider-height)/2);
         width: calc(30px + var(--calculated-paper-slider-height));
         height: calc(30px + var(--calculated-paper-slider-height));
+        filter: drop-shadow(0 0 1px #222);
       }
 
       .transiting > .slider-knob {
@@ -250,12 +251,15 @@ Custom property | Description | Default
 
       .slider-knob-inner::before,
       .slider-knob-inner::after {
-        transition: -webkit-transform .18s ease, background-color .18s ease;
-        transition: transform .18s ease, background-color .18s ease;
+        transition: none;
       }
 
       .pin.ring > .slider-knob > .slider-knob-inner::before {
         border-top-color: var(--paper-slider-pin-start-color, var(--paper-grey-400));
+      }
+
+      .pin.ring > .slider-knob > .slider-knob-inner::after {
+        background-color: var(--paper-slider-pin-start-color, var(--paper-grey-400));
       }
 
       .pin.expand > .slider-knob > .slider-knob-inner::before {

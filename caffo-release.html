@@ -10,6 +10,9 @@
 <dom-module id='caffo-release'>
   <template>
   <style>
+  :host{
+    background: #eee;
+  }
   paper-tabs {
     text-transform: uppercase;
     --paper-tab-ink: aqua;
@@ -64,11 +67,12 @@
   </style>
   <app-route route="{{route}}" pattern="/:tabName" data="{{data}}"></app-route>
 
-  <header>
+  <header class='mdl-shadow--2dp'>
     <div>
 
     <h1 id="releaseTitle">[[release.title]]</h1>
     <span class="year">[[release.year]]</span>
+    <span class="genre">[[release.genre]]</span>
 
     <paper-icon-button src="/download.svg"></paper-icon-button>
   </div>
@@ -94,7 +98,7 @@
                 <li><img src='/play.svg' /><span class='title'>{{item.title}}</span><span>[[_formatTime(item.length)]]</span></li>
               </template>
             </dom-repeat>
-            <li>
+            <li class='mdl-shadow--dp8'>
               <img src='/pause.svg' />
               <span class='title'>example</span>
               <span>4:20</span>
