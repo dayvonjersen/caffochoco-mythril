@@ -32,6 +32,14 @@ releases:
       defaultTracklist: 3
       category: "ep"
 
+#     - id: 3
+#       title: "Mashups 2007-2009"
+#       info: |
+#           My early mashups consisted of nothing more than two tracks laid on top of each other
+#           with minimum effects and automation, mostly for levels
+#       category: "mashup"
+
+
 tracklists:
     - id: 1
       title: "tracklist"

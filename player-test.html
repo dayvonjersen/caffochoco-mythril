@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+	<head>
+        <meta charset='utf-8'>
+		<title>Player-Test</title>
+	</head>
+	<body>
+	    <script src="/player.js"></script>
+			<audio id="audioElement" controls></audio>
+
+			<button id="test">add song</button>
+
+			<ol id="playlist">
+
+			</ol>
+			<script>
+			var mdl;
+			window.onload = () => {
+				var audioElement = document.getElementById("audioElement");
+				var playlistElement = document.getElementById("playlist");
+				var testButton = document.getElementById("test");
+
+				mdl = new PlayerModel(audioElement);
+				var view = new class {
+					notify(playerState) {
+						playlistElement.innerHTML = "";
+						playerState.playlist.forEach((url, i) => {
+							playlistElement.insertAdjacentHTML("beforeend", `<li>
+							${playerState.nowPlayingIndex == i ? '<strong>':''}${url}
+							</li>`);
+						});
+					}
+				};
+
+				mdl.subject.add(view);
+
+				testButton.addEventListener("click", ()=>{
+					mdl.add("/audio/djr-untitled-ep/wookie-puss.mp3");
+
+				})
+			};
+			</script>
+	</body>
+</html>
