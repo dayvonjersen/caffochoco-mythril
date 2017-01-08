@@ -9,15 +9,15 @@
 
     <title>discograph</title>
 
-    <link rel='stylesheet' href='/material.css'>
-    <link rel='stylesheet' href='/style.css'>
+    <link rel='stylesheet' href='/css/material.css'>
+    <link rel='stylesheet' href='/css/style.css'>
 
     <script src='/bower_components/webcomponentsjs/webcomponents-lite.js'></script>
 
     <link rel='import' href='/caffo-app.html'>
     <style>
       body {
-        background-image: url(/background.jpg);
+        background-image: url(/image/background.jpg);
         background-attachment: fixed;
         background-size: cover;
         margin: 0;
@@ -48,7 +48,7 @@
 
   <body>
     <div class='loader'>
-      <img src='/rings.svg'>
+      <img src='/svg/rings.svg'>
     </div>
 
     <script defer>
@@ -111,7 +111,7 @@ fetch("/data.json")
 })
 .catch(err => console.error(err));
 
-function setBackground(image='/background.jpg') {
+function setBackground(image='/image/background.jpg') {
   document.body.style.backgroundImage = `url(${image})`;
 };
     </script>

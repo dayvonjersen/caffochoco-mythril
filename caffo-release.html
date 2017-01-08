@@ -92,7 +92,7 @@
         <span class='genre'>[[release.genre]]</span>
 
         <!-- actions -->
-        <paper-icon-button src='/download.svg'></paper-icon-button>
+        <paper-icon-button src='/svg/download.svg'></paper-icon-button>
       </div>
 
       <!-- tabs -->
@@ -115,14 +115,14 @@
               <dom-repeat items='{{item.tracks}}'>
                 <template>
                   <li>
-                    <img src='/play.svg'>
+                    <img src='/svg/play.svg'>
                     <span class='title'>{{item.title}}</span>
                     <span>[[_formatTime(item.length)]]</span>
                   </li>
                 </template>
               </dom-repeat>
               <li class='mdl-shadow--dp8'>
-                <img src='/pause.svg'>
+                <img src='/svg/pause.svg'>
                 <span class='title'>example</span>
                 <span>4:20</span>
                 <paper-slider pin min='10' max='200' value='110'></paper-slider>
