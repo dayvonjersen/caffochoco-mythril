@@ -13,17 +13,22 @@
 <dom-module id='caffo-release'>
   <template>
     <style>
-      :host{
+      :host {
         background: var(--darkmuted, rgba(252,252,252,0.8));
         color: var(--darkmuted-text, #000);
+        display: flex;
+        flex-direction: column;
+        margin: 2em;
+        flex: 0 0 33.3333%;
+        align-self: stretch;
+        border-radius: 2px;
+        position: relative;
+        font-size: 16px;
       }
-      paper-slider {
-        --paper-slider-container-color: var(--vibrant-text);
-        --paper-slider-active-color: var(--vibrant);
-        --paper-slider-knob-color: var(--vibrant);
-        --paper-slider-pin-color: var(--vibrant);
-        --paper-slider-font-color: var(--vibrant-text);
+      h1 {
+        font-size: 2em;
       }
+
       paper-tabs {
         text-transform: uppercase;
         --paper-tab-ink: var(--vibrant, #000);
@@ -48,34 +53,6 @@
       }
       header div {
         padding: 0 1em;
-      }
-      .tracklist ol {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-      .tracklist li  {
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1em 0.5em;
-        position: relative;
-      }
-      .tracklist li paper-slider {
-        position: absolute;
-        width: calc(100% + 32px);
-        left: -16px;
-        bottom: -16px;
-        --paper-slider-height: 3px;
-      }
-      .tracklist li img {
-        width: 2.3333em;
-        height: 2.3333em;
-      }
-      .tracklist .title {
-        flex: 1;
-        padding: 0 .5em;
       }
     </style>
 
@@ -113,22 +90,15 @@
       <dom-repeat items='{{tracklists}}'>
         <template>
           <div class='tracklist'>
-            <ol>
-              <dom-repeat items='{{item.tracks}}'>
-                <template>
-                  <li>
-                    <caffo-playlist-item
-                      title$='[[item.title]]'
-                      length$='[[item.length]]'
-                      url$='[[_formatUrl(item.file)]]'>
-                    </caffo-playlist-item>
-                  </li>
-                </template>
-              </dom-repeat>
-              <li class='mdl-shadow--dp8'>
-
-              </li>
-            </ol>
+            <dom-repeat items='{{item.tracks}}'>
+              <template>
+                <caffo-playlist-item
+                  title$='[[item.title]]'
+                  length$='[[item.length]]'
+                  url$='[[_formatUrl(item.file)]]'>
+                </caffo-playlist-item>
+              </template>
+            </dom-repeat>
           </div>
         </template>
       </dom-repeat>
@@ -172,21 +142,23 @@ class CaffoRelease extends Polymer.Element {
   _tabChanged(event, details) {
     let tracklist = details.item.dataset.tracklist;
     if(tracklist === "") return;
+    if(tracklist === player.state.tracklistId) return;
     for(let i = 0; i < this.tracklists.length; i++) {
       if(this.tracklists[i].id == tracklist) {
         player.clear();
-        player.subject.removeAll();
         this.tracklists[i].tracks.forEach(t => player.add(this._formatUrl(t.file)));
-        [].forEach.call(
-          this.shadowRoot.querySelectorAll("caffo-playlist-item"),
-          (item) => player.subject.add(item)
-        );
+        player.state.tracklistId = tracklist;
+        return;
       }
     }
   }
 
   connectedCallback() {
     super.connectedCallback();
+    [].forEach.call(
+      this.shadowRoot.querySelectorAll("caffo-playlist-item"),
+      (item) => player.subject.add(item)
+    );
   }
 }
 customElements.define(CaffoRelease.is, CaffoRelease);

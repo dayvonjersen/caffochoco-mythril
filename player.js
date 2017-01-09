@@ -34,6 +34,8 @@ class PlayerModel {
 
       isPlaying: false,
       currentTime: 0,
+
+      tracklistId: 0,
     };
 
     //
@@ -99,7 +101,7 @@ class PlayerModel {
   }
 
   clear() {
-    this.state.playlist = [];
+    this.state.playlist = this.state.nowPlayingIndex > 0 ? [this.nowPlaying] : [];
     this.state.nowPlayingIndex = 0;
     this.load();
     this.update();
