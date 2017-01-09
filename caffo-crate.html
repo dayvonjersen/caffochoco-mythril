@@ -82,7 +82,7 @@
       <paper-tab data-category='sketch'>SKETCHES</paper-tab>
     </paper-tabs>
 
-    <div class='stack' id='stack'></div>
+    <div class='stack' id='stack' on-click="_test"></div>
   </template>
   <script>
 class CaffoCrate extends Polymer.Element {
@@ -90,7 +90,7 @@ class CaffoCrate extends Polymer.Element {
   static get config() {
     return {
       properties: {
-        page: {
+        route: {
           type: Object,
           notify: true
         },
@@ -98,8 +98,30 @@ class CaffoCrate extends Polymer.Element {
       observers: [
         '_pageChanged(page)'
       ],
+      listeners: {
+        'click': '_test',
+      }
     }
   }
+
+  _test(event, details, wut) {
+    console.log(event, event.target, details, wut);
+    if(event.target == this.$.stack.lastElementChild) {
+      this.set('route.path', '/release/'+event.target.getAttribute("url"));
+    } else {
+      this.$.stack.lastElementChild.classList.add('flipforward__container--animate')
+      setTimeout(() => {
+        this.$.stack.insertBefore(this.$.stack.removeChild(this.$.stack.lastElementChild), this.$.stack.firstChild);
+      }, 400);
+    }
+  }
+
+// filter
+// sort
+// render
+// animate flip
+// click handler on this.$.stack, if target is lastChild then follow link
+//  otherwise advance queue
 
   _tabChanged(event, details) {
     let category = details.item.dataset.category;
