@@ -13,7 +13,15 @@
     <!--<img src='/svg/pause.svg'>-->
     <span class='title'>[[title]]</span>
     <span>[[currentTime]]</span>
-    <paper-slider id='seek' pin min='0' max='[[length]]' value='0'></paper-slider>
+    <paper-slider
+      on-immediate-value-change="_seek"
+      on-value-change="_done"
+      id="seek"
+      pin
+      min='0'
+      max='[[length]]'
+      value='0'>
+    </paper-slider>
   </template>
   <script>
 class CaffoPlaylistItem extends Polymer.Element {
@@ -31,9 +39,18 @@ class CaffoPlaylistItem extends Polymer.Element {
     return formatTime(time);
   }
 
+  _seek() {
+    this.isSeeking = true;
+    player.seekTo(this.$.seek.immediateValue);
+  }
+
+  _done() {
+    this.isSeeking = false;
+  }
+
   notify(playerState) {
     if(playerState.nowPlaying == this.url) {
-      this.$.seek.value = playerState.currentTime;
+      if(!this.isSeeking) this.$.seek.value = playerState.currentTime;
       this.currentTime = formatTime(this.length - playerState.currentTime, true);
     }
   }
@@ -41,7 +58,7 @@ class CaffoPlaylistItem extends Polymer.Element {
   connectedCallback() {
     super.connectedCallback();
     this.currentTime = formatTime(this.length);
-    // ...
+    this.isSeeking = false;
   }
 }
 customElements.define(CaffoPlaylistItem.is, CaffoPlaylistItem);
