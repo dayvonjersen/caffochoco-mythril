@@ -8,6 +8,8 @@
 <link rel='import' href='/bower_components/paper-tabs/paper-tabs.html'>
 <link rel='import' href='/bower_components/paper-slider/paper-slider.html'>
 
+<link rel='import' href='/caffo-playlist-item.html'>
+
 <dom-module id='caffo-release'>
   <template>
     <style>
@@ -115,17 +117,16 @@
               <dom-repeat items='{{item.tracks}}'>
                 <template>
                   <li>
-                    <img src='/svg/play.svg'>
-                    <span class='title'>{{item.title}}</span>
-                    <span>[[_formatTime(item.length)]]</span>
+                    <caffo-playlist-item
+                      title$='[[item.title]]'
+                      length$='[[item.length]]'
+                      url$='[[_formatUrl(item.file)]]'>
+                    </caffo-playlist-item>
                   </li>
                 </template>
               </dom-repeat>
               <li class='mdl-shadow--dp8'>
-                <img src='/svg/pause.svg'>
-                <span class='title'>example</span>
-                <span>4:20</span>
-                <paper-slider pin min='10' max='200' value='110'></paper-slider>
+
               </li>
             </ol>
           </div>
@@ -147,18 +148,11 @@ class CaffoRelease extends Polymer.Element {
           type: Object,
           notify: true
         },
-        tracklists: {
-          type: Array,
-        }
       },
       observers: [
         '_pageChanged(data.tabName)'
       ],
     }
-  }
-
-  _formatTime(time) {
-    return formatTime(time);
   }
 
   _pageChanged(name) {
@@ -171,13 +165,22 @@ class CaffoRelease extends Polymer.Element {
     document.title = this.release.title;
   }
 
+  _formatUrl(url) {
+    return `/audio/${this.release.url}/${url}`;
+  }
+
   _tabChanged(event, details) {
     let tracklist = details.item.dataset.tracklist;
     if(tracklist === "") return;
     for(let i = 0; i < this.tracklists.length; i++) {
       if(this.tracklists[i].id == tracklist) {
         player.clear();
-        this.tracklists[i].tracks.forEach(t => player.add(`/audio/${this.release.url}/${t.file}`));
+        player.subject.removeAll();
+        this.tracklists[i].tracks.forEach(t => player.add(this._formatUrl(t.file)));
+        [].forEach.call(
+          this.shadowRoot.querySelectorAll("caffo-playlist-item"),
+          (item) => player.subject.add(item)
+        );
       }
     }
   }

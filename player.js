@@ -33,7 +33,7 @@ class PlayerModel {
       previousVolume: 0,
 
       isPlaying: false,
-
+      currentTime: 0,
     };
 
     //
@@ -42,11 +42,16 @@ class PlayerModel {
       this.next();
       this.togglePlayback();
     });
+    this.audioElement.addEventListener('timeupdate', () => {
+      this.state.currentTime = this.audioElement.currentTime;
+      this.update();
+    });
   }
 
   // observer pattern
   update() {
     this.state.isPlaying = !this.audioElement.paused;
+    this.state.nowPlaying = this.nowPlaying;
     this.subject.notifyObservers(this.state);
   }
 

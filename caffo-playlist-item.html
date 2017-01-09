@@ -1,0 +1,49 @@
+<link rel='import' href='/bower_components/polymer/polymer-element.html'>
+<dom-module id='caffo-playlist-item'>
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        overflow: hidden;
+      }
+      img { width: 2em; height: 2em; }
+    </style>
+    <img src='/svg/play.svg'>
+    <!--<img src='/svg/pause.svg'>-->
+    <span class='title'>[[title]]</span>
+    <span>[[currentTime]]</span>
+    <paper-slider id='seek' pin min='0' max='[[length]]' value='0'></paper-slider>
+  </template>
+  <script>
+class CaffoPlaylistItem extends Polymer.Element {
+  static get is() { return 'caffo-playlist-item'; }
+  static get config() {
+    return {
+      properties: {
+        title: {},
+        length:{},
+        url:{},
+      }
+    }
+  }
+  _formatTime(time) {
+    return formatTime(time);
+  }
+
+  notify(playerState) {
+    if(playerState.nowPlaying == this.url) {
+      this.$.seek.value = playerState.currentTime;
+      this.currentTime = formatTime(this.length - playerState.currentTime, true);
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.currentTime = formatTime(this.length);
+    // ...
+  }
+}
+customElements.define(CaffoPlaylistItem.is, CaffoPlaylistItem);
+  </script>
+</dom-module>
