@@ -125,10 +125,11 @@ class CaffoCrate extends Polymer.Element {
     this.releases = window.releases;
     this.selectedTab = 0;
     this.releases.forEach((item) => {
-      this.$.stack.insertAdjacentHTML("beforeend", `<caffo-record
-        label="${item.title} - ${item.year}"
-        image="/image/${item.url}.jpg">
-      </caffo-record>`);
+      let record = document.createElement("caffo-record");
+      record.setAttribute("label", `${item.title} - ${item.year}`);
+      record.setAttribute("url", item.url)
+      record.setAttribute("image", `/image/${item.url}.jpg`)
+      this.$.stack.appendChild(record);
     });
   }
 }
