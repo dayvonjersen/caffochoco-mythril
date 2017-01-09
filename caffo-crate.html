@@ -1,15 +1,75 @@
 <link rel='import' href='/bower_components/polymer/polymer-element.html'>
 
+<link rel='import' href='/caffo-record.html'>
 <link rel='import' href='/caffo-release.html'>
 
 <dom-module id='caffo-crate'>
   <template>
+    <link rel='stylesheet' href='/image/background.jpg.css'>
     <style>
       :host {
         display: block;
         position: relative;
-        overflow: hidden;
+        width: 66.6667%;
       }
+
+      paper-tabs {
+        --paper-tab-ink: var(--darkvibrant);
+        --paper-tabs-selection-bar-color: var(--darkvibrant);
+        color: #fff;
+        -webkit-text-stroke: .5px #ccc;
+        width: 50%;
+        margin: auto;
+      }
+
+      @media (max-width: 720px) {
+        paper-tabs {
+          width: 100%;
+        }
+      }
+
+      .stack {
+        margin: 20px auto;
+        width: 300px;
+        height: 300px;
+        padding: 0;
+        position: relative;
+        max-width: 100%;
+        transform: translateY(10.6%);
+        transition: all 0.3s;
+      }
+
+      .stack > * /*caffo-record*/ {
+        max-width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: all 0.3s;
+        outline: 1px solid transparent;
+        backface-visibility: hidden;
+        transform-origin: 50% -22%;
+      }
+
+      .stack > *:last-child {
+        position: relative;
+        width: 24rem;
+      }
+
+      .stack:hover > :nth-last-child(2) {
+        transform:scale(.8888) translateY(-8.8888%);
+      }
+      .stack > *:last-child {  transform: scale(1); }
+      .stack > *:nth-last-child(1) {  transform: scale(1); }
+      .stack > *:nth-last-child(2) {  transform: scale(0.9); }
+      .stack > *:nth-last-child(3) {  transform: scale(0.81); }
+      .stack > *:nth-last-child(4) {  transform: scale(0.729); }
+      .stack > *:nth-last-child(5) {  transform: scale(0.6561); }
+      .stack > *:nth-last-child(6) {  transform: scale(0.59049); }
+      .stack > *:nth-last-child(7) {  transform: scale(0.53144); }
+      .stack > *:nth-last-child(8) {  transform: scale(0.4783); }
+      .stack > *:nth-last-child(9) {  transform: scale(0.43047); }
+      .stack > *:nth-last-child(10) {  transform: scale(0.38742); }
+
     </style>
 
     <paper-tabs selected='{{selectedTab}}' on-iron-select='_tabChanged' scrollable>
@@ -22,16 +82,18 @@
       <paper-tab data-category='sketch'>SKETCHES</paper-tab>
     </paper-tabs>
 
-    <button on-click='test'>sort</button>
-    <ul>
+    <div class='stack'>
       <dom-repeat id='list' items='{{releases}}'>
         <template>
-          <li>
-            <a href='/release/{{item.url}}'>{{item.title}} - {{item.year}}</a>
-          </li>
+          <a href="/release/{{item.url}}">
+            <caffo-record
+              label="[[item.title]] - [[item.year]]"
+              image="/image/{{item.url}}.jpg">
+            </caffo-record>
+          </a>
         </template>
       </dom-repeat>
-    </ul>
+    </div>
   </template>
   <script>
 class CaffoCrate extends Polymer.Element {
@@ -41,10 +103,6 @@ class CaffoCrate extends Polymer.Element {
       properties: {
         page: {
           type: Object,
-          notify: true
-        },
-        releases: {
-          type: Array,
           notify: true
         },
       },
