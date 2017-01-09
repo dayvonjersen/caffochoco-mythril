@@ -1,29 +1,29 @@
 releases:
-    - id: 1
-      title: "deadHipsters - LOVE COMPUTER"
-      year: 2012
-      url: "deadhipsters-lovecomputer"
-      info: |
-          <dl>
-          <dt>visiv</dt>
-          <dd>tavis ivan lochhead</dd>
-          <dd>toronto</dd>
-          <dd>written-by, synths, vocals, piano, mix-and-master, front-man</dd>
-          <dt>d.j.r.</dt>
-          <dd>david j. rivera</dt>
-          <dd>nyc</dd>
-          <dd>written-by, percussion, mix-and-arrangement</dd>
-          <dt>the bf project</dd>
-          <dd>ben flack</dd>
-          <dd>seattle, washington</dd>
-          <dd>remix-and-additional-production, pads-courtesy-of</dd>
-          </dl>
-      tracklists: [1, 2]
-      defaultTracklist: 1
-      category: "album"
+    # - id: 1
+    #   title: "deadHipsters - LOVE COMPUTER"
+    #   year: 2012
+    #   url: "deadhipsters-lovecomputer"
+    #   info: |
+    #       <dl>
+    #       <dt>visiv</dt>
+    #       <dd>tavis ivan lochhead</dd>
+    #       <dd>toronto</dd>
+    #       <dd>written-by, synths, vocals, piano, mix-and-master, front-man</dd>
+    #       <dt>d.j.r.</dt>
+    #       <dd>david j. rivera</dt>
+    #       <dd>nyc</dd>
+    #       <dd>written-by, percussion, mix-and-arrangement</dd>
+    #       <dt>the bf project</dd>
+    #       <dd>ben flack</dd>
+    #       <dd>seattle, washington</dd>
+    #       <dd>remix-and-additional-production, pads-courtesy-of</dd>
+    #       </dl>
+    #   tracklists: [1, 2]
+    #   defaultTracklist: 1
+    #   category: "album"
 
     - id: 2
-      title: "d.j.r. - Untitled E.P."
+      title: "d.j.r. - untitled E.P."
       year: 2011
       genre: "Tech House"
       url: "djr-untitled-ep"
@@ -31,6 +31,17 @@ releases:
         dunno
       tracklists: [3]
       defaultTracklist: 3
+      category: "ep"
+
+    - id: 3
+      title: "d.j.r. - Amherst E.P."
+      year: 2011
+      genre: "Music"
+      url: "djr-amherst-ep"
+      info: |
+        it was raining
+      tracklists: [4, 5]
+      defaultTracklist: 4
       category: "ep"
 
 #     - id: 3
@@ -42,36 +53,42 @@ releases:
 
 
 tracklists:
-    - id: 1
-      title: "tracklist"
-      tracks: [1,2,3,4,5,6,7]
+    # - id: 1
+    #   title: "tracklist"
+    #   tracks: [1,2,3,4,5,6,7]
     - id: 2
       title: "extended mixes"
       tracks: [8,9]
     - id: 3
       title: "tracklist"
       tracks: [10,11,12,13]
+    - id: 4
+      title: "tracklist"
+      tracks: [14,15,16,17]
+    - id: 5
+      title: "alternate mixes"
+      tracks: [18,19,20,21]
 
 tracks:
-    - id: 1
-      title: the bf project & d.j.r. - "Beginnings"
-    - id: 2
-      title: d.j.r. & logichead - "Kennedy"
-    - id: 3
-      title: logichead - "Love Computer"
-    - id: 4
-      title: d.j.r. & logichead - "Shopping"
-    - id: 5
-      title: tavis ivan - "All The Time"
-    - id: 6
-      title: deadHipsters - "error free/meow chi (edit)"
-    - id: 7
-      title: deadHipsters - ∑≐<3 ∗ ∞
+    # - id: 1
+    #   title: the bf project & d.j.r. - "Beginnings"
+    # - id: 2
+    #   title: d.j.r. & logichead - "Kennedy"
+    # - id: 3
+    #   title: logichead - "Love Computer"
+    # - id: 4
+    #   title: d.j.r. & logichead - "Shopping"
+    # - id: 5
+    #   title: tavis ivan - "All The Time"
+    # - id: 6
+    #   title: deadHipsters - "error free/meow chi (edit)"
+    # - id: 7
+    #   title: deadHipsters - ∑≐<3 ∗ ∞
 
-    - id: 8
-      title: the bf project & d.j.r. - "Beginnings" [Extended Mix]
-    - id: 9
-      title: d.j.r. & logichead - "Kennedy" [the bf project dub]
+    # - id: 8
+    #   title: the bf project & d.j.r. - "Beginnings" [Extended Mix]
+    # - id: 9
+    #   title: d.j.r. & logichead - "Kennedy" [the bf project dub]
 
     - id: 10
       title: midnight on e houston
@@ -92,4 +109,45 @@ tracks:
       title: over
       file: over.mp3
       length: 497
+
+    - id: 14
+      title: amherst
+      file: simpler_12.mp3                                                                                                              
+      length: 383              
+
+    - id: 15
+      title: "untitledq 6"
+      file: untitledq_6.mp3
+      length: 368
+
+    - id: 16
+      title: "untitled 3.6"
+      file: untitled3_6.mp3
+      length: 457
+
+    - id: 17
+      title: "dunno 10"
+      file: dunno_10.mp3                                                                                                                
+      length: 338
+
+    - id: 18
+      title: amherst (alternate mix)
+      file: simpler_7.mp3                                                                                                              
+      length: 323 
+
+    - id: 19
+      title: "untitledq 7"
+      file: untitledq_7.mp3
+      length: 228
+
+    - id: 20
+      title: "untitled 3.5"
+      file: untitled3_5.mp3
+      length: 447
+
+    - id: 21
+      title: "dunno 8"
+      file: dunno_8.mp3                                                                                                                
+      length: 247
+
 
