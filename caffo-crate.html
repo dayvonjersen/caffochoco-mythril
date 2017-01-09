@@ -22,7 +22,7 @@
         margin: auto;
       }
 
-      @media (max-width: 720px) {
+      @media (max-width: 1080px) {
         paper-tabs {
           width: 100%;
         }
@@ -82,18 +82,7 @@
       <paper-tab data-category='sketch'>SKETCHES</paper-tab>
     </paper-tabs>
 
-    <div class='stack'>
-      <dom-repeat id='list' items='{{releases}}'>
-        <template>
-          <a href="/release/{{item.url}}">
-            <caffo-record
-              label="[[item.title]] - [[item.year]]"
-              image="/image/{{item.url}}.jpg">
-            </caffo-record>
-          </a>
-        </template>
-      </dom-repeat>
-    </div>
+    <div class='stack' id='stack'></div>
   </template>
   <script>
 class CaffoCrate extends Polymer.Element {
@@ -135,6 +124,12 @@ class CaffoCrate extends Polymer.Element {
     super.connectedCallback();
     this.releases = window.releases;
     this.selectedTab = 0;
+    this.releases.forEach((item) => {
+      this.$.stack.insertAdjacentHTML("beforeend", `<caffo-record
+        label="${item.title} - ${item.year}"
+        image="/image/${item.url}.jpg">
+      </caffo-record>`);
+    });
   }
 }
 customElements.define(CaffoCrate.is, CaffoCrate);
