@@ -5,12 +5,22 @@
 
 <dom-module id='caffo-crate'>
   <template>
-    <link rel='stylesheet' href='/image/background.jpg.css'>
     <style>
     :host {
       display: block;
       position: relative;
       width: 66.6667%;
+      --vibrant: rgba(167,131,64,1);
+      --vibrant-text: #ffffff;
+      --darkvibrant: rgba(23,81,114,1);
+      --darkvibrant-text: #ffffff;
+      --muted: rgba(159,97,86,1);
+      --muted-text: #ffffff;
+      --lightmuted: rgba(200,166,168,1);
+      --lightmuted-text: #000000;
+      --darkmuted: rgba(52,69,85,1);
+      --darkmuted-text: #ffffff;
+
     }
 
     paper-tabs {
@@ -135,9 +145,6 @@ class CaffoCrate extends Polymer.Element {
           notify: true
         },
       },
-      observers: [
-        '_pageChanged(page)'
-      ],
       listeners: {
         'click': '_test',
       }
@@ -145,7 +152,7 @@ class CaffoCrate extends Polymer.Element {
   }
 
   _test(event, details, wut) {
-    console.log(event, event.target, details, wut);
+    //console.log(event, event.target, details, wut);
     if(event.target == this.$.stack.lastElementChild) {
       this.set('route.path', '/release/'+event.target.getAttribute("url"));
     } else {
@@ -174,13 +181,6 @@ class CaffoCrate extends Polymer.Element {
     let d = this.sortDirection ? 1 : -1;
     this.releases.sort((a,b)=>d*a.title.localeCompare(b.title))
     this.$.list.render();
-  }
-
-  _pageChanged(page) {
-    if(!page) {
-      setBackground('/image/background.jpg');
-      document.title = 'caffoCrate++'
-    }
   }
 
   connectedCallback() {

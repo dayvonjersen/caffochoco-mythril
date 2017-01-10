@@ -55,7 +55,7 @@
       selected='[[routeData.page]]'
       attr-for-selected='name'
       fallback-selection='index'
-      on-iron-select='testFn'>
+      on-iron-select='_pageChanged'>
       <div name='index'>
         <caffo-crate
           route='{{route}}'>
@@ -80,9 +80,15 @@ class CaffoApp extends Polymer.Element {
   static get is() { return 'caffo-app'; }
   static get config() { return {};  }
 
-  testFn(event, details) {
-    //console.log('page changed', this.routeData)
-    //console.log(event, details)
+  _pageChanged() {
+    switch(this.routeData.page) {
+      case "release":
+        break;
+      default:
+        setBackground('/image/background.jpg');
+        document.title = 'caffoCrate++'
+        break;
+    }
   }
 
   connectedCallback() {
