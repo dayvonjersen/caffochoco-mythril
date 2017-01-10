@@ -107,9 +107,18 @@ class PlayerModel {
     this.update();
   }
 
-  load() {
-    this.audioElement.src = this.nowPlaying;
+  load(srcUrl) {
+    if(srcUrl) {
+      let idx = this.state.playlist.findIndex(u=>u===srcUrl);
+      if(idx != -1) {
+        this.state.nowPlayingIndex = idx;
+        this.audioElement.src = srcUrl;
+      }
+    } else {
+      this.audioElement.src = this.nowPlaying;
+    }
     if(this.isPlaying) this.audioElement.play();
+    this.update();
   }
 
   // playback

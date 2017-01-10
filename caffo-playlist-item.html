@@ -7,9 +7,9 @@
         flex-wrap: nowrap;
         justify-content: space-between;
         align-items: center;
-        padding: 1em 0.5em;
         position: relative;
         user-select: none;
+        border-radius: 2px;
       }
       :host:not(.mdl-shadow--24dp) paper-slider {
         height: 0;
@@ -28,22 +28,37 @@
         left: -16px;
         bottom: -16px;
       }
-      img {
-        width: 2.3333em;
-        height: 2.3333em;
-      }
       .title {
         flex: 1;
-        padding: 0 .5em;
+      }
+      :host:hover .title {
+        text-decoration: underline;
       }
       .time {
+        padding-right: 16px;
+      }
+      .title, .time {
         cursor: pointer;
+        line-height: 3.5;
+      }
+      #playpause {
+        width: 56px;
+        height: 56px;
+        filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.14))
+         drop-shadow(0 3px 14px rgba(0, 0, 0, 0.12))
+         drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2));
+      }
+      .hide {
+        opacity: 0;
+      }
+      :host:hover .hide {
+        opacity: 1;
       }
     </style>
-    <img src='/svg/play.svg'>
+    <paper-icon-button id='playpause' class='hide' src='/svg/play.svg' on-click="_play"></paper-icon-button>
     <!--<img src='/svg/pause.svg'>-->
-    <span class='title'>[[title]]</span>
-    <span class='time' on-click='_timeRemaining'>[[currentTime]]</span>
+    <span class='title' on-click="_play">[[title]]</span>
+    <span class='time' title='toggle time remaining' on-click='_timeRemaining'>[[currentTime]]</span>
     <paper-slider
       on-immediate-value-change="_seek"
       on-value-change="_done"
@@ -83,9 +98,19 @@ class CaffoPlaylistItem extends Polymer.Element {
     this.isSeeking = false;
   }
 
+  _play(event) {
+    if(player.state.nowPlaying != this.url) {
+      player.stopPlayback();
+      player.load(this.url);
+    }
+    player.togglePlayback();
+  }
+
   notify(playerState) {
     if(playerState.nowPlaying == this.url) {
       this.classList.add('mdl-shadow--24dp');
+      this.$.playpause.classList.remove('hide');
+      this.$.playpause.src = playerState.isPlaying ? '/svg/pause.svg' : '/svg/play.svg';
       if(!this.isSeeking) this.$.seek.value = playerState.currentTime;
       this.currentTime = formatTime(
         this.timeRemaining ? this.length - playerState.currentTime : playerState.currentTime,
@@ -93,6 +118,8 @@ class CaffoPlaylistItem extends Polymer.Element {
       );
     } else {
       this.classList.remove('mdl-shadow--24dp');
+      this.$.playpause.classList.add('hide');
+      this.$.playpause.src = '/svg/play.svg';
       this.currentTime = formatTime(this.length);
     }
   }
