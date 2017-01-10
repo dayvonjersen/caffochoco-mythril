@@ -67,29 +67,51 @@ func main() {
 
 }
 
+type file struct {
+	modtime    int64
+	stylesheet string
+}
+
+var imageCache = map[string]*file{}
+
 func imageHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/css; charset=UTF-8")
+
 	path := "." + r.URL.Path
 	path = strings.TrimSuffix(path, ".css")
 
 	f, err := os.Open(path)
 	checkErr(err)
+	defer f.Close()
+
+	info, err := f.Stat()
+	checkErr(err)
+	modtime := info.ModTime().Unix()
+
+	if cached, ok := imageCache[path]; ok {
+		if cached.modtime == modtime {
+			fmt.Fprintf(w, cached.stylesheet)
+			return
+		}
+	}
+
 	img, _, err := image.Decode(f)
-	f.Close()
 	checkErr(err)
 	palette, err := vibrant.NewPaletteFromImage(img)
 	checkErr(err)
-	w.Header().Set("Content-Type", "text/css; charset=UTF-8")
-	fmt.Fprintf(w, ":root {\n")
+	stylesheet := ":root {\n"
 	for _, swatch := range palette.ExtractAwesome() {
 		c := swatch.Color
 		r, g, b := c.RGB()
 		n := strings.ToLower(swatch.Name)
-		fmt.Fprintf(w,
+		stylesheet += fmt.Sprintf(
 			"    --%s: rgba(%d,%d,%d,1);\n    --%s-text: %s;\n",
 			n, r, g, b, n, c.TitleTextColor(),
 		)
 	}
-	fmt.Fprintf(w, "}")
+	stylesheet += "}"
+	fmt.Fprintf(w, stylesheet)
+	imageCache[path] = &file{modtime: modtime, stylesheet: stylesheet}
 }
 
 func fileExists(filename string) bool {
