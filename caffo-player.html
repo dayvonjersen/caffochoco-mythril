@@ -4,16 +4,29 @@
     <style>
       :host {
         display: block;
-        position: relative;
-        overflow: hidden;
+        position: fixed;
+        background: #fafafa;
+      }
+      ol {
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        list-style-position: inside;
+        cursor: pointer;
+        padding: 0 1em;
+      }
+      li[selected] {
+        background: #a8c5f7;
+        font-weight: bold;
       }
     </style>
     <audio id="audioElement" controls></audio>
     <ol>
-      <dom-repeat items='{{playlist}}'>
+      <dom-repeat items='{{playlist}}' id='list'>
         <template>
-          <li>
-            {{item}}
+          <li selected$=[[item.selected]] data-index$=[[item.index]] on-click="_play">
+            {{item.value}}
           </li>
         </template>
       </dom-repeat>
@@ -34,6 +47,12 @@ class CaffoPlayer extends Polymer.Element {
     }
   }
 
+  _play(event) {
+    let e = Polymer.dom(event);
+    player.state.nowPlayingIndex = e.localTarget.dataset.index;
+    player.load();
+  }
+
   connectedCallback() {
     super.connectedCallback();
     player = new PlayerModel(this.$.audioElement);
@@ -41,7 +60,10 @@ class CaffoPlayer extends Polymer.Element {
   }
 
   notify(playerState) {
-    this.playlist = playerState.playlist;
+    let playlist = [];
+    playerState.playlist.forEach((item, i) => playlist.push({index:i,value:item,selected:playerState.nowPlayingIndex==i}));
+    this.playlist = playlist;
+    this.$.list.render();
   }
 }
 customElements.define(CaffoPlayer.is, CaffoPlayer);
