@@ -49,8 +49,10 @@ class CaffoPlayer extends Polymer.Element {
 
   _play(event) {
     let e = Polymer.dom(event);
+    player.stopPlayback();
     player.state.nowPlayingIndex = e.localTarget.dataset.index;
     player.load();
+    player.togglePlayback();
   }
 
   connectedCallback() {
