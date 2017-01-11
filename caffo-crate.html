@@ -81,7 +81,7 @@
     }
 
     .stack:hover > :nth-last-child(2) {
-      transform:scale(.8888) translateY(-8.8888%);
+      transform:scale(.8888) translateY(-12.6667%);
     }
     .stack > *:last-child {  transform: scale(1); }
     .stack > *:nth-last-child(1) {  transform: scale(1); }
@@ -104,6 +104,10 @@
       transform-style: preserve-3d;
       transition: 400ms transform, 400ms opacity;
       opacity: 1;
+    }
+
+    .flipforward__container:hover ~ .flipforward__container:not(.flipforward__container--animate) ::slotted(.flipforward__item) {
+      transform: rotateX(-35deg);
     }
 
     .flipforward__container ::slotted(.flipforward__edge) {
