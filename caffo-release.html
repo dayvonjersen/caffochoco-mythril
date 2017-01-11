@@ -43,6 +43,7 @@
       iron-pages {
         display: flex;
         min-height: 0;
+        height: 100%;
       }
       iron-pages > * {
         width: 100%;
@@ -93,6 +94,7 @@
             <dom-repeat items='{{item.tracks}}'>
               <template>
                 <caffo-playlist-item
+                  tracklist-id$='[[item.tracklistId]]'
                   title$='[[item.title]]'
                   length$='[[item.length]]'
                   url$='[[_formatUrl(item.file)]]'>
@@ -127,13 +129,22 @@ class CaffoRelease extends Polymer.Element {
 
   _loadTracklist(tracklist) {
     if(!player) return;
-    if(tracklist === "") return;
-    if(tracklist === player.state.tracklistId) return;
+
     for(let i = 0; i < this.tracklists.length; i++) {
       if(this.tracklists[i].id == tracklist) {
         player.clear();
-        this.tracklists[i].tracks.forEach(t => player.add(this._formatUrl(t.file)));
-        player.state.tracklistId = tracklist;
+        let skip = false;
+        if(tracklist == player.state.tracklistId) {
+          skip = true;
+        }
+        this.tracklists[i].tracks.forEach((t) => {
+          let url = this._formatUrl(t.file);
+          if(player.nowPlaying != url) {
+            if(!skip) player.add(url);
+          } else if(skip) {
+            skip = false;
+          }
+        });
         return;
       }
     }
@@ -164,7 +175,7 @@ class CaffoRelease extends Polymer.Element {
 
   _tabChanged(event, details) {
     let e = Polymer.dom(event);
-    this._loadTracklist(e.localTarget.selectedItem.dataset.tracklist);
+    this._loadTracklist(parseInt(e.localTarget.selectedItem.dataset.tracklist));
   }
 
   connectedCallback() {

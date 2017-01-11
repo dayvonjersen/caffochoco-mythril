@@ -85,6 +85,10 @@ class CaffoApp extends Polymer.Element {
       case "release":
         break;
       default:
+        if(player) {
+          player.stopPlayback();
+          player.clear();
+        }
         setBackground('/image/background.jpg');
         document.title = 'caffoCrate++'
         break;

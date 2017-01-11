@@ -56,9 +56,9 @@ tracklists:
     # - id: 1
     #   title: "tracklist"
     #   tracks: [1,2,3,4,5,6,7]
-    - id: 2
-      title: "extended mixes"
-      tracks: [8,9]
+    # - id: 2
+    #  title: "extended mixes"
+    #  tracks: [8,9]
     - id: 3
       title: "tracklist"
       tracks: [10,11,12,13]
@@ -93,13 +93,13 @@ tracks:
     - id: 10
       title: midnight on e houston
       file: midnight-on-e-houston.mp3
-      length: 392      
-      
+      length: 392
+
     - id: 11
       title: glaston error
       file: glaston-error.mp3
       length: 472
-          
+
     - id: 12
       title: wookie puss
       file: wookie-puss.mp3
@@ -112,8 +112,8 @@ tracks:
 
     - id: 14
       title: amherst
-      file: simpler_12.mp3                                                                                                              
-      length: 383              
+      file: simpler_12.mp3
+      length: 383
 
     - id: 15
       title: "untitledq 6"
@@ -127,13 +127,13 @@ tracks:
 
     - id: 17
       title: "dunno 10"
-      file: dunno_10.mp3                                                                                                                
+      file: dunno_10.mp3
       length: 338
 
     - id: 18
       title: amherst (alternate mix)
-      file: simpler_7.mp3                                                                                                              
-      length: 323 
+      file: simpler_7.mp3
+      length: 323
 
     - id: 19
       title: "untitledq 7"
@@ -147,7 +147,5 @@ tracks:
 
     - id: 21
       title: "dunno 8"
-      file: dunno_8.mp3                                                                                                                
+      file: dunno_8.mp3
       length: 247
-
-

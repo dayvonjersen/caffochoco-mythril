@@ -101,7 +101,7 @@ class PlayerModel {
   }
 
   clear() {
-    this.state.playlist = this.state.nowPlayingIndex > 0 ? [this.nowPlaying] : [];
+    this.state.playlist = this.state.isPlaying && this.state.playlist.length > 0 ? [this.nowPlaying] : [];
     this.state.nowPlayingIndex = 0;
     this.load();
     this.update();
@@ -114,7 +114,7 @@ class PlayerModel {
         this.state.nowPlayingIndex = idx;
         this.audioElement.src = srcUrl;
       }
-    } else {
+    } else if(!this.audioElement.src || new URL(this.audioElement.src).pathname !== this.nowPlaying) {
       this.audioElement.src = this.nowPlaying;
     }
     if(this.isPlaying) this.audioElement.play();
@@ -140,6 +140,8 @@ class PlayerModel {
     if(this.audioElement.readyState != HTMLMediaElement.HAVE_NOTHING) {
       this.audioElement.currentTime = 0;
     }
+
+    this.state.currentTime = 0;
 
     this.update();
   }

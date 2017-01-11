@@ -10,6 +10,7 @@
         position: relative;
         user-select: none;
         border-radius: 2px;
+        margin-bottom: 16px;
       }
       :host:not(.mdl-shadow--24dp) paper-slider {
         height: 0;
@@ -78,6 +79,7 @@ class CaffoPlaylistItem extends Polymer.Element {
         title: {},
         length:{},
         url:{},
+        tracklistId:{}
       }
     }
   }
@@ -108,7 +110,9 @@ class CaffoPlaylistItem extends Polymer.Element {
 
   notify(playerState) {
     if(playerState.nowPlaying == this.url) {
+      player.state.tracklistId = this.tracklistId
       this.classList.add('mdl-shadow--24dp');
+      this.scrollIntoView();
       this.$.playpause.classList.remove('hide');
       this.$.playpause.src = playerState.isPlaying ? '/svg/pause.svg' : '/svg/play.svg';
       if(!this.isSeeking) this.$.seek.value = playerState.currentTime;

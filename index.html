@@ -107,7 +107,9 @@ fetch("/data.json")
   data.tracklists.forEach(tracklist => {
     let _tracks = [];
     tracklist.tracks.forEach(t => {
-      _tracks[_tracks.length] = tracks[t];
+      let track = tracks[t];
+      track.tracklistId = tracklist.id;
+      _tracks[_tracks.length] = track;
     });
     tracklist.tracks = _tracks;
     tracklists[tracklist.id] = tracklist;
