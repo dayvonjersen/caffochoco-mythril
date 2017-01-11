@@ -14,8 +14,6 @@
   <template>
     <style>
       :host {
-        background: var(--darkmuted, rgba(252,252,252,0.8));
-        color: var(--darkmuted-text, #000);
         display: flex;
         flex-direction: column;
         margin: 2em;
@@ -37,8 +35,11 @@
       paper-icon-button {
         --paper-icon-button-ink-color: var(--vibrant);
       }
-      .year {
+      .info {
         color: #aaa;
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
       }
       iron-pages {
         display: flex;
@@ -52,7 +53,11 @@
         scroll-behavior: smooth;
         padding: 16px;
       }
-      header div {
+      header {
+        background: var(--darkmuted, rgba(252,252,252,0.8));
+        color: var(--darkmuted-text, #000);
+      }
+      header > div {
         padding: 0 1em;
       }
     </style>
@@ -68,11 +73,14 @@
       <div>
         <!-- info -->
         <h1 id='releaseTitle'>[[release.title]]</h1>
-        <span class='year'>[[release.year]]</span>
-        <span class='genre'>[[release.genre]]</span>
+        <div class='info'>
+          <span class='year'>[[release.year]]</span>
+          <span class='genre'>#[[release.genre]]</span>
+          <span class='total'>[[total]]</span>
+        </div>
 
         <!-- actions -->
-        <paper-icon-button src='/svg/download.svg'></paper-icon-button>
+        <!--<paper-icon-button src='/svg/download.svg'></paper-icon-button>-->
       </div>
 
       <!-- tabs -->
@@ -130,6 +138,7 @@ class CaffoRelease extends Polymer.Element {
   _loadTracklist(tracklist) {
     if(!player) return;
 
+    let total = 0;
     for(let i = 0; i < this.tracklists.length; i++) {
       if(this.tracklists[i].id == tracklist) {
         player.clear();
@@ -138,6 +147,7 @@ class CaffoRelease extends Polymer.Element {
           skip = true;
         }
         this.tracklists[i].tracks.forEach((t) => {
+          total += t.length;
           let url = this._formatUrl(t.file);
           if(player.nowPlaying != url) {
             if(!skip) player.add(url);
@@ -145,9 +155,10 @@ class CaffoRelease extends Polymer.Element {
             skip = false;
           }
         });
-        return;
+        break;
       }
     }
+    this.total = formatTime(total);
   }
 
   _pageChanged(name) {

@@ -36,6 +36,7 @@ class PlayerModel {
       currentTime: 0,
 
       tracklistId: 0,
+      lastPlaying: '',
     };
 
     //
@@ -53,6 +54,7 @@ class PlayerModel {
   // observer pattern
   update() {
     this.state.isPlaying = !this.audioElement.paused;
+    this.state.lastPlaying = this.state.nowPlaying;
     this.state.nowPlaying = this.nowPlaying;
     this.subject.notifyObservers(this.state);
   }
