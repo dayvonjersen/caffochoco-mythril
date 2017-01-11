@@ -115,15 +115,10 @@ fetch("/data.json")
 
   data.releases.forEach(release => {
     let _tracklists = [];
-    let _defaultTracklist;
     release.tracklists.forEach((tl,i) => {
       let tracklist = tracklists[tl];
-      if(release.defaultTracklist === tracklist.id) {
-        _defaultTracklist = i;
-      }
       _tracklists[_tracklists.length] = tracklist;
     });
-    release.defaultTracklist = _defaultTracklist;
     release.tracklists = _tracklists;
     releases.push(release);
 

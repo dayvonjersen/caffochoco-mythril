@@ -125,22 +125,8 @@ class CaffoRelease extends Polymer.Element {
     }
   }
 
-  _pageChanged(name) {
-    if(!('_caffoCache' in window && window._caffoCache.has(name)))  return;
-    this.release = _caffoCache.get(name);
-    setBackground('/image/'+this.release.url+'.jpg');
-    this.tracklists = this.release.tracklists;
-    this.selectedTab = this.release.defaultTracklist+1;
-    this.$.releaseInfo.innerHTML = this.release.info;
-    document.title = this.release.title;
-  }
-
-  _formatUrl(url) {
-    return `/audio/${this.release.url}/${url}`;
-  }
-
-  _tabChanged(event, details) {
-    let tracklist = details.item.dataset.tracklist;
+  _loadTracklist(tracklist) {
+    if(!player) return;
     if(tracklist === "") return;
     if(tracklist === player.state.tracklistId) return;
     for(let i = 0; i < this.tracklists.length; i++) {
@@ -151,6 +137,34 @@ class CaffoRelease extends Polymer.Element {
         return;
       }
     }
+  }
+
+  _pageChanged(name) {
+    if(!('_caffoCache' in window && window._caffoCache.has(name)))  return;
+    this.release = _caffoCache.get(name);
+
+    setBackground('/image/'+this.release.url+'.jpg');
+    document.title = this.release.title;
+
+    this.$.releaseInfo.innerHTML = this.release.info;
+
+    this.tracklists = this.release.tracklists;
+    for(let i = 0; i < this.release.tracklists.length; i++) {
+      if(this.release.defaultTracklist === this.release.tracklists[i].id) {
+        this.selectedTab = i+1;
+        break;
+      }
+    }
+    this._loadTracklist(this.release.defaultTracklist);
+  }
+
+  _formatUrl(url) {
+    return `/audio/${this.release.url}/${url}`;
+  }
+
+  _tabChanged(event, details) {
+    let e = Polymer.dom(event);
+    this._loadTracklist(e.localTarget.selectedItem.dataset.tracklist);
   }
 
   connectedCallback() {
