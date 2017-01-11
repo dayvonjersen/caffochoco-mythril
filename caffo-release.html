@@ -25,6 +25,8 @@
       }
       h1 {
         font-size: 2em;
+        margin-top: 16px;
+        margin-bottom: 16px;
       }
 
       paper-tabs {
@@ -60,6 +62,11 @@
       header > div {
         padding: 0 1em;
       }
+      header img {
+        float: left;
+        width: 5em;
+        margin-right: 16px;
+      }
     </style>
 
     <link rel='stylesheet' href='/image/[[release.url]].jpg.css'>
@@ -71,6 +78,8 @@
 
     <header class='mdl-shadow--2dp'>
       <div>
+        <!-- art -->
+        <img id='thumbnail' >
         <!-- info -->
         <h1 id='releaseTitle'>[[release.title]]</h1>
         <div class='info'>
@@ -166,6 +175,7 @@ class CaffoRelease extends Polymer.Element {
     this.release = _caffoCache.get(name);
 
     setBackground('/image/'+this.release.url+'.jpg');
+    this.$.thumbnail.src = '/image/'+this.release.url+'.jpg';
     document.title = this.release.title;
 
     this.$.releaseInfo.innerHTML = this.release.info;
