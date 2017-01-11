@@ -11,8 +11,13 @@
         user-select: none;
         border-radius: 2px;
         margin-bottom: 16px;
+        color: var(--vibrant-text, --lightvibrant-text);
+        background-size: 100% 100%;
       }
-      :host:not(.mdl-shadow--24dp) paper-slider {
+      :host.nowplaying {
+        filter: drop-shadow(0 0 1px var(--darkmuted, --muted, #000)) drop-shadow(0 0 6px rgba(0,0,0,0.4));
+      }
+      :host:not(.nowplaying) paper-slider {
         height: 0;
         overflow: hidden;
       }
@@ -56,7 +61,18 @@
       :host:hover .hide {
         opacity: 1;
       }
+      #positionMarker {
+        position: absolute;
+        left: 0;
+        height: 100%;
+        background: var(--vibrant, --lightvibrant);
+        width: 0%;
+        mix-blend-mode: difference;
+        z-index: 1;
+        pointer-events: none;
+      }
     </style>
+    <div id='positionMarker'></div>
     <paper-icon-button id='playpause' class='hide' src='/svg/play.svg' on-click="_play"></paper-icon-button>
     <!--<img src='/svg/pause.svg'>-->
     <span class='title' on-click="_play">[[title]]</span>
@@ -84,6 +100,7 @@ class CaffoPlaylistItem extends Polymer.Element {
       }
     }
   }
+
   _formatTime(time) {
     return formatTime(time);
   }
@@ -113,11 +130,11 @@ class CaffoPlaylistItem extends Polymer.Element {
     if(this.notSynced || playerState.lastPlaying != playerState.nowPlaying) {
       if(playerState.nowPlaying == this.url) {
         player.state.tracklistId = this.tracklistId
-        this.classList.add('mdl-shadow--24dp');
+        this.classList.add('nowplaying');
         this.scrollIntoView();
         this.$.playpause.classList.remove('hide');
       } else {
-        this.classList.remove('mdl-shadow--24dp');
+        this.classList.remove('nowplaying');
         this.$.playpause.classList.add('hide');
         this.$.playpause.src = '/svg/play.svg';
         this.currentTime = formatTime(this.length);
@@ -132,6 +149,7 @@ class CaffoPlaylistItem extends Polymer.Element {
         this.timeRemaining ? this.length - playerState.currentTime : playerState.currentTime,
         this.timeRemaining
       );
+      this.$.positionMarker.style.width = `${playerState.currentTime / this.length * 100}%`
     }
   }
 
@@ -142,6 +160,7 @@ class CaffoPlaylistItem extends Polymer.Element {
     this.timeRemaining = true;
     this.notSynced = true;
     player.subject.add(this);
+    this.style.backgroundImage = 'url(' + this.url.replace(/\.mp3$/,'.png') + ')';
   }
 
   disconnectedCallback() {
