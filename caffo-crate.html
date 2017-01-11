@@ -20,7 +20,10 @@
       --lightmuted-text: #000000;
       --darkmuted: rgba(52,69,85,1);
       --darkmuted-text: #ffffff;
+    }
 
+    paper-icon-button {
+      --paper-icon-button-ink-color: var(--darkvibrant);
     }
 
     paper-tabs {
@@ -28,18 +31,30 @@
       --paper-tabs-selection-bar-color: var(--darkvibrant);
       color: #fff;
       -webkit-text-stroke: .5px #ccc;
-      width: 50%;
+      width: 66.6667%;
       margin: auto;
     }
 
-    @media (max-width: 1080px) {
+    @media (min-width: 1400px) {
+      paper-tabs {
+        width: 50%;
+      }
+    }
+
+    @media (max-width: 1280px) {
       paper-tabs {
         width: 100%;
       }
     }
 
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .stack {
-      margin: 20px auto;
+      margin: 20px;
       width: 300px;
       height: 300px;
       padding: 0;
@@ -122,7 +137,7 @@
     }
     </style>
 
-    <paper-tabs selected='{{selectedTab}}' on-iron-select='_tabChanged' scrollable>
+    <paper-tabs id="tabs" selected='{{selectedTab}}' on-iron-select='_tabChanged'>
       <paper-tab data-category='all'>ALL</paper-tab>
       <paper-tab data-category='album'>ALBUMS</paper-tab>
       <paper-tab data-category='ep'>EPs</paper-tab>
@@ -132,7 +147,11 @@
       <paper-tab data-category='sketch'>SKETCHES</paper-tab>
     </paper-tabs>
 
-    <div class='stack' id='stack' on-click="_test"></div>
+    <div class='container'>
+      <paper-icon-button on-click="_previous" src="/svg/chevron-left.svg"></paper-icon-button>
+      <div class='stack' id='stack' on-click="_test"></div>
+      <paper-icon-button on-click="_next" src="/svg/chevron-right.svg"></paper-icon-button>
+    </div>
   </template>
   <script>
 class CaffoCrate extends Polymer.Element {
@@ -149,6 +168,14 @@ class CaffoCrate extends Polymer.Element {
         'click': '_test',
       }
     }
+  }
+
+  _previous() {
+    this.$.tabs.selectPrevious();
+  }
+
+  _next() {
+    this.$.tabs.selectNext();
   }
 
   _test(event, details, wut) {
@@ -171,9 +198,22 @@ class CaffoCrate extends Polymer.Element {
 // click handler on this.$.stack, if target is lastChild then follow link
 //  otherwise advance queue
 
+  _render() {
+    this.$.stack.innerHTML = '';
+    this.releases.forEach((item) => {
+      let record = document.createElement("caffo-record");
+      record.setAttribute("class", "flipforward__container")
+      record.setAttribute("label", `${item.title} - ${item.year}`);
+      record.setAttribute("url", item.url)
+      record.setAttribute("image", `/image/${item.url}.jpg`)
+      this.$.stack.appendChild(record);
+    });
+  }
+
   _tabChanged(event, details) {
     let category = details.item.dataset.category;
     this.releases = category == 'all' ? window.releases : window.releases.filter(r=>r.category===category);
+    this._render();
   }
 
   test() {
@@ -187,14 +227,14 @@ class CaffoCrate extends Polymer.Element {
     super.connectedCallback();
     this.releases = window.releases;
     this.selectedTab = 0;
-    this.releases.forEach((item) => {
-      let record = document.createElement("caffo-record");
-      record.setAttribute("class", "flipforward__container")
-      record.setAttribute("label", `${item.title} - ${item.year}`);
-      record.setAttribute("url", item.url)
-      record.setAttribute("image", `/image/${item.url}.jpg`)
-      this.$.stack.appendChild(record);
-    });
+    this._render()
+    window.addEventListener("resize", () => {
+      if(window.innerWidth <= 640) {
+        this.$.tabs.setAttribute('scrollable', '');
+      } else {
+        this.$.tabs.removeAttribute('scrollable');
+      }
+    })
   }
 }
 customElements.define(CaffoCrate.is, CaffoCrate);
