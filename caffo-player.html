@@ -5,11 +5,11 @@
       :host {
         display: block;
         position: fixed;
-        background: #fafafa;
       }
       ol {
         margin: 0;
         padding: 0;
+        background: #fafafa;
       }
       li {
         list-style-position: inside;
@@ -20,7 +20,17 @@
         background: #a8c5f7;
         font-weight: bold;
       }
+      :host:hover input[type='checkbox']:checked ~ audio {
+        opacity: 0.7;
+      }
+      input[type='checkbox']:checked ~ audio {
+        opacity: 0.2;
+      }
+      input[type='checkbox']:checked ~ ol {
+        display: none;
+      }
     </style>
+    <input type='checkbox'>
     <audio id="audioElement" controls></audio>
     <ol>
       <dom-repeat items='{{playlist}}' id='list'>
