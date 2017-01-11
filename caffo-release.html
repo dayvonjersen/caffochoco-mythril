@@ -167,15 +167,24 @@ class CaffoRelease extends Polymer.Element {
       }
     }
     this._loadTracklist(this.release.defaultTracklist);
+    if(player) {
+      player.togglePlayback();
+    } else {
+      this.willPlay = true;
+    }
   }
 
   _formatUrl(url) {
     return `/audio/${this.release.url}/${url}`;
   }
 
-  _tabChanged(event, details) {
+  _tabChanged(event) {
     let e = Polymer.dom(event);
     this._loadTracklist(parseInt(e.localTarget.selectedItem.dataset.tracklist));
+    if(this.willPlay) {
+      player.togglePlayback();
+      this.willPlay = undefined;
+    }
   }
 
   connectedCallback() {
