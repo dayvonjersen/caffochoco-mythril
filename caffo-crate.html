@@ -81,10 +81,6 @@
     }
 
     .stack:hover > :nth-last-child(2) {
-      transform:scale(.8888) translateY(-8.3333%);
-    }
-
-    .stack:hover > :nth-last-child(2):hover {
       transform:scale(.8888) translateY(-12.6667%);
     }
     .stack > *:last-child {  transform: scale(1); }
@@ -99,8 +95,49 @@
     .stack > *:nth-last-child(9) {  transform: scale(0.43047); }
     .stack > *:nth-last-child(10) {  transform: scale(0.38742); }
 
-    .flipforward__container:hover ~ .flipforward__container:not(.flipforward__container--animate) ::slotted(.flipforward__item) {
+    .flipforward__container {
+      perspective: 1000px;
+    }
+
+    .flipforward__container .flipforward__item {
+      transform-origin: center bottom;
+      transform-style: preserve-3d;
+      transition: 400ms transform, 400ms opacity;
+      opacity: 1;
+    }
+
+    .flipforward__container:hover ~ .flipforward__container:not(.flipforward__container--animate) .flipforward__item {
       transform: rotateX(-35deg);
+    }
+
+    .flipforward__container .flipforward__edge {
+      width: 100%;
+      height: 5px;
+      background: hotpink;
+      position: relative;
+      top: 0;
+      transform-origin: center top;
+      transform: rotateX(-90deg);
+    }
+
+    .flipforward__container .flipforward__item::before /* shadow */ {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      box-shadow: 0 0 100px 50px rgba(0, 0, 0, 0.1), inset 0 0 250px 250px rgba(0, 0, 0, 0.1);
+      transition: 1s;
+      transform: rotateX(95deg) translateZ(-80px) scale(0.75);
+      transform-origin: inherit;
+    }
+
+    .flipforward__container--animate .flipforward__item {
+      transform: rotateX(-75deg) translateZ(5vw);
+      opacity: 0;
+    }
+
+    .flipforward__container--animate .flipforward__item::before {
+      box-shadow: 0 0 25px 25px rgba(0, 0, 0, 0.5), inset 0 0 250px 250px rgba(0, 0, 0, 0.5);
+      transform: rotateX(-5deg) translateZ(80px) scale(1);
     }
     </style>
 
@@ -147,7 +184,7 @@ class CaffoCrate extends Polymer.Element {
 
   _test(event, details, wut) {
     //console.log(event, event.target, details, wut);
-    if(event.target == this.$.stack.lastElementChild) {
+    if(event.target.parentElement === this.$.stack.lastElementChild) {
       this.set('route.path', '/release/'+event.target.getAttribute("url"));
     } else {
       this.$.stack.lastElementChild.classList.add('flipforward__container--animate');
@@ -169,11 +206,14 @@ class CaffoCrate extends Polymer.Element {
     this.$.stack.innerHTML = '';
     this.releases.forEach((item) => {
       let record = document.createElement("caffo-record");
-      record.setAttribute("class", "flipforward__container")
+      record.setAttribute("class", "flipforward__item");
       record.setAttribute("label", item.title);
-      record.setAttribute("url", item.url)
-      record.setAttribute("image", `/image/${item.url}.jpg`)
-      this.$.stack.appendChild(record);
+      record.setAttribute("url", item.url);
+      record.setAttribute("image", `/image/${item.url}.jpg`);
+      let containerElement = document.createElement("div");
+      containerElement.setAttribute("class", "flipforward__container");
+      containerElement.appendChild(record);
+      this.$.stack.appendChild(containerElement);
     });
   }
 
