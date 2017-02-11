@@ -50,6 +50,16 @@ releases:
 #           My early mashups consisted of nothing more than two tracks laid on top of each other
 #           with minimum effects and automation, mostly for levels
 #       category: "mashup"
+#
+    - id: 4
+      title: "d.j.r. - coffee break"
+      year: 2013
+      genre: "Music"
+      url: "coffee-break"
+      info: ""
+      tracklists: [6]
+      defaultTracklist: 6
+      category: "single"
 
 
 tracklists:
@@ -68,6 +78,9 @@ tracklists:
     - id: 5
       title: "alternate mixes"
       tracks: [18,19,20,21]
+    - id: 6
+      title: "tracklist"
+      tracks: [22]
 
 tracks:
     # - id: 1
@@ -149,3 +162,8 @@ tracks:
       title: "dunno 8"
       file: dunno_8.mp3
       length: 247
+
+    - id: 22
+      title: "coffee break"
+      file: coffee-break.mp3
+      length: 495

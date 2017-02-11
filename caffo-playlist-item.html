@@ -47,8 +47,12 @@
       .title, .time {
         cursor: pointer;
         line-height: 3.5;
+        background-color: var(--vibrant);
+        mix-blend-mode: hard-light;
       }
       #playpause {
+        position: absolute;
+        left: -12.5%;
         width: 56px;
         height: 56px;
         filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.14))
@@ -61,18 +65,16 @@
       :host:hover .hide {
         opacity: 1;
       }
-      #positionMarker {
+      sorbetto-waveform {
         position: absolute;
-        left: 0;
+        z-index: -1;
         height: 100%;
-        background: var(--vibrant, --lightvibrant);
-        width: 0%;
-        mix-blend-mode: difference;
-        z-index: 1;
-        pointer-events: none;
+      }
+      sorbetto-waveform div,
+      sorbetto-waveform img {
+        height: 100%;
       }
     </style>
-    <div id='positionMarker'></div>
     <paper-icon-button id='playpause' class='hide' src='/svg/play.svg' on-click="_play"></paper-icon-button>
     <!--<img src='/svg/pause.svg'>-->
     <span class='title' on-click="_play">[[title]]</span>
@@ -149,8 +151,18 @@ class CaffoPlaylistItem extends Polymer.Element {
         this.timeRemaining ? this.length - playerState.currentTime : playerState.currentTime,
         this.timeRemaining
       );
-      this.$.positionMarker.style.width = `${playerState.currentTime / this.length * 100}%`
+      let waveformElement = this.shadowRoot.querySelector('#waveform');
+      if(waveformElement) waveformElement.value = playerState.currentTime / this.length;
     }
+  }
+
+  _getCSSVar(v) {
+    let style = getComputedStyle(this);
+    let rgba = style.getPropertyValue(v)
+                .trim().replace(/[^\d]+/, '')
+                .split(",").map(c=>("0"+(c|0).toString(16)).slice(-2));
+    rgba.pop();
+    return '#'+rgba.join('');
   }
 
   connectedCallback() {
@@ -160,7 +172,16 @@ class CaffoPlaylistItem extends Polymer.Element {
     this.timeRemaining = true;
     this.notSynced = true;
     player.subject.add(this);
-    this.style.backgroundImage = 'url(' + this.url.replace(/\.mp3$/,'.png') + ')';
+    Polymer.RenderStatus.afterNextRender(this, () => {
+      let imageElement = document.createElement('img')
+      imageElement.setAttribute("src", this.url.replace(/\.mp3$/, '.png'));
+      let waveformElement = document.createElement('sorbetto-waveform');
+      waveformElement.setAttribute('id', 'waveform')
+      waveformElement.setAttribute('data-top-color', this._getCSSVar('--lightvibrant'));
+      waveformElement.setAttribute('data-bottom-color', this._getCSSVar('--darkmuted'));
+      waveformElement.appendChild(imageElement);
+      this.shadowRoot.appendChild(waveformElement);
+    });
   }
 
   disconnectedCallback() {

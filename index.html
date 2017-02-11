@@ -150,6 +150,40 @@ fetch("/data.json")
 function setBackground(image='/image/background.jpg') {
   document.body.style.backgroundImage = `url(${image})`;
 };
+
+function Register(elementName, elementTag, elementPrototype, elementTemplate) {
+  customElements.define(elementTag, class extends HTMLElement {
+    get template() {
+      let fragment = document.createDocumentFragment();
+      let div = fragment.appendChild(document.createElement('div'));
+      div.innerHTML = elementTemplate;
+      let child;
+      while(child = div.firstChild) {
+          fragment.insertBefore(child,div);
+      }
+      fragment.removeChild(div);
+      return {
+          content: fragment
+      };
+    }
+
+    constructor() {
+      super();
+      if('createdCallback' in elementPrototype) elementPrototype.createdCallback.call(this);
+    }
+    connectedCallback() {
+      if('attachedCallback' in elementPrototype) elementPrototype.attachedCallback.call(this);
+    }
+    disconnectedCallback() {
+      if('detachedCallback' in elementPrototype) elementPrototype.detachedCallback.call(this);
+    }
+    // TODO: attributeChangedCallback
+    // TODO: childListChangedCallback
+
+  });
+}
     </script>
+    <script src="/sorbetto/tmp/sorbetto-waveform.js"></script>
+    <link rel='stylesheet' href='/sorbetto/tmp/sorbetto-waveform.css'>
   </body>
 </html>

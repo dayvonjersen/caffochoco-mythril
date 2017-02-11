@@ -24,13 +24,13 @@
         opacity: 0.7;
       }
       input[type='checkbox']:checked ~ audio {
-        opacity: 0.2;
+        opacity: 0;
       }
       input[type='checkbox']:checked ~ ol {
         display: none;
       }
     </style>
-    <input type='checkbox'>
+    <input type='checkbox' checked>
     <audio id="audioElement" controls></audio>
     <ol>
       <dom-repeat items='{{playlist}}' id='list'>

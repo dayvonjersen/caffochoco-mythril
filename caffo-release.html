@@ -4,6 +4,7 @@
 
 <link rel='import' href='/bower_components/iron-pages/iron-pages.html'>
 
+<link rel='import' href='/bower_components/paper-dialog/paper-dialog.html'>
 <link rel='import' href='/bower_components/paper-icon-button/paper-icon-button.html'>
 <link rel='import' href='/bower_components/paper-tabs/paper-tabs.html'>
 <link rel='import' href='/bower_components/paper-slider/paper-slider.html'>
@@ -31,6 +32,7 @@
 
       paper-tabs {
         text-transform: uppercase;
+        clear: both;
         --paper-tab-ink: var(--vibrant, #000);
         --paper-tabs-selection-bar-color: var(--vibrant, #000);
       }
@@ -89,7 +91,10 @@
         </div>
 
         <!-- actions -->
-        <!--<paper-icon-button src='/svg/download.svg'></paper-icon-button>-->
+        <paper-icon-button onclick='modal.open' src='/svg/download.svg'></paper-icon-button>
+        <paper-dialog id='modal'>
+            <div id='releaseInfo'></div>
+        </paper-dialog>
       </div>
 
       <!-- tabs -->
@@ -103,25 +108,7 @@
       </paper-tabs>
     </header>
 
-    <iron-pages selected='{{selectedTab}}'>
-      <div id='releaseInfo'></div>
-      <dom-repeat items='{{tracklists}}'>
-        <template>
-          <div class='tracklist'>
-            <dom-repeat items='{{item.tracks}}'>
-              <template>
-                <caffo-playlist-item
-                  tracklist-id$='[[item.tracklistId]]'
-                  title$='[[item.title]]'
-                  length$='[[item.length]]'
-                  url$='[[_formatUrl(item.file)]]'>
-                </caffo-playlist-item>
-              </template>
-            </dom-repeat>
-          </div>
-        </template>
-      </dom-repeat>
-    </iron-pages>
+    <div class='tracklist' id='tracklist'></div>
 
     <footer>
       <!-- total time, volume controls? etc... -->
@@ -168,6 +155,21 @@ class CaffoRelease extends Polymer.Element {
       }
     }
     this.total = formatTime(total);
+    this._render(tracklist);
+  }
+
+  _render(tracklistId) {
+    let tracklist = this.tracklists.find(tl=>tl.id == tracklistId);
+    if(!tracklist) return;
+    this.$.tracklist.innerHTML = '';
+    tracklist.tracks.forEach(item => {
+      let playlistItem = document.createElement('caffo-playlist-item');
+      playlistItem.setAttribute('tracklist-id', item.tracklistId);
+      playlistItem.setAttribute('title', item.title);
+      playlistItem.setAttribute('length', item.length);
+      playlistItem.setAttribute('url', this._formatUrl(item.file));
+      this.$.tracklist.appendChild(playlistItem);
+    });
   }
 
   _pageChanged(name) {
