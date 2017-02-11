@@ -55,7 +55,7 @@
       }
     </style>
 
-    <paper-button onclick='modal.open()'>license ☭</paper-button>
+    <paper-button on-click='_openModal'>license ☭</paper-button>
 
     <paper-dialog id='modal'>
       <h1 id='peer-production-license-a-model-for-copyfarleft'>Peer Production License</h1>
@@ -299,6 +299,10 @@ this License is not intended to restrict the license of any rights under applica
   <script>
 class CaffoLicense extends Polymer.Element {
   static get is() { return 'caffo-license'; }
+
+  _openModal() {
+    this.$.modal.open();
+  }
 
   connectedCallback() {
     super.connectedCallback();
