@@ -71,7 +71,6 @@
       }
     </style>
 
-    <link rel='stylesheet' href='/image/[[release.url]].jpg.css'>
     <app-route
       route='{{route}}'
       pattern='/:tabName'
@@ -175,6 +174,11 @@ class CaffoRelease extends Polymer.Element {
   _pageChanged(name) {
     if(!('_caffoCache' in window && window._caffoCache.has(name)))  return;
     this.release = _caffoCache.get(name);
+
+    fetch('/image/'+this.release.url+'.jpg.css')
+      .then(response=>response.json())
+      .then(json=>this.updateStyles(json))
+      .catch(err=>console.error(err))
 
     setBackground('/image/'+this.release.url+'.jpg');
     this.$.thumbnail.src = '/image/'+this.release.url+'.jpg';

@@ -14,10 +14,10 @@
         color: var(--vibrant-text, --lightvibrant-text);
         background-size: 100% 100%;
       }
-      :host.nowplaying {
+      :host(.nowplaying) {
         filter: drop-shadow(0 0 1px var(--darkmuted, --muted, #000)) drop-shadow(0 0 6px rgba(0,0,0,0.4));
       }
-      :host:not(.nowplaying) paper-slider {
+      :host(:not(.nowplaying)) paper-slider {
         height: 0;
         overflow: hidden;
       }
@@ -38,7 +38,7 @@
       .title {
         flex: 1;
       }
-      :host:hover .title {
+      :host(:hover) .title {
         text-decoration: underline;
       }
       .time {
@@ -62,9 +62,41 @@
       .hide {
         opacity: 0;
       }
-      :host:hover .hide {
+      :host(:hover) .hide {
         opacity: 1;
       }
+      sorbetto-waveform {
+        display: block;
+      }
+      sorbetto-waveform .container {
+        position: relative;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 100%;
+      }
+      sorbetto-waveform .slider_wrapper {
+        position: absolute;
+        left: 0%;
+        height: 100%;
+      }
+      sorbetto-waveform .image_wrapper {
+        display: inline-block;
+        width: 100%;
+        position: relative;
+        vertical-align: bottom;
+        left: 0%;
+        overflow: hidden;
+      }
+      sorbetto-waveform .image {
+        position: relative;
+        right: 0%;
+        text-align: center;
+      }
+      sorbetto-waveform .image img {
+        width: 100%;
+        cursor: pointer;
+      }
+
       sorbetto-waveform {
         position: absolute;
         z-index: -1;

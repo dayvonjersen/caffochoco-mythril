@@ -99,17 +99,15 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 	checkErr(err)
 	palette, err := vibrant.NewPaletteFromImage(img)
 	checkErr(err)
-	stylesheet := ":root {\n"
+	vars := []string{}
 	for _, swatch := range palette.ExtractAwesome() {
 		c := swatch.Color
 		r, g, b := c.RGB()
 		n := strings.ToLower(swatch.Name)
-		stylesheet += fmt.Sprintf(
-			"    --%s: rgba(%d,%d,%d,1);\n    --%s-text: %s;\n",
-			n, r, g, b, n, c.TitleTextColor(),
-		)
+		vars = append(vars, fmt.Sprintf(`"--%s":"rgba(%d,%d,%d,1)"`, n, r, g, b))
+		vars = append(vars, fmt.Sprintf(`"--%s-text":"%s"`, n, c.TitleTextColor()))
 	}
-	stylesheet += "}"
+	stylesheet := "{" + strings.Join(vars, ",") + "}"
 	fmt.Fprintf(w, stylesheet)
 	imageCache[path] = &file{modtime: modtime, stylesheet: stylesheet}
 }
