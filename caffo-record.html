@@ -98,7 +98,7 @@
         transform: rotateX(-5deg) translateZ(80px) scale(1);
       }
     </style>
-    <div class='record flipforward__item'>
+    <div id='record' class='record flipforward__item'>
         <div class='record-center-label'></div>
         <div class='record-bottom-label'>[[label]]</div>
     </div>
@@ -109,17 +109,21 @@ class CaffoRecord extends Polymer.Element {
   static get config() {
     return {
       properties: {
-        image:{},
+        image: {
+          type: String,
+          observer: '_setBackgroundImage'
+        },
         label:{},
       }
     }
   }
 
+  _setBackgroundImage(imageUrl) {
+    this.$.record.style.backgroundImage = `url(${imageUrl})`;
+  }
+
   connectedCallback() {
     super.connectedCallback();
-    if(!this.shadowRoot) return;
-
-    this.shadowRoot.querySelector('.record').style.backgroundImage = `url(${this.image})`;
   }
 }
 customElements.define(CaffoRecord.is, CaffoRecord);

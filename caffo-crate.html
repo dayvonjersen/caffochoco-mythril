@@ -194,7 +194,7 @@ class CaffoCrate extends Polymer.Element {
     super.connectedCallback();
     this.releases = window.releases;
     this.selectedTab = 0;
-    setTimeout(()=>this._render(), 300);
+    this._render();
     window.addEventListener("resize", () => {
       if(window.innerWidth <= 640) {
         this.$.tabs.setAttribute('scrollable', '');
