@@ -26,7 +26,7 @@
       }
 
       h2 {
-        margin: .5rem 1rem;
+        margin: .5rem 1.5rem;
         line-height: 1;
         font-size: 1.25rem;
       }
@@ -57,7 +57,7 @@
 
       header img {
         width: 100%;
-        max-height: 24vh;
+        max-height: 8rem;
         transition: 0.35s all 0.1s ease-in-out;
         object-fit: cover;
       }
@@ -70,7 +70,7 @@
         display: none;
       }
 
-      .tracklist {
+      .content {
         flex: 1;
         overflow-y: scroll;
         min-height: 0;
@@ -106,8 +106,8 @@
       </paper-tabs>
     </header>
 
-    <div id='releaseInfo'></div>
-    <div class='tracklist' id='tracklist'></div>
+    <div class='content' id='releaseInfo'></div>
+    <div class='content' id='tracklist'></div>
 
     <footer>
       <paper-icon-button src='/svg/download.svg'></paper-icon-button>
