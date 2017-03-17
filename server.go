@@ -40,6 +40,10 @@ func main() {
 		file := "index.html"
 		req := strings.TrimPrefix(r.URL.Path, "/")
 
+		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		w.Header().Set("Pragma", "no-cache")
+		w.Header().Set("Expires", "0")
+
 		if fileExists(req) {
 			file = req
 		} else if strings.HasPrefix(req, "bower_components/") {
