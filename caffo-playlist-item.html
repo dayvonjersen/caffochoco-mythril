@@ -163,7 +163,7 @@ class CaffoPlaylistItem extends Polymer.Element {
   notify(playerState) {
     if(this.notSynced || playerState.lastPlaying != playerState.nowPlaying) {
       if(playerState.nowPlaying == this.url) {
-        player.state.tracklistId = this.tracklistId
+        player.state.tracklistId = parseInt(this.tracklistId);
         this.classList.add('nowplaying');
         this.scrollIntoView();
         this.$.playpause.classList.remove('hide');
