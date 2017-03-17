@@ -37,6 +37,9 @@
       }
     </style>
 
+    <caffo-license></caffo-license>
+    <caffo-player></caffo-player>
+
     <app-location route='{{route}}'></app-location>
     <app-route
       route='{{route}}'
@@ -52,9 +55,6 @@
     <app-drawer id="drawer" align='right' on-app-drawer-transitioned='_drawerFn'>
       <caffo-release route='{{subroute}}'></caffo-release>
     </app-drawer>
-
-    <caffo-license></caffo-license>
-    <caffo-player></caffo-player>
   </template>
   <script>
 class CaffoApp extends Polymer.Element {

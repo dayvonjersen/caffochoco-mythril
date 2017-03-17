@@ -7,8 +7,43 @@
     <title>dayvonjersen discography</title>
 
     <link rel='stylesheet' href='/css/style.css'>
+    <link rel='stylesheet' href='/sorbetto/tmp/sorbetto-waveform.css'>
+    <link rel='stylesheet' href='/sorbetto/tmp/sorbetto-spektrum.css'>
 
     <script src='/bower_components/webcomponentsjs/webcomponents-lite.js'></script>
+    <script>
+    function Register(elementName, elementTag, elementPrototype, elementTemplate) {
+      customElements.define(elementTag, class extends HTMLElement {
+        get template() {
+          let fragment = document.createDocumentFragment();
+          let div = fragment.appendChild(document.createElement('div'));
+          div.innerHTML = elementTemplate;
+          let child;
+          while(child = div.firstChild) {
+              fragment.insertBefore(child,div);
+          }
+          fragment.removeChild(div);
+          return {
+              content: fragment
+          };
+        }
+
+        constructor() {
+          super();
+          if('createdCallback' in elementPrototype) elementPrototype.createdCallback.call(this);
+        }
+        connectedCallback() {
+          if('attachedCallback' in elementPrototype) elementPrototype.attachedCallback.call(this);
+        }
+        disconnectedCallback() {
+          if('detachedCallback' in elementPrototype) elementPrototype.detachedCallback.call(this);
+        }
+        // TODO: attributeChangedCallback
+        // TODO: childListChangedCallback
+
+      });
+    }
+    </script>
 
     <link rel='import' href='/caffo-app.html'>
     <style>
@@ -65,7 +100,7 @@
       <img src='/svg/rings.svg'>
     </div>
 
-    <script defer>
+    <script>
 fetch("/data.json")
 .then(response=>response.json())
 .then(data => {
@@ -121,40 +156,6 @@ fetch("/data.json")
   }
 })
 .catch(err => console.error(err));
-
-function Register(elementName, elementTag, elementPrototype, elementTemplate) {
-  customElements.define(elementTag, class extends HTMLElement {
-    get template() {
-      let fragment = document.createDocumentFragment();
-      let div = fragment.appendChild(document.createElement('div'));
-      div.innerHTML = elementTemplate;
-      let child;
-      while(child = div.firstChild) {
-          fragment.insertBefore(child,div);
-      }
-      fragment.removeChild(div);
-      return {
-          content: fragment
-      };
-    }
-
-    constructor() {
-      super();
-      if('createdCallback' in elementPrototype) elementPrototype.createdCallback.call(this);
-    }
-    connectedCallback() {
-      if('attachedCallback' in elementPrototype) elementPrototype.attachedCallback.call(this);
-    }
-    disconnectedCallback() {
-      if('detachedCallback' in elementPrototype) elementPrototype.detachedCallback.call(this);
-    }
-    // TODO: attributeChangedCallback
-    // TODO: childListChangedCallback
-
-  });
-}
     </script>
-    <script src="/sorbetto/tmp/sorbetto-waveform.js"></script>
-    <link rel='stylesheet' href='/sorbetto/tmp/sorbetto-waveform.css'>
   </body>
 </html>

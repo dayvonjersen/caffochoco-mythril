@@ -223,13 +223,15 @@ class CaffoCrate extends Polymer.Element {
     this.releases = window.releases;
     this.selectedTab = 0;
     this._render();
-    window.addEventListener("resize", () => {
+    let setScrollable = () => {
       if(window.innerWidth <= 640) {
         this.$.tabs.setAttribute('scrollable', '');
       } else {
         this.$.tabs.removeAttribute('scrollable');
       }
-    });
+    };
+    window.addEventListener("resize", setScrollable);
+    setScrollable();
   }
 }
 customElements.define(CaffoCrate.is, CaffoCrate);

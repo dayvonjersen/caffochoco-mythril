@@ -72,8 +72,10 @@
 
       .content {
         flex: 1;
-        overflow-y: scroll;
         min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: .5rem;
       }
     </style>
 
@@ -94,6 +96,7 @@
           <span class='total'>[[total]]</span>
         </div>
       </div>
+      <sorbetto-spektrum></sorbetto-spektrum>
 
       <!-- tabs -->
       <paper-tabs selected='{{selectedTab}}' on-iron-select='_tabChanged'>

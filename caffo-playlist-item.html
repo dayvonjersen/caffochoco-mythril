@@ -10,17 +10,11 @@
         position: relative;
         user-select: none;
         border-radius: 2px;
-        margin-bottom: 16px;
-        color: var(--vibrant-text, --lightvibrant-text);
-        background-size: 100% 100%;
+        color: var(--vibrant-text, #fff);
+        margin-bottom: .5rem;
+        padding: .25rem 0;
       }
-      :host(.nowplaying) {
-        filter: drop-shadow(0 0 1px var(--darkmuted, --muted, #000)) drop-shadow(0 0 6px rgba(0,0,0,0.4));
-      }
-      :host(:not(.nowplaying)) paper-slider {
-        height: 0;
-        overflow: hidden;
-      }
+
       paper-slider {
         --paper-slider-container-color: var(--vibrant-text);
         --paper-slider-active-color: var(--vibrant);
@@ -35,6 +29,7 @@
         bottom: -16px;
         cursor: grab;
       }
+
       .title {
         flex: 1;
       }
@@ -47,17 +42,7 @@
       .title, .time {
         cursor: pointer;
         line-height: 3.5;
-        background-color: var(--vibrant);
-        mix-blend-mode: hard-light;
-      }
-      #playpause {
-        position: absolute;
-        left: -12.5%;
-        width: 56px;
-        height: 56px;
-        filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.14))
-         drop-shadow(0 3px 14px rgba(0, 0, 0, 0.12))
-         drop-shadow(0 5px 5px rgba(0, 0, 0, 0.2));
+        color: var(--vibrant-text, #fff);
       }
       .hide {
         opacity: 0;
@@ -106,8 +91,12 @@
       sorbetto-waveform img {
         height: 100%;
       }
+      :host(:not(.nowplaying)) paper-slider {
+        height: 0;
+        overflow: hidden;
+      }
+
     </style>
-    <paper-icon-button id='playpause' class='hide' src='/svg/play.svg' on-click="_play"></paper-icon-button>
     <!--<img src='/svg/pause.svg'>-->
     <span class='title' on-click="_play">[[title]]</span>
     <span class='time' title='toggle time remaining' on-click='_timeRemaining'>[[currentTime]]</span>
@@ -121,6 +110,8 @@
       value='0'>
     </paper-slider>
   </template>
+  <script src="/sorbetto/tmp/sorbetto-waveform.js"></script>
+  <script src="/sorbetto/tmp/sorbetto-spektrum.js"></script>
   <script>
 class CaffoPlaylistItem extends Polymer.Element {
   static get is() { return 'caffo-playlist-item'; }
@@ -166,18 +157,14 @@ class CaffoPlaylistItem extends Polymer.Element {
         player.state.tracklistId = parseInt(this.tracklistId);
         this.classList.add('nowplaying');
         this.scrollIntoView();
-        this.$.playpause.classList.remove('hide');
       } else {
         this.classList.remove('nowplaying');
-        this.$.playpause.classList.add('hide');
-        this.$.playpause.src = '/svg/play.svg';
         this.currentTime = formatTime(this.length);
       }
       this.notSynced = false;
     }
 
     if(playerState.nowPlaying == this.url) {
-      this.$.playpause.src = playerState.isPlaying ? '/svg/pause.svg' : '/svg/play.svg';
       if(!this.isSeeking) this.$.seek.value = playerState.currentTime;
       this.currentTime = formatTime(
         this.timeRemaining ? this.length - playerState.currentTime : playerState.currentTime,
@@ -209,8 +196,8 @@ class CaffoPlaylistItem extends Polymer.Element {
       imageElement.setAttribute("src", this.url.replace(/\.mp3$/, '.png'));
       let waveformElement = document.createElement('sorbetto-waveform');
       waveformElement.setAttribute('id', 'waveform')
-      waveformElement.setAttribute('data-top-color', this._getCSSVar('--lightvibrant'));
-      waveformElement.setAttribute('data-bottom-color', this._getCSSVar('--darkmuted'));
+      waveformElement.setAttribute('data-top-color', this._getCSSVar('--vibrant'));
+      waveformElement.setAttribute('data-bottom-color', '#777777');
       waveformElement.appendChild(imageElement);
       this.shadowRoot.appendChild(waveformElement);
     });
