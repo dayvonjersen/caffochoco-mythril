@@ -180,7 +180,6 @@ class CaffoRelease extends Polymer.Element {
       .then(json=>this.updateStyles(json))
       .catch(err=>console.error(err))
 
-    setBackground('/image/'+this.release.url+'.jpg');
     this.$.thumbnail.src = '/image/'+this.release.url+'.jpg';
     document.title = this.release.title;
 

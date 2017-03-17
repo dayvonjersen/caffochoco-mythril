@@ -3,14 +3,10 @@
 <link rel='import' href='/bower_components/app-route/app-location.html'>
 <link rel='import' href='/bower_components/app-route/app-route.html'>
 
-<link rel='import' href='/bower_components/iron-pages/iron-pages.html'>
-
-<link rel='import' href='/bower_components/paper-fab/paper-fab.html'>
 <link rel='import' href='/bower_components/app-layout/app-drawer/app-drawer.html'>
 
 <link rel='import' href='/caffo-crate.html'>
 <link rel='import' href='/caffo-license.html'>
-<link rel='import' href='/caffo-pages.html'>
 <link rel='import' href='/caffo-player.html'>
 
 <dom-module id='caffo-app'>
@@ -21,29 +17,16 @@
         position: relative;
         overflow: hidden;
       }
-      .caffo-app__home {
+      .crate-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 100vh;
         position: fixed;
-        bottom: 12px;
-        left: 12px;
+        top: 0;
+        left: 0;
       }
-      .caffo-app__home paper-fab {
-        --paper-fab-background: #000;
-        --size: 96px;
-        width: var(--size);
-        height: var(--size);
-        --iron-icon-width: var(--size);
-        --iron-icon-height: var(--size);
-      }
-
-      caffo-pages > * {
-        transition: all 1s ease-in-out;
-      }
-      /*
-      caffo-pages > :not(.iron-selected) {
-        opacity: 0;
-        pointer-events: none;
-      }
-      */
       app-drawer {
         --app-drawer-width: 33.3333vw;
       }
@@ -57,9 +40,10 @@
       tail='{{subroute}}'>
     </app-route>
 
-    <div style='display:flex;justify-content:center;align-items:center;width:100vw;height:100vh;position:fixed;top:0;left:0'>
+    <div class='crate-container'>
       <caffo-crate route='{{route}}'></caffo-crate>
     </div>
+
     <app-drawer id="drawer" align='right' on-app-drawer-transitioned='_drawerFn'>
       <caffo-release route='{{subroute}}'></caffo-release>
     </app-drawer>
@@ -95,6 +79,7 @@ class CaffoApp extends Polymer.Element {
       case "release":
         this.$.drawer.open();
         break;
+
       default:
         this.$.drawer.close();
         if(player) {
@@ -102,15 +87,13 @@ class CaffoApp extends Polymer.Element {
           player.clear();
           player.state.tracklistId = 0;
         }
-        setBackground('/image/background.jpg');
-        document.title = 'caffoCrate++'
+        document.title = 'dayvonjersen discography'
         break;
     }
   }
 
   connectedCallback() {
     super.connectedCallback();
-    // ...
   }
 }
 customElements.define(CaffoApp.is, CaffoApp);

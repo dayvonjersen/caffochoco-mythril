@@ -1,61 +1,36 @@
-<!--
-
-
-     LOVELOVELOVELOVELOVELOVELOVELOVELOVELOVELOVELOVELOVELOVELOVE
-     L            OVELOVELOVELOVELOVELOVELOV         LOVELOVELOVE
-     LOV        ELOVELOVELOVELOVELOVELOV                 LOVELOVE
-     LOVE      VELOVELOVELOVELOVELOVEL                     VELOVE
-     LOVE      VELOVELOVELOVELOVELOVE            LOVEL      ELOVE
-     LOVE      VELOVELOVELOVELOVELOV           VELOVELO      LOVE
-     LOVE      VELOVELOVELOVELOVELOV          OVELOVELOV     LOVE
-     LOVE      VELOVELOVELOVELOVELOV         LOVELOVELOV     LOVE
-     LOVE      VELOVELOVELOVELOVELOV        ELOVELOVELO      LOVE
-     LOVE      VELOVELOVELOVELOVELOV       VELOVELOVEL       LOVE
-     LOVE      VELOVELOVELOVELOVELOV      OVELOVELOVE        LOVE
-     LOVE      VELOVELOVELOVELOVEL V     LOVELOVELOV         LOVE
-     LOVE      VELOVELOVELOVELOVEL V     LOVELOVELO          LOVE
-     LOVE      VELOVELOVELOVELOVE  V      OVELOVEL           LOVE
-     LOVE      VELOVELOVELOVELOV   V       VELOV             LOVE
-     LOVE      VELOVELOVELOVEL     VE                       ELOVE
-     L                             VELOV                 LOVELOVE
-     L                             VELOVELOV         LOVELOVELOVE
-     L             VELOV                                        E
-     L             VELOV                                        E
-     LOVE      VELOVELOVELOV   VELOVELOVE      VELOVELOVELO     E
-     LOVEL      ELOVELOVELO   OVELOVELOVE      VELOVELOVELOVE   E
-     LOVEL      ELOVELOVELO   OVELOVELOVE      VELOVELOVELOVEL  E
-     LOVELO      LOVELOVEL   LOVELOVELOVE      VELOVELOVELOVELO E
-     LOVELO      LOVELOVEL   LOVELOVELOVE      VELOVEL VELOVELOVE
-     LOVELOV      OVELOVE   ELOVELOVELOVE      VELOVE  VELOVELOVE
-     LOVELOV      OVELOVE   ELOVELOVELOVE              VELOVELOVE
-     LOVELOVE      VELOV   VELOVELOVELOVE      VELOVE  VELOVELOVE
-     LOVELOVE      VELOV   VELOVELOVELOVE      VELOVEL VELOVELOVE
-     LOVELOVEL      ELO   OVELOVELOVELOVE      VELOVELOVELOVELO E
-     LOVELOVEL      ELO   OVELOVELOVELOVE      VELOVELOVELOVEL  E
-     LOVELOVELO      L   LOVELOVELOVELOVE      VELOVELOVELOVE   E
-     LOVELOVELO          LOVELOVELOVELOVE      VELOVELOVELO     E
-     LOVELOVELOV        ELOVELOVELOVE                           E
-     LOVELOVELOV        ELOVELOVELOVE                           E
-     LOVELOVELOVELOVELOVELOVELOVELOVELOVELOVELOVELOVELOVELOVELOVE
-
-
--->
 <!doctype html>
 <html>
   <head>
     <meta charset='utf-8'>
     <meta name='viewport' content='width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes'>
 
-    <title>discograph</title>
+    <title>dayvonjersen discography</title>
 
-    <link rel='stylesheet' href='/css/material.css'>
     <link rel='stylesheet' href='/css/style.css'>
 
     <script src='/bower_components/webcomponentsjs/webcomponents-lite.js'></script>
 
     <link rel='import' href='/caffo-app.html'>
     <style>
+      @font-face {
+        font-family: "Akkurat";
+        font-weight: 400;
+        src: url(/font/akkurat.woff);
+      }
+      @font-face {
+        font-family: "Akkurat";
+        font-weight: bold;
+        src: url(/font/akkurat-bold.woff);
+      }
+      html {
+        font-family: "Akkurat", "Roboto", sans-serif;
+        color: rgba(0,0,0, 0.87);
+        font-size: 1em;
+        line-height: 1.4;
+      }
       body {
+        font-size: 14px;
+        line-height: 20px;
         background-image: url(/image/background.jpg);
         background-attachment: fixed;
         background-size: cover;
@@ -146,10 +121,6 @@ fetch("/data.json")
   }
 })
 .catch(err => console.error(err));
-
-function setBackground(image='/image/background.jpg') {
-  document.body.style.backgroundImage = '/image/background.jpg';
-};
 
 function Register(elementName, elementTag, elementPrototype, elementTemplate) {
   customElements.define(elementTag, class extends HTMLElement {

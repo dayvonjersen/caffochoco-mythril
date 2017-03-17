@@ -152,9 +152,9 @@
     </paper-tabs>
 
     <div class='container'>
-      <paper-icon-button on-click="_previous" src="/svg/chevron-left.svg"></paper-icon-button>
-      <div class='stack' id='stack' on-click="_test"></div>
-      <paper-icon-button on-click="_next" src="/svg/chevron-right.svg"></paper-icon-button>
+      <paper-icon-button on-click="_previousTab" src="/svg/chevron-left.svg"></paper-icon-button>
+      <div class='stack' id='stack' on-click="_clickHandler"></div>
+      <paper-icon-button on-click="_nextTab" src="/svg/chevron-right.svg"></paper-icon-button>
     </div>
   </template>
   <script>
@@ -169,21 +169,23 @@ class CaffoCrate extends Polymer.Element {
         },
       },
       listeners: {
-        'click': '_test',
+        'click': '_clickHandler',
       }
     }
   }
 
-  _previous() {
+  _previousTab() {
     this.$.tabs.selectPrevious();
   }
 
-  _next() {
+  _nextTab() {
     this.$.tabs.selectNext();
   }
 
-  _test(event, details, wut) {
-    //console.log(event, event.target, details, wut);
+  // click handler on this.$.stack
+  // if target is lastChild then follow link
+  // otherwise advance queue
+  _clickHandler(event) {
     if(event.target.parentElement === this.$.stack.lastElementChild) {
       this.set('route.path', '/release/'+event.target.getAttribute("url"));
     } else {
@@ -194,13 +196,6 @@ class CaffoCrate extends Polymer.Element {
       }, 200);
     }
   }
-
-// filter
-// sort
-// render
-// animate flip
-// click handler on this.$.stack, if target is lastChild then follow link
-//  otherwise advance queue
 
   _render() {
     this.$.stack.innerHTML = '';
@@ -223,13 +218,6 @@ class CaffoCrate extends Polymer.Element {
     this._render();
   }
 
-  test() {
-    this.sortDirection = !this.sortDirection;
-    let d = this.sortDirection ? 1 : -1;
-    this.releases.sort((a,b)=>d*a.title.localeCompare(b.title))
-    this.$.list.render();
-  }
-
   connectedCallback() {
     super.connectedCallback();
     this.releases = window.releases;
@@ -241,7 +229,7 @@ class CaffoCrate extends Polymer.Element {
       } else {
         this.$.tabs.removeAttribute('scrollable');
       }
-    })
+    });
   }
 }
 customElements.define(CaffoCrate.is, CaffoCrate);
