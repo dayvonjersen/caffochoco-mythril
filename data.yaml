@@ -23,7 +23,8 @@ releases:
     #   category: "album"
 
     - id: 2
-      title: "d.j.r. - untitled E.P."
+      artist: "d.j.r."
+      title: "untitled E.P."
       year: 2011
       genre: "Tech House"
       url: "djr-untitled-ep"
@@ -34,7 +35,8 @@ releases:
       category: "ep"
 
     - id: 3
-      title: "d.j.r. - Amherst E.P."
+      artist: "d.j.r."
+      title: "Amherst E.P."
       year: 2011
       genre: "Music"
       url: "djr-amherst-ep"
@@ -52,7 +54,8 @@ releases:
 #       category: "mashup"
 #
     - id: 4
-      title: "d.j.r. - coffee break"
+      artist: "d.j.r."
+      title: "coffee break"
       year: 2013
       genre: "Music"
       url: "coffee-break"

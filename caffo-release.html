@@ -2,8 +2,6 @@
 
 <link rel='import' href='/bower_components/app-route/app-route.html'>
 
-<link rel='import' href='/bower_components/iron-pages/iron-pages.html'>
-
 <link rel='import' href='/bower_components/paper-dialog/paper-dialog.html'>
 <link rel='import' href='/bower_components/paper-icon-button/paper-icon-button.html'>
 <link rel='import' href='/bower_components/paper-tabs/paper-tabs.html'>
@@ -17,17 +15,20 @@
       :host {
         display: flex;
         flex-direction: column;
-        margin: 2em;
-        flex: 0 0 33.3333%;
-        align-self: stretch;
-        border-radius: 2px;
-        position: relative;
-        font-size: 16px;
+        height: 100%;
+        text-align: left;
       }
+
       h1 {
-        font-size: 2em;
-        margin-top: 16px;
-        margin-bottom: 16px;
+        font-size: 2rem;
+        margin: 0;
+        padding: .5rem;
+      }
+
+      h2 {
+        margin: .5rem 1rem;
+        line-height: 1;
+        font-size: 1.25rem;
       }
 
       paper-tabs {
@@ -36,38 +37,43 @@
         --paper-tab-ink: var(--vibrant, #000);
         --paper-tabs-selection-bar-color: var(--vibrant, #000);
       }
+
       paper-icon-button {
         --paper-icon-button-ink-color: var(--vibrant);
       }
+
       .info {
-        color: #aaa;
-        font-size: 12px;
+        color: var(--darkmuted-text, #aaa);
+        font-size: 14px;
         display: flex;
         justify-content: space-between;
+        padding: 1em;
       }
-      iron-pages {
-        display: flex;
-        min-height: 0;
-        height: 100%;
-      }
-      iron-pages > * {
-        width: 100%;
-        overflow-y: auto;
-        overflow-x: hidden;
-        scroll-behavior: smooth;
-        padding: 16px;
-      }
+
       header {
         background: var(--darkmuted, rgba(252,252,252,0.8));
         color: var(--darkmuted-text, #000);
       }
-      header > div {
-        padding: 0 1em;
-      }
+
       header img {
-        float: left;
-        width: 5em;
-        margin-right: 16px;
+        width: 100%;
+        max-height: 24vh;
+        transition: 0.35s all 0.1s ease-in-out;
+        object-fit: cover;
+      }
+
+      header img:hover {
+        max-height: 100vh;
+      }
+
+      .gone {
+        display: none;
+      }
+
+      .tracklist {
+        flex: 1;
+        overflow-y: scroll;
+        min-height: 0;
       }
     </style>
 
@@ -77,23 +83,16 @@
       data='{{data}}'>
     </app-route>
 
-    <header class='mdl-shadow--2dp'>
+    <header>
       <div>
-        <!-- art -->
-        <img id='thumbnail' >
-        <!-- info -->
-        <h1 id='releaseTitle'>[[release.title]]</h1>
+        <a id='albumartlink' target='_blank'><img id='thumbnail'></a>
+        <h2>[[release.artist]]</h2>
+        <h1>&ldquo;[[release.title]]&rdquo;</h1>
         <div class='info'>
           <span class='year'>[[release.year]]</span>
           <span class='genre'>#[[release.genre]]</span>
           <span class='total'>[[total]]</span>
         </div>
-
-        <!-- actions -->
-        <paper-icon-button onclick='modal.open' src='/svg/download.svg'></paper-icon-button>
-        <paper-dialog id='modal'>
-            <div id='releaseInfo'></div>
-        </paper-dialog>
       </div>
 
       <!-- tabs -->
@@ -107,10 +106,11 @@
       </paper-tabs>
     </header>
 
+    <div id='releaseInfo'></div>
     <div class='tracklist' id='tracklist'></div>
 
     <footer>
-      <!-- total time, volume controls? etc... -->
+      <paper-icon-button src='/svg/download.svg'></paper-icon-button>
     </footer>
   </template>
   <script>
@@ -181,6 +181,7 @@ class CaffoRelease extends Polymer.Element {
       .catch(err=>console.error(err))
 
     this.$.thumbnail.src = '/image/'+this.release.url+'.jpg';
+    this.$.albumartlink.href = '/image/'+this.release.url+'.jpg';
     document.title = this.release.title;
 
     this.$.releaseInfo.innerHTML = this.release.info;
@@ -205,11 +206,18 @@ class CaffoRelease extends Polymer.Element {
   }
 
   _tabChanged(event) {
-    let e = Polymer.dom(event);
-    this._loadTracklist(parseInt(e.localTarget.selectedItem.dataset.tracklist));
-    if(this.willPlay) {
-      player.togglePlayback();
-      this.willPlay = undefined;
+    if(!event.detail.item.dataset.tracklist) {
+      this.$.releaseInfo.classList.remove('gone');
+      this.$.tracklist.classList.add('gone');
+    } else {
+      this.$.releaseInfo.classList.add('gone');
+      this.$.tracklist.classList.remove('gone');
+      let e = Polymer.dom(event);
+      this._loadTracklist(parseInt(e.localTarget.selectedItem.dataset.tracklist));
+      if(this.willPlay) {
+        player.togglePlayback();
+        this.willPlay = undefined;
+      }
     }
   }
 

@@ -28,7 +28,12 @@
         left: 0;
       }
       app-drawer {
-        --app-drawer-width: 33.3333vw;
+        --app-drawer-width: 36vw;
+      }
+      @media (max-width: 800px) {
+        app-drawer {
+          --app-drawer-width: 75vw;
+        }
       }
     </style>
 
