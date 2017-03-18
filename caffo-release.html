@@ -6,6 +6,7 @@
 <link rel='import' href='/bower_components/paper-icon-button/paper-icon-button.html'>
 <link rel='import' href='/bower_components/paper-tabs/paper-tabs.html'>
 <link rel='import' href='/bower_components/paper-slider/paper-slider.html'>
+<link rel='import' href='/bower_components/paper-fab/paper-fab.html'>
 
 <link rel='import' href='/caffo-playlist-item.html'>
 
@@ -43,6 +44,7 @@
       }
 
       .info {
+        background: var(--darkmuted, #333);
         color: var(--darkmuted-text, #aaa);
         font-size: 14px;
         display: flex;
@@ -76,6 +78,56 @@
         overflow-y: auto;
         overflow-x: hidden;
         padding: .5rem;
+        box-shadow: 0px 12px 10px -10px var(--darkmuted, #000) inset,
+                    0px -12px 10px -10px var(--darkmuted, #000) inset;
+      }
+
+      sorbetto-spektrum {
+        display: block;
+        height: 3rem;
+      }
+
+      paper-icon-button {
+        display: inline-block;
+        background: var(--vibrant, #ccc);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+      }
+
+      #playpauseBtn {
+        width: 60px;
+        height: 60px;
+      }
+
+      #previousBtn, #nextBtn, #muteBtn {
+        width: 28px;
+        height: 28px;
+        vertical-align: middle;
+        margin-left: .25rem;
+      }
+
+      #muteBtn {
+        margin-right: -1.25rem;
+      }
+
+      .controls {
+        padding: .5rem;
+        display: flex;
+        justify-content: space-between;
+      }
+      .controls > div {
+        display: flex;
+        align-items: center;
+      }
+      .controls paper-slider {
+        width: 5.25rem;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0 1em;
+        --paper-progress-active-color: var(--vibrant);
+        --paper-slider-knob-color: var(--vibrant);
       }
     </style>
 
@@ -90,13 +142,19 @@
         <a id='albumartlink' target='_blank'><img id='thumbnail'></a>
         <h2>[[release.artist]]</h2>
         <h1>&ldquo;[[release.title]]&rdquo;</h1>
-        <div class='info'>
-          <span class='year'>[[release.year]]</span>
-          <span class='genre'>#[[release.genre]]</span>
-          <span class='total'>[[total]]</span>
+        <sorbetto-spektrum></sorbetto-spektrum>
+        <div class='controls'>
+          <div>
+            <paper-icon-button id="playpauseBtn" on-click="_playpause" elevation="3" src="/svg/play.svg"></paper-icon-button>
+            <paper-icon-button id="previousBtn" on-click="_previous" elevation="2" src="/svg/fast-backward.svg"></paper-icon-button>
+            <paper-icon-button id="nextBtn" on-click="_next" elevation="2" src="/svg/fast-forward.svg"></paper-icon-button>
+          </div>
+          <div>
+            <paper-icon-button id="muteBtn" elevation="0" src="/svg/volume-mute.svg"></paper-icon-button>
+            <paper-slider></paper-slider>
+          </div>
         </div>
       </div>
-      <sorbetto-spektrum></sorbetto-spektrum>
 
       <!-- tabs -->
       <paper-tabs selected='{{selectedTab}}' on-iron-select='_tabChanged'>
@@ -113,7 +171,11 @@
     <div class='content' id='tracklist'></div>
 
     <footer>
-      <paper-icon-button src='/svg/download.svg'></paper-icon-button>
+      <div class='info'>
+        <span class='year'>[[release.year]]</span>
+        <span class='genre'>#[[release.genre]]</span>
+        <span class='total'>[[total]]</span>
+      </div>
     </footer>
   </template>
   <script>
@@ -131,6 +193,19 @@ class CaffoRelease extends Polymer.Element {
         '_pageChanged(data.tabName)'
       ],
     }
+  }
+
+  _playpause() {
+    player.togglePlayback();
+    this.$.playpauseBtn.src = player.state.isPlaying ? '/svg/pause.svg' : '/svg/play.svg';
+  }
+
+  _previous() {
+    player.previous();
+  }
+
+  _next() {
+    player.next();
   }
 
   _loadTracklist(tracklist) {

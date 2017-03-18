@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg version="1.1" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-  <path d="M50,0C22.4,0,0,22.4,0,50s22.4,50,50,50s50-22.4,50-50S77.6,0,50,0z M38.7,72.4V27.2l34.9,22.6L38.7,72.4z"/>
+<svg viewBox="0 0 75 75" version="1.1" x="0px" y="0px" data-icon="play" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <path d="M 25.15625 16.761719 L 59.007812 37.910156 L 25.15625 59.953125 Z M 25.15625 16.761719" fill-rule="nonzero" fill-opacity="1"/>
+  </g>
 </svg>
