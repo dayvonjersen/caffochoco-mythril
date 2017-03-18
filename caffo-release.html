@@ -2,11 +2,9 @@
 
 <link rel='import' href='/bower_components/app-route/app-route.html'>
 
-<link rel='import' href='/bower_components/paper-dialog/paper-dialog.html'>
 <link rel='import' href='/bower_components/paper-icon-button/paper-icon-button.html'>
 <link rel='import' href='/bower_components/paper-tabs/paper-tabs.html'>
 <link rel='import' href='/bower_components/paper-slider/paper-slider.html'>
-<link rel='import' href='/bower_components/paper-fab/paper-fab.html'>
 
 <link rel='import' href='/caffo-playlist-item.html'>
 
@@ -125,7 +123,7 @@
         width: 5.25rem;
         display: inline-block;
         vertical-align: middle;
-        padding: 0 1em;
+        padding: 0 1.25rem 0 1rem;
         --paper-progress-active-color: var(--vibrant);
         --paper-slider-knob-color: var(--vibrant);
       }
@@ -156,7 +154,6 @@
         </div>
       </div>
 
-      <!-- tabs -->
       <paper-tabs selected='{{selectedTab}}' on-iron-select='_tabChanged'>
         <paper-tab>info</paper-tab>
         <dom-repeat items='{{tracklists}}'>
@@ -312,6 +309,16 @@ class CaffoRelease extends Polymer.Element {
   notify(playerState) {
     this.$.playpauseBtn.src = playerState.isPlaying ? '/svg/pause.svg' : '/svg/play.svg';
     this.$.muteBtn.src = playerState.currentVolume == 0 ? '/svg/volume-mute.svg' : (playerState.currentVolume > 50 ? '/svg/volume-full.svg' : '/svg/volume-mid.svg');
+    if(playerState.nowPlayingIndex == 0) {
+      this.$.previousBtn.classList.add('gone');
+    } else {
+      this.$.previousBtn.classList.remove('gone');
+    }
+    if(playerState.nowPlayingIndex == playerState.playlist.length - 1) {
+      this.$.nextBtn.classList.add('gone');
+    } else {
+      this.$.nextBtn.classList.remove('gone');
+    }
   }
 
   connectedCallback() {
