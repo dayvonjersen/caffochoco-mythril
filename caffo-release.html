@@ -221,10 +221,11 @@ class CaffoRelease extends Polymer.Element {
     let total = 0;
     for(let i = 0; i < this.tracklists.length; i++) {
       if(this.tracklists[i].id == tracklist) {
-        player.clear();
         let skip = false;
         if(tracklist == player.state.tracklistId) {
           skip = true;
+        } else {
+          player.clear();
         }
         this.tracklists[i].tracks.forEach((t) => {
           total += t.length;
