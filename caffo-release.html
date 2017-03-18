@@ -178,18 +178,18 @@
   <script>
 class CaffoRelease extends Polymer.Element {
   static get is() { return 'caffo-release'; }
-  static get config() {
+  static get properties() {
     return {
-      properties: {
-        route: {
-          type: Object,
-          notify: true
-        },
-      },
-      observers: [
-        '_pageChanged(data.tabName)'
-      ],
-    }
+      route: {
+        type: Object,
+        notify: true
+      }
+    };
+  }
+  static get observers() {
+    return [
+      '_pageChanged(data.tabName)'
+    ];
   }
 
   _playpause() {

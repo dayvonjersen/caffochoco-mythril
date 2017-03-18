@@ -115,15 +115,13 @@
   <script>
 class CaffoPlaylistItem extends Polymer.Element {
   static get is() { return 'caffo-playlist-item'; }
-  static get config() {
+  static get properties() {
     return {
-      properties: {
-        title: {},
-        length:{},
-        url:{},
-        tracklistId:{}
-      }
-    }
+      title: String,
+      length: Number,
+      url: String,
+      tracklistId: Number,
+    };
   }
 
   _formatTime(time) {
@@ -190,6 +188,10 @@ class CaffoPlaylistItem extends Polymer.Element {
     this.isSeeking = false;
     this.timeRemaining = true;
     this.notSynced = true;
+
+    // XXX wtf
+    ['title','length','url','tracklistId'].forEach((wtf) => this[wtf] = this.getAttribute(wtf));
+
     player.subject.add(this);
     Polymer.RenderStatus.afterNextRender(this, () => {
       let imageElement = document.createElement('img')

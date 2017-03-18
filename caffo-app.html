@@ -59,18 +59,18 @@
   <script>
 class CaffoApp extends Polymer.Element {
   static get is() { return 'caffo-app'; }
-  static get config() {
+  static get properties() {
     return {
-      properties: {
-        route: {
-          type: Object,
-          notify: true
-        },
+      route: {
+        type: Object,
+        notify: true
       },
-      observers: [
-        '_pageChanged(routeData.page)'
-      ],
     };
+  }
+  static get observers() {
+      return [
+        '_pageChanged(routeData.page)'
+      ];
   }
 
   _drawerFn() {

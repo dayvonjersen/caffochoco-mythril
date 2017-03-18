@@ -160,14 +160,16 @@
   <script>
 class CaffoCrate extends Polymer.Element {
   static get is() { return 'caffo-crate' }
+  static get properties() {
+    return {
+      route: {
+        type: Object,
+        notify: true
+      },
+    }
+  }
   static get config() {
     return {
-      properties: {
-        route: {
-          type: Object,
-          notify: true
-        },
-      },
       listeners: {
         'click': '_clickHandler',
       }

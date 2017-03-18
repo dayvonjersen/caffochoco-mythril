@@ -75,24 +75,21 @@
   <script>
 class CaffoRecord extends Polymer.Element {
   static get is() { return 'caffo-record'; }
-  static get config() {
+  static get properties() {
     return {
-      properties: {
-        image: {
-          type: String,
-          observer: '_setBackgroundImage'
-        },
-        label:{},
-      }
-    }
-  }
-
-  _setBackgroundImage(imageUrl) {
-    this.$.record.style.backgroundImage = `url(${imageUrl})`;
+      image: String,
+      label: String,
+      url: String,
+    };
   }
 
   connectedCallback() {
     super.connectedCallback();
+    // XXX wtf
+    ['image','label','url'].forEach((wtf) => this[wtf] = this.getAttribute(wtf));
+
+    this.$.record.style.backgroundImage = `url(${this.image})`;
+
   }
 }
 customElements.define(CaffoRecord.is, CaffoRecord);

@@ -47,14 +47,12 @@
 var player;
 class CaffoPlayer extends Polymer.Element {
   static get is() { return 'caffo-player'; }
-  static get config() {
+  static get properties() {
     return {
-      properties: {
-        playlist: {
-          type: Array
-        }
+      playlist: {
+        type: Array
       }
-    }
+    };
   }
 
   _play(event) {
