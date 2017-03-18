@@ -189,9 +189,6 @@ class CaffoPlaylistItem extends Polymer.Element {
     this.timeRemaining = true;
     this.notSynced = true;
 
-    // XXX wtf
-    ['title','length','url','tracklistId'].forEach((wtf) => this[wtf] = this.getAttribute(wtf));
-
     player.subject.add(this);
     Polymer.RenderStatus.afterNextRender(this, () => {
       let imageElement = document.createElement('img')

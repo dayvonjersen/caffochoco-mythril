@@ -85,11 +85,7 @@ class CaffoRecord extends Polymer.Element {
 
   connectedCallback() {
     super.connectedCallback();
-    // XXX wtf
-    ['image','label','url'].forEach((wtf) => this[wtf] = this.getAttribute(wtf));
-
     this.$.record.style.backgroundImage = `url(${this.image})`;
-
   }
 }
 customElements.define(CaffoRecord.is, CaffoRecord);
