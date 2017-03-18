@@ -150,8 +150,8 @@
             <paper-icon-button id="nextBtn" on-click="_next" elevation="2" src="/svg/fast-forward.svg"></paper-icon-button>
           </div>
           <div>
-            <paper-icon-button id="muteBtn" elevation="0" src="/svg/volume-mute.svg"></paper-icon-button>
-            <paper-slider></paper-slider>
+            <paper-icon-button id="muteBtn" on-click="_toggleMute" elevation="0" src="/svg/volume-mute.svg"></paper-icon-button>
+            <paper-slider id="volume" on-immediate-value-change="_setVolume" min="0" max="100"></paper-slider>
           </div>
         </div>
       </div>
@@ -197,7 +197,6 @@ class CaffoRelease extends Polymer.Element {
 
   _playpause() {
     player.togglePlayback();
-    this.$.playpauseBtn.src = player.state.isPlaying ? '/svg/pause.svg' : '/svg/play.svg';
   }
 
   _previous() {
@@ -206,6 +205,17 @@ class CaffoRelease extends Polymer.Element {
 
   _next() {
     player.next();
+  }
+
+  _toggleMute() {
+    player.toggleMute();
+    this.$.volume.value = player.currentVolume;
+  }
+
+  _setVolume() {
+    if(player.currentVolume !== this.$.volume.immediateValue) {
+      player.setVolume(this.$.volume.immediateValue);
+    }
   }
 
   _loadTracklist(tracklist) {
@@ -299,12 +309,19 @@ class CaffoRelease extends Polymer.Element {
     }
   }
 
+  notify(playerState) {
+    this.$.playpauseBtn.src = playerState.isPlaying ? '/svg/pause.svg' : '/svg/play.svg';
+    this.$.muteBtn.src = playerState.currentVolume == 0 ? '/svg/volume-mute.svg' : (playerState.currentVolume > 50 ? '/svg/volume-full.svg' : '/svg/volume-mid.svg');
+  }
+
   connectedCallback() {
     super.connectedCallback();
+    this.$.volume.value = parseInt(player.audioElement.volume * 100);
     [].forEach.call(
       this.shadowRoot.querySelectorAll("caffo-playlist-item"),
       (item) => player.subject.add(item)
     );
+    player.subject.add(this);
   }
 }
 customElements.define(CaffoRelease.is, CaffoRelease);

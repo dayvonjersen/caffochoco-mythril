@@ -56,6 +56,7 @@ class PlayerModel {
     this.state.isPlaying = !this.audioElement.paused;
     this.state.lastPlaying = this.state.nowPlaying;
     this.state.nowPlaying = this.nowPlaying;
+    this.state.currentVolume = parseInt(this.audioElement.volume * 100);
     this.subject.notifyObservers(this.state);
   }
 
@@ -66,6 +67,10 @@ class PlayerModel {
     }
     return '';
   }
+
+  get currentVolume() {
+    return parseInt(this.audioElement.volume * 100);
+  }  
 
   previous() {
     if(!this.state.playlist.length) return;
