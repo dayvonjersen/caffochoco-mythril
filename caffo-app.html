@@ -26,6 +26,16 @@
         /*position: fixed;*/
         top: 0;
         left: 0;
+        perspective: 1000px;
+      }
+      caffo-crate {
+        transition: transform 0.2s;
+      }
+      app-drawer[opened] + .crate-container {
+        width: 64vw;
+      }
+      app-drawer[opened] + .crate-container caffo-crate {
+        transform: rotateY(31deg) rotateX(-4deg) rotateZ(-20deg);
       }
       app-drawer {
         --app-drawer-width: 36vw;
@@ -48,13 +58,14 @@
       tail='{{subroute}}'>
     </app-route>
 
+
+    <app-drawer id="drawer" align='right' on-app-drawer-transitioned='_drawerFn' persistent>
+      <caffo-release route='{{subroute}}'></caffo-release>
+    </app-drawer>
+
     <div class='crate-container'>
       <caffo-crate route='{{route}}'></caffo-crate>
     </div>
-
-    <app-drawer id="drawer" align='right' on-app-drawer-transitioned='_drawerFn'>
-      <caffo-release route='{{subroute}}'></caffo-release>
-    </app-drawer>
   </template>
   <script>
 class CaffoApp extends Polymer.Element {
