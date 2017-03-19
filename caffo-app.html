@@ -5,6 +5,8 @@
 
 <link rel='import' href='/bower_components/app-layout/app-drawer/app-drawer.html'>
 
+<link rel='import' href='/bower_components/paper-icon-button/paper-icon-button.html'>
+
 <link rel='import' href='/caffo-crate.html'>
 <link rel='import' href='/caffo-license.html'>
 <link rel='import' href='/caffo-player.html'>
@@ -27,8 +29,10 @@
         top: 0;
         left: 0;
         perspective: 1000px;
+        pointer-events: none;
       }
       caffo-crate {
+        pointer-events: all;
         transition: transform 0.2s;
       }
       app-drawer[opened] + .crate-container {
@@ -44,6 +48,18 @@
         app-drawer {
           --app-drawer-width: 75vw;
         }
+        app-drawer[opened] + .crate-container {
+          display: none;
+        }
+      }
+      .drawerCloser {
+        position: absolute;
+        left: -2.5rem;
+        height: 100vh;
+        background: rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        cursor: pointer;
       }
     </style>
 
@@ -60,11 +76,14 @@
 
 
     <app-drawer id="drawer" align='right' on-app-drawer-transitioned='_drawerFn' persistent>
+      <div class='drawerCloser' on-click="_closeDrawer">
+        <paper-icon-button src="/svg/chevron-right.svg"></paper-icon-button>
+      </div>
       <caffo-release route='{{subroute}}'></caffo-release>
     </app-drawer>
 
     <div class='crate-container'>
-      <caffo-crate route='{{route}}'></caffo-crate>
+      <caffo-crate id='crate' route='{{route}}'></caffo-crate>
     </div>
   </template>
   <script>
@@ -84,6 +103,11 @@ class CaffoApp extends Polymer.Element {
       ];
   }
 
+  _closeDrawer() {
+    this.$.drawer.close();
+    this.set('route.path', '/');
+  }
+
   _drawerFn() {
     if(!this.$.drawer.opened) {
       this.set('route.path', '/');
@@ -94,10 +118,12 @@ class CaffoApp extends Polymer.Element {
     switch(this.routeData.page) {
       case "release":
         this.$.drawer.open();
+        this.$.crate.classList.add('rotated');
         break;
 
       default:
         this.$.drawer.close();
+        this.$.crate.classList.remove('rotated');
         if(player) {
           player.stopPlayback();
           player.clear();
