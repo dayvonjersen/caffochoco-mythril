@@ -61,10 +61,47 @@
         align-items: center;
         cursor: pointer;
       }
+
+      header {
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+      header h1 {
+        font-family: "CafeAndBrewery";
+        font-weight: normal;
+        font-size: 28px;
+        margin-top: .25em;
+        background-image: linear-gradient(90deg, transparent 21%, rgba(255,255,255,0.8) 100%);
+        background-size: 100% 1px;
+        background-repeat: no-repeat;
+        background-position: 100% 100%;
+      }
+      header h2 {
+        font-family: "Operator";
+        font-weight: normal;
+        font-style: italic;
+        text-align: right;
+        font-size: 13px;
+        margin: -1em 0 .5em;
+      }
+      header img {
+        width: 1.25em;
+        margin: 0 0.25em;
+        vertical-align: middle;
+        display: inline-block;
+      }
     </style>
 
-    <caffo-license></caffo-license>
-    <caffo-player></caffo-player>
+    <header>
+      <div>
+        <h1><img src='/image/awesome.png'>dayvonjersen</h1>
+        <h2>discography</h2>
+      </div>
+      <caffo-license></caffo-license>
+      <caffo-player></caffo-player>
+    </header>
 
     <app-location route='{{route}}'></app-location>
     <app-route
