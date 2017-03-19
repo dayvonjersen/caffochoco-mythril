@@ -145,7 +145,10 @@ var Z = {
         });
 
         function draw() {
-            //if(audioElement.paused) return;
+            if(audioElement.paused) {
+              audioElement.addEventListener("play", draw);
+              return;
+            }
             if(!canvas.width || !canvas.height) resizeFn();
             requestAnimationFrame(draw);
 
@@ -155,7 +158,7 @@ var Z = {
         source.connect(analyser);
         analyser.connect(audioCtx.destination);
 
-        draw();//audioElement.addEventListener("play", draw);
+        draw();
 
         Object.defineProperty(this, "state", {
             get: function() {

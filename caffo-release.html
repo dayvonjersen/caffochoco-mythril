@@ -83,6 +83,9 @@
       sorbetto-spektrum {
         display: block;
         height: 3rem;
+        color: var(--lightvibrant, #555);
+        border-color: var(--vibrant, red);
+        filter: drop-shadow(0 0 64px);
       }
 
       paper-icon-button {
@@ -140,7 +143,7 @@
         <a id='albumartlink' target='_blank'><img id='thumbnail'></a>
         <h2>[[release.artist]]</h2>
         <h1>&ldquo;[[release.title]]&rdquo;</h1>
-        <sorbetto-spektrum></sorbetto-spektrum>
+        <sorbetto-spektrum id="spektrum"></sorbetto-spektrum>
         <div class='controls'>
           <div>
             <paper-icon-button id="playpauseBtn" on-click="_playpause" elevation="3" src="/svg/play.svg"></paper-icon-button>
@@ -320,6 +323,8 @@ class CaffoRelease extends Polymer.Element {
     } else {
       this.$.nextBtn.classList.remove('gone');
     }
+    this.$.spektrum.bars = 64;
+    this.$.spektrum.padY = 0;
   }
 
   connectedCallback() {
