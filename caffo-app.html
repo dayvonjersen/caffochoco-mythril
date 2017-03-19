@@ -39,14 +39,14 @@
         width: 64vw;
       }
       app-drawer[opened] + .crate-container caffo-crate {
-        transform: rotateY(31deg) rotateX(-4deg) rotateZ(-20deg);
+        transform: rotateY(31deg) rotateX(-4deg) rotateZ(-17deg);
       }
       app-drawer {
         --app-drawer-width: 36vw;
       }
       @media (max-width: 800px) {
         app-drawer {
-          --app-drawer-width: 75vw;
+          --app-drawer-width: calc(100vw - 2.5rem);
         }
         app-drawer[opened] + .crate-container {
           display: none;
@@ -71,7 +71,7 @@
       header h1 {
         font-family: "CafeAndBrewery";
         font-weight: normal;
-        font-size: 28px;
+        font-size: 24px;
         margin-top: .25em;
         background-image: linear-gradient(90deg, transparent 21%, rgba(255,255,255,0.8) 100%);
         background-size: 100% 1px;
