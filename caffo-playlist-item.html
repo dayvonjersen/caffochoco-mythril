@@ -98,9 +98,10 @@
 
     </style>
     <!--<img src='/svg/pause.svg'>-->
-    <span class='title' on-click="_play">[[title]]</span>
+    <span class='title' title="toggle playback" on-click="_play">[[title]]</span>
     <span class='time' title='toggle time remaining' on-click='_timeRemaining'>[[currentTime]]</span>
     <paper-slider
+      title="seek to time"
       on-immediate-value-change="_seek"
       on-value-change="_done"
       id="seek"

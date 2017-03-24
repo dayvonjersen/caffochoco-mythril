@@ -165,19 +165,19 @@
 
     <header>
       <div>
-        <a id='albumartlink' target='_blank'><img id='thumbnail'></a>
+        <a id='albumartlink' target='_blank' title='click to open full-size album art in new window'><img id='thumbnail'></a>
         <h2>[[release.artist]]</h2>
         <h1>&ldquo;[[release.title]]&rdquo;</h1>
-        <sorbetto-spektrum id="spektrum"></sorbetto-spektrum>
+        <sorbetto-spektrum id="spektrum" title="click to cycle through visualizations"></sorbetto-spektrum>
         <div class='controls'>
           <div>
-            <paper-icon-button id="playpauseBtn" on-click="_playpause" elevation="3" src="/svg/play.svg"></paper-icon-button>
-            <paper-icon-button id="previousBtn" on-click="_previous" elevation="2" src="/svg/fast-backward.svg"></paper-icon-button>
-            <paper-icon-button id="nextBtn" on-click="_next" elevation="2" src="/svg/fast-forward.svg"></paper-icon-button>
+            <paper-icon-button id="playpauseBtn" on-click="_playpause" elevation="3" src="/svg/play.svg" title="toggle playback"></paper-icon-button>
+            <paper-icon-button id="previousBtn" on-click="_previous" elevation="2" src="/svg/fast-backward.svg" title="previous track"></paper-icon-button>
+            <paper-icon-button id="nextBtn" on-click="_next" elevation="2" src="/svg/fast-forward.svg" title="next track"></paper-icon-button>
           </div>
           <div>
-            <paper-icon-button id="muteBtn" on-click="_toggleMute" elevation="0" src="/svg/volume-mute.svg"></paper-icon-button>
-            <paper-slider id="volume" on-immediate-value-change="_setVolume" min="0" max="100"></paper-slider>
+            <paper-icon-button id="muteBtn" on-click="_toggleMute" elevation="0" src="/svg/volume-mute.svg" title="toggle mute"></paper-icon-button>
+            <paper-slider id="volume" on-immediate-value-change="_setVolume" min="0" max="100" title="adjust volume"></paper-slider>
           </div>
         </div>
       </div>
@@ -197,9 +197,9 @@
 
     <footer>
       <div class='info'>
-        <span class='year'>[[release.year]]</span>
-        <span class='genre'>#[[release.genre]]</span>
-        <span class='total'>[[total]]</span>
+        <span class='year' title="release year">[[release.year]]</span>
+        <span class='genre' title="genre">#[[release.genre]]</span>
+        <span class='total' title="total duration">[[total]]</span>
       </div>
     </footer>
   </template>

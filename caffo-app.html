@@ -77,6 +77,10 @@
         display: flex;
         position: fixed;
       }
+      header a {
+        color: inherit;
+        text-decoration: none;
+      }
       header h1 {
         font-family: "CafeAndBrewery";
         font-weight: normal;
@@ -139,7 +143,7 @@
 
     <header>
       <div>
-        <h1><img src='/image/awesome.png'>dayvonjersen</h1>
+        <h1><a href="https://dayvonjersen.com" title="return to dayvonjersen.com"><img src='/image/awesome.png'>dayvonjersen</a></h1>
         <h2>discography</h2>
       </div>
       <caffo-player></caffo-player>
@@ -155,7 +159,7 @@
 
 
     <app-drawer id="drawer" align='right' on-app-drawer-transitioned='_drawerFn' persistent>
-      <div class='drawerCloser' on-click="_closeDrawer">
+      <div class='drawerCloser' on-click="_closeDrawer" title="stop playback &amp; close player">
         <paper-icon-button id='drawerCloserIcon' src="/svg/chevron-right.svg"></paper-icon-button>
       </div>
       <caffo-release route='{{subroute}}'></caffo-release>
