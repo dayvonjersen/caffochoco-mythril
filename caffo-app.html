@@ -156,7 +156,7 @@
 
     <app-drawer id="drawer" align='right' on-app-drawer-transitioned='_drawerFn' persistent>
       <div class='drawerCloser' on-click="_closeDrawer">
-        <paper-icon-button src="/svg/chevron-right.svg"></paper-icon-button>
+        <paper-icon-button id='drawerCloserIcon' src="/svg/chevron-right.svg"></paper-icon-button>
       </div>
       <caffo-release route='{{subroute}}'></caffo-release>
     </app-drawer>
@@ -189,8 +189,11 @@ class CaffoApp extends Polymer.Element {
   }
 
   _closeDrawer() {
+    let ripple = this.$.drawerCloserIcon.getRipple();
+    ripple.downAction();
     this.$.drawer.close();
     this.set('route.path', '/');
+    ripple.upAction();
   }
 
   _drawerFn() {
