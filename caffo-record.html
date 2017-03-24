@@ -18,10 +18,8 @@
           border-style: none;
           cursor: pointer;
           z-index: 1;
-          background-color: rgba(248,242,242,1);
+          background-color: #1b1b1b;
           overflow: hidden;
-          color: #080903;
-      	  text-shadow: 3px 3px 0px rgba(8,9,3,0.1), 0px 0px 1px;
           background-size: cover;
       }
       @media (min-width: 1024px) {
@@ -33,17 +31,19 @@
       .record, .record * {
           transition: all 0.3s ease;
       }
-      .record-bottom-label {
-          box-shadow: none;
-          background: rgba(255, 255, 255, 0.8);
-          font-size: 1.5em;
-          padding: 1em;
-          margin: 0.5em;
-      }
-      .record-bottom-label {
+      .record-top-label {
+          font-size: 1.3333rem;
+          font-weight: bold;
+          padding: 1rem;
+          margin: .8rem;
           position: absolute;
-          width: calc(100% - 1em);
-          bottom: 0;
+          width: calc(100% - 1.6rem);
+          top: 0;
+          min-height: 72px;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justify-content: space-around;
       }
       .record-center-label {
           position: absolute;
@@ -64,17 +64,41 @@
       .record-center-label::after {
           content: '';
           background-color: #000;
-          height: 10px;
-          width: 10px;
+          height: 8px;
+          width: 8px;
           border-radius: 50%;
           display: inline-block;
           flex: 0 0 auto;
           margin-left: 2px;
       }
+      .record-bottom-label {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        padding: .5rem .8rem;
+        display: flex;
+        justify-content: space-between;
+      }
+      .record-top-label,
+      .record-bottom-label {
+        color: #fff;
+        text-shadow: -1px 0px 0 #000,
+                      0px -1px 0 #000,
+                      0px 0px 0 #000,
+                      0px 1px 0 #000,
+                      1px 0px 0 #000;
+      }
     </style>
     <div id='record' class='record'>
+        <div class='record-top-label'>
+          <span>[[artist]]</span>
+          <span>&ldquo;[[title]]&rdquo;</span>
+        </div>
         <div class='record-center-label'></div>
-        <div class='record-bottom-label'>[[label]]</div>
+        <div class='record-bottom-label'>
+          <span class='year'>[[year]]</span>
+          <span class='genre'>#[[genre]]</span>
+        </div>
     </div>
   </template>
   <script>
@@ -83,8 +107,11 @@ class CaffoRecord extends Polymer.Element {
   static get properties() {
     return {
       image: String,
-      label: String,
+      artist: String,
+      title: String,
       url: String,
+      year: String,
+      genre: String,
     };
   }
 

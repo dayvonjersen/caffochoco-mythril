@@ -1,7 +1,9 @@
 releases:
     # - id: 1
-    #   title: "deadHipsters - LOVE COMPUTER"
+    #   artist: "deadHipsters"
+    #   title: "LOVE COMPUTER"
     #   year: 2012
+    #   genre: "Music"
     #   url: "deadhipsters-lovecomputer"
     #   info: |
     #       <dl>

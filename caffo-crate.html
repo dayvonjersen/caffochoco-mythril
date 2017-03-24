@@ -233,7 +233,10 @@ class CaffoCrate extends Polymer.Element {
     this.releases.forEach((item) => {
       let record = document.createElement("caffo-record");
       record.setAttribute("class", "flipforward__item");
-      record.setAttribute("label", item.title);
+      record.setAttribute("artist", item.artist);
+      record.setAttribute("title", item.title);
+      record.setAttribute("year", item.year);
+      record.setAttribute("genre", item.genre);
       record.setAttribute("url", item.url);
       record.setAttribute("image", `/image/${item.url}.jpg`);
       let containerElement = document.createElement("div");
