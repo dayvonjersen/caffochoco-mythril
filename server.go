@@ -81,6 +81,21 @@ type file struct {
 
 var imageCache = map[string]*file{}
 
+var vibrantFallback = map[string]string{
+	"vibrant":           "#acaaaa",
+	"vibrant-text":      "#000",
+	"lightvibrant":      "#fff",
+	"lightvibrant-text": "#000",
+	"darkvibrant":       "#2b2b2b",
+	"darkvibrant-text":  "#fff",
+	"muted":             "#6d6a6a",
+	"muted-text":        "#fff",
+	"lightmuted":        "#6d6a6a",
+	"lightmuted-text":   "#fff",
+	"darkmuted":         "#32312f",
+	"darkmuted-text":    "#fff",
+}
+
 func imageHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/css; charset=UTF-8")
 
@@ -106,13 +121,17 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 	checkErr(err)
 	palette, err := vibrant.NewPaletteFromImage(img)
 	checkErr(err)
-	vars := []string{}
+	vibrantColors := vibrantFallback
 	for _, swatch := range palette.ExtractAwesome() {
 		c := swatch.Color
 		r, g, b := c.RGB()
 		n := strings.ToLower(swatch.Name)
-		vars = append(vars, fmt.Sprintf(`"--%s":"rgba(%d,%d,%d,1)"`, n, r, g, b))
-		vars = append(vars, fmt.Sprintf(`"--%s-text":"%s"`, n, c.TitleTextColor()))
+		vibrantColors[n] = fmt.Sprintf(`rgba(%d,%d,%d,1)`, r, g, b)
+		vibrantColors[n+"-text"] = c.TitleTextColor().RGBHex()
+	}
+	vars := []string{}
+	for k, v := range vibrantColors {
+		vars = append(vars, fmt.Sprintf(`"--%s":"%s"`, k, v))
 	}
 	stylesheet := "{" + strings.Join(vars, ",") + "}"
 	fmt.Fprintf(w, stylesheet)
