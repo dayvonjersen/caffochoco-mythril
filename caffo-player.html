@@ -5,15 +5,26 @@
       :host {
         display: block;
       }
+      audio {
+        display: block;
+        width: 100%;
+      }
+      audio, ol {
+        box-shadow: 5px 5px #4285f4;
+        position: relative;
+      }
       ol {
+        z-index: 1;
         margin: 0;
+        margin-top: -.5rem;
         padding: 0;
         background: #fafafa;
+        color: #000;
       }
       li {
         list-style-position: inside;
         cursor: pointer;
-        padding: 0 1em;
+        padding: .5rem .5rem 0;
       }
       li[selected] {
         background: #a8c5f7;
@@ -29,6 +40,8 @@
       }
       input[type='checkbox']:not(:checked) ~ audio {
         opacity: 0;
+        width: auto;
+        box-shadow: none;
       }
       input[type='checkbox']:not(:checked) ~ ol {
         display: none;

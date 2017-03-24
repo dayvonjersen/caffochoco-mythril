@@ -325,7 +325,12 @@ class CaffoRelease extends Polymer.Element {
 
   notify(playerState) {
     this.$.playpauseBtn.src = playerState.isPlaying ? '/svg/pause.svg' : '/svg/play.svg';
-    this.$.muteBtn.src = playerState.currentVolume == 0 ? '/svg/volume-mute.svg' : (playerState.currentVolume > 50 ? '/svg/volume-full.svg' : '/svg/volume-mid.svg');
+    this.$.muteBtn.src = playerState.currentVolume == 0 || playerState.muted ? '/svg/volume-mute.svg' : (playerState.currentVolume > 50 ? '/svg/volume-full.svg' : '/svg/volume-mid.svg');
+    if(!playerState.muted && this.$.volume.value != playerState.currentVolume) {
+      this.$.volume.value = playerState.currentVolume;
+    } else if(playerState.muted && this.$.volume.value != 0) {
+      this.$.volume.value = 0;
+    }
     if(playerState.nowPlayingIndex == 0) {
       this.$.previousBtn.classList.add('gone');
     } else {
