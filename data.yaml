@@ -5,7 +5,7 @@ releases:
     #   year: 2012
     #   genre: "Music"
     #   url: "deadhipsters-lovecomputer"
-    #   info: |
+    #   about: |
     #       <dl>
     #       <dt>visiv</dt>
     #       <dd>tavis ivan lochhead</dd>
@@ -30,7 +30,7 @@ releases:
       year: 2011
       genre: "Tech House"
       url: "djr-untitled-ep"
-      info: |
+      about: |
         dunno
       tracklists: [3]
       defaultTracklist: 3
@@ -42,7 +42,7 @@ releases:
       year: 2011
       genre: "Music"
       url: "djr-amherst-ep"
-      info: |
+      about: |
         it was raining
       tracklists: [4, 5]
       defaultTracklist: 4
@@ -50,7 +50,7 @@ releases:
 
 #     - id: 3
 #       title: "Mashups 2007-2009"
-#       info: |
+#       about: |
 #           My early mashups consisted of nothing more than two tracks laid on top of each other
 #           with minimum effects and automation, mostly for levels
 #       category: "mashup"
@@ -61,7 +61,7 @@ releases:
       year: 2013
       genre: "Music"
       url: "coffee-break"
-      info: ""
+      about: ""
       tracklists: [6]
       defaultTracklist: 6
       category: "single"

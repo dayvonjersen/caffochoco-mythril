@@ -183,7 +183,7 @@
       </div>
 
       <paper-tabs selected='{{selectedTab}}' on-iron-select='_tabChanged'>
-        <paper-tab>info</paper-tab>
+        <paper-tab>about</paper-tab>
         <dom-repeat items='{{tracklists}}'>
           <template>
             <paper-tab data-tracklist$='[[item.id]]'>[[item.title]]</paper-tab>
@@ -192,7 +192,7 @@
       </paper-tabs>
     </header>
 
-    <div class='content' id='releaseInfo'></div>
+    <div class='content' id='about'></div>
     <div class='content' id='tracklist'></div>
 
     <footer>
@@ -298,7 +298,7 @@ class CaffoRelease extends Polymer.Element {
     this.$.albumartlink.href = '/image/'+this.release.url+'.jpg';
     document.title = this.release.title;
 
-    this.$.releaseInfo.innerHTML = this.release.info;
+    this.$.about.innerHTML = this.release.about;
 
     this.tracklists = this.release.tracklists;
     for(let i = 0; i < this.release.tracklists.length; i++) {
@@ -321,10 +321,10 @@ class CaffoRelease extends Polymer.Element {
 
   _tabChanged(event) {
     if(!event.detail.item.dataset.tracklist) {
-      this.$.releaseInfo.classList.remove('gone');
+      this.$.about.classList.remove('gone');
       this.$.tracklist.classList.add('gone');
     } else {
-      this.$.releaseInfo.classList.add('gone');
+      this.$.about.classList.add('gone');
       this.$.tracklist.classList.remove('gone');
       let e = Polymer.dom(event);
       this._loadTracklist(parseInt(e.localTarget.selectedItem.dataset.tracklist));
