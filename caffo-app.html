@@ -43,6 +43,7 @@
       }
       app-drawer {
         --app-drawer-width: 36vw;
+        z-index: 1;
       }
       @media (max-width: 800px) {
         app-drawer {
@@ -67,6 +68,7 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
+        position: fixed;
       }
       header h1 {
         font-family: "CafeAndBrewery";
@@ -92,6 +94,40 @@
         vertical-align: middle;
         display: inline-block;
       }
+      footer {
+        position: fixed;
+        bottom: 0;
+        font-size: 14px;
+        color: #fff;
+        width: 100%;
+        background: linear-gradient(transparent, #000 100%);
+      }
+      footer a {
+        color: #fff;
+        font-weight: bold;
+      }
+      footer p {
+        margin: 0;
+        margin-bottom: -.5rem;
+        padding: .15rem .75rem;
+      }
+      footer .with-love {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        font-size: 12px;
+        padding: .25rem .5rem 0 .5rem;
+        background: #ddd;
+        border-top-left-radius: 5px;
+        border-top: 1px dotted;
+        border-left: 1px dotted;
+        background: rgba(0,0,0,.95);
+        color: #fff;
+        text-transform: uppercase;
+      }
+      app-drawer[opened] ~ footer .with-love {
+        z-index: -1;
+      }
     </style>
 
     <header>
@@ -99,7 +135,6 @@
         <h1><img src='/image/awesome.png'>dayvonjersen</h1>
         <h2>discography</h2>
       </div>
-      <caffo-license></caffo-license>
       <caffo-player></caffo-player>
     </header>
 
@@ -122,6 +157,12 @@
     <div class='crate-container'>
       <caffo-crate id='crate' route='{{route}}'></caffo-crate>
     </div>
+
+    <footer>
+      <p>&copy; 2006-2017</p>
+      <caffo-license></caffo-license>
+      <div class="with-love" title="less than three from new jersey">with <span style='color:#f39'>&lt;3</span> from nj</div>
+    </footer>
   </template>
   <script>
 class CaffoApp extends Polymer.Element {
