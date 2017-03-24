@@ -63,6 +63,10 @@
       transition: all 0.3s;
     }
 
+    :host(.rotated) .stack {
+      transform: translateY(10.6%) rotateY(31deg) rotateX(-4deg) rotateZ(-17deg);
+    }
+
     .stack > * /*caffo-record*/ {
       max-width: 100%;
       position: absolute;
@@ -110,7 +114,7 @@
     }
 
     :host(.rotated) .flipforward__container:hover ~ .flipforward__container:not(.flipforward__container--animate) .flipforward__item {
-      transform: rotateX(-35deg) rotateY(18deg) rotateZ(14deg);
+      transform: translateY(12.6667%)
     }
 
     .flipforward__container .flipforward__edge {
@@ -129,7 +133,7 @@
       width: 100%; height: 100%;
       box-shadow: 0 0 100px 50px rgba(0, 0, 0, 0.1), inset 0 0 250px 250px rgba(0, 0, 0, 0.1);
       transition: 1s;
-      transform: rotateX(95deg) translateZ(-80px) scale(0.75);
+      transform: rotateX(95deg) translateZ(-20px) scale(0.75);
       transform-origin: inherit;
     }
 
@@ -139,7 +143,8 @@
     }
 
     :host(.rotated) .flipforward__container--animate .flipforward__item {
-      transform: rotateX(-75deg) translateZ(5vw) rotateY(18deg) rotateZ(14deg);
+      transform: translateY(100%) translateZ(5vw);
+      opacity: 0;
     }
 
     .flipforward__container--animate .flipforward__item::before {
@@ -148,13 +153,14 @@
     }
 
     :host(.rotated) .flipforward__container--animate .flipforward__item::before {
-      transform: rotateX(-5deg) translateZ(80px) scale(1) rotateY(18deg) rotateZ(14deg);
+      transform: translateY(100%) translateZ(5vw);
+      opacity: 0;
     }
 
     #nextButton {
       padding-left: 2rem;
       padding-right: 1.6667rem;
-      margin-top: 2rem;
+      margin-top: 4rem;
       color: #fff;
       --paper-button-ink-color: #fff;
       font-weight: bold;
