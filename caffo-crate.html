@@ -151,19 +151,23 @@
       transform: rotateX(-5deg) translateZ(80px) scale(1) rotateY(18deg) rotateZ(14deg);
     }
 
-    #flipButton {
+    #nextButton {
       padding-left: 2rem;
-      padding-right: 2rem;
+      padding-right: 1.6667rem;
       margin-top: 2rem;
-      color: var(--darkvibrant);
-      --paper-button-ink-color: var(--darkvibrant);
+      color: #fff;
+      --paper-button-ink-color: #fff;
       font-weight: bold;
       border: 1px solid;
+      transition: 1s;
     }
-    #flipButton[disabled] {
+    #nextButton:active {
+      background: var(--darkvibrant);
+    }
+    #nextButton[disabled] {
       opacity: 0;
     }
-    #flipButton iron-icon {
+    #nextButton iron-icon {
       --iron-icon-width: .8rem;
       --iron-icon-height: .8rem;
     }
@@ -181,7 +185,7 @@
 
     <div class='container'>
       <div class='stack' id='stack' on-click="_clickHandler"></div>
-      <paper-button id='flipButton' on-click="_advance" elevation='2'>NEXT&ensp;<iron-icon src="/svg/chevron-right--blue.svg"></iron-icon></paper-button>
+      <paper-button id='nextButton' on-click="_advance" elevation='2'>NEXT&ensp;<iron-icon src="/svg/chevron-right.svg"></iron-icon></paper-button>
     </div>
   </template>
   <script>
@@ -243,7 +247,7 @@ class CaffoCrate extends Polymer.Element {
       containerElement.appendChild(record);
       this.$.stack.appendChild(containerElement);
     });
-    this.$.flipButton.disabled = (this.releases.length < 2);
+    this.$.nextButton.disabled = (this.releases.length < 2);
   }
 
   _tabChanged(event, details) {

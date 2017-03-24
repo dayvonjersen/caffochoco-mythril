@@ -18,6 +18,19 @@
         text-align: left;
       }
 
+      ::selection {
+        background: var(--vibrant, #9cf);
+        color: var(--vibrant-text, #000);
+      }
+      ::-moz-selection {
+        background: var(--vibrant, #9cf);
+        color: var(--vibrant-text, #000);
+      }
+      ::-webkit-selection {
+        background: var(--vibrant, #9cf);
+        color: var(--vibrant-text, #000);
+      }
+
       h1 {
         font-size: 2rem;
         margin: 0;

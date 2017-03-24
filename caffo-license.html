@@ -62,7 +62,7 @@
 
     <paper-button on-click='_openModal' class='opener'>license</paper-button>
 
-    <paper-dialog id='modal'>
+    <paper-dialog id='modal' on-iron-overlay-closed="_closed">
       <h1 id='peer-production-license-a-model-for-copyfarleft'>Peer Production License</h1>
       <h2>A Model for Copyfarleft</h2>
         <paper-dialog-scrollable>
@@ -307,6 +307,13 @@ class CaffoLicense extends Polymer.Element {
 
   _openModal() {
     this.$.modal.open();
+    let app = document.querySelector("caffo-app");
+    app.$.drawer.style.zIndex = app.$.drawer.opened ? 0 : "";
+  }
+
+  _closed() {
+    let app = document.querySelector("caffo-app");
+    app.$.drawer.style.zIndex = "";
   }
 
   connectedCallback() {
