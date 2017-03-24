@@ -37,6 +37,8 @@ class PlayerModel {
 
       tracklistId: 0,
       lastPlaying: '',
+
+      isLoading: true,
     };
 
     //
@@ -48,6 +50,18 @@ class PlayerModel {
     this.audioElement.addEventListener('timeupdate', () => {
       this.state.currentTime = this.audioElement.currentTime;
       this.update();
+    });
+
+    let canplayCallback = () => {
+      this.audioElement.removeEventListener('canplay', canplayCallback);
+      this.state.isLoading = false;
+      this.update();
+    };
+    this.audioElement.addEventListener('canplay', canplayCallback);
+    this.audioElement.addEventListener('waiting', () => {
+      this.state.isLoading = true;
+      this.update();
+      this.audioElement.addEventListener('canplay', canplayCallback);
     });
   }
 

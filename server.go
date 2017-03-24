@@ -62,6 +62,9 @@ func main() {
 			return
 		}
 		log.Println("<- 200 OK")
+		// if strings.HasSuffix(req, ".mp3") {
+		// 	<-time.After(time.Second * 2)
+		// }
 		http.ServeFile(w, r, file)
 	})
 
