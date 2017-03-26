@@ -1,6 +1,8 @@
 package main
 
 import (
+	"archive/zip"
+	"bytes"
 	"flag"
 	"fmt"
 	"image"
@@ -8,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 
 	_ "image/jpeg"
@@ -58,6 +61,15 @@ func main() {
 				return
 			}
 			imageHandler(w, r)
+			log.Println("<- 200 OK")
+			return
+		} else if strings.HasPrefix(req, "audio/") && strings.HasSuffix(req, ".zip") {
+			if !fileExists(strings.TrimSuffix(req, ".zip")) {
+				log.Println("<- 404 Not Found")
+				io.WriteString(w, "File Not Found")
+				return
+			}
+			zipHandler(w, r)
 			log.Println("<- 200 OK")
 			return
 		}
@@ -136,6 +148,36 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 	stylesheet := "{" + strings.Join(vars, ",") + "}"
 	fmt.Fprintf(w, stylesheet)
 	imageCache[path] = &file{modtime: modtime, stylesheet: stylesheet}
+}
+
+func zipHandler(w http.ResponseWriter, r *http.Request) {
+	// TODO: cache created zips on disk
+	// TODO: add license, nfo, m3u, album art
+	// TODO: add tracknumbers, artist, etc (from data.json maybe?)
+	w.Header().Set("Content-Type", "application/zip")
+
+	path := "." + r.URL.Path
+	path = strings.TrimSuffix(path, ".zip")
+
+	w.Header().Set("Content-Disposition", "attachment; filename=\""+path+".zip\"")
+
+	buf := new(bytes.Buffer)
+	zw := zip.NewWriter(buf)
+
+	filepath.Walk(path, func(path string, file os.FileInfo, err error) error {
+		if strings.HasSuffix(file.Name(), ".mp3") {
+			zf, err := zw.Create(file.Name())
+			checkErr(err)
+			f, err := os.Open(path)
+			checkErr(err)
+			io.Copy(zf, f)
+			f.Close()
+		}
+		return nil
+	})
+
+	checkErr(zw.Close())
+	io.Copy(w, buf)
 }
 
 func fileExists(filename string) bool {
