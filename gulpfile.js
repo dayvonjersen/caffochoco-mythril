@@ -12,7 +12,7 @@ gulp.task('sass', () => {
 
 gulp.task('data', (cb) => {
     exec(
-      "ruby -ryaml -rjson -e 'puts JSON.generate(YAML.load(ARGF))' < data.yaml > data.json",
+      "ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.load(ARGF))' < data.yaml > data.json",
       (err, stdout, stderr) => {
         cb(err);
         console.log(stdout, stderr);
