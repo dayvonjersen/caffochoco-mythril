@@ -7,12 +7,12 @@
       "year": 2011,
       "genre": "Tech House",
       "url": "djr-untitled-ep",
-      "about": "dunno\n",
       "tracklists": [
         3
       ],
       "defaultTracklist": 3,
-      "category": "ep"
+      "category": "ep",
+      "about": "<p>This was my first E.P. representing a collection of tracks that captured my life in early 2011.</p>\n<p><b>midnight on e houston</b> refers to a specific memory of trying to sneak my underage then-girlfriend into a club on a Sunday night. She was nervous and didn't want to go through with it, so we went to a nearby bench and argued for about an hour. It was really desolate, dark and lifeless out. The track is about the walk from the train to the bench and then back again. The bass is me. The synth is her.</p>\n<p><b>glaston error</b> is about being on mushrooms.</p>\n<p><b>wookie puss</b> contains samples of R2-D2 and John William's Cantina Theme from Star Wars. It's about imagining a small club as if it were the Mos Eisley Cantina. This track was featured on Derek Marin's Subtrak label with proceeds going towards relief for the 2011 tsunami in Japan.I made the track instead of going to work one day.</p>\n<p><b>over</b> is an original track made with the lyrics to Drake - \"Over\" in mind.</p>\n"
     },
     {
       "id": 3,
@@ -21,7 +21,7 @@
       "year": 2011,
       "genre": "Music",
       "url": "djr-amherst-ep",
-      "about": "it was raining\n",
+      "about": "<p><b>amherst</b> is about a specific sad memory I have of driving home alone from UMass Amherst campus and seeing a mailbox in the rain and the empty college town at night.</p>\n<p>The other tracks are further introspective reflections on more abstract notions.</p>\n",
       "tracklists": [
         4,
         5
@@ -36,12 +36,12 @@
       "year": 2013,
       "genre": "Music",
       "url": "coffee-break",
-      "about": "",
       "tracklists": [
         6
       ],
       "defaultTracklist": 6,
-      "category": "single"
+      "category": "single",
+      "about": "<p>I wrote this track in a day, not really about anything other than staring out of a window while enjoying a nice cup of coffee.</p>\n"
     },
     {
       "id": 5,
