@@ -5,8 +5,10 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
+	"hash/crc32"
 	"image"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -148,6 +150,12 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 	stylesheet := "{" + strings.Join(vars, ",") + "}"
 	fmt.Fprintf(w, stylesheet)
 	imageCache[path] = &file{modtime: modtime, stylesheet: stylesheet}
+}
+
+func crc32sum(f io.Reader) string {
+	b, err := ioutil.ReadAll(f)
+	checkErr(err)
+	return fmt.Sprintf("%08x", crc32.ChecksumIEEE(b))
 }
 
 func zipHandler(w http.ResponseWriter, r *http.Request) {
