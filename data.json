@@ -84,6 +84,20 @@
       "defaultTracklist": 9,
       "category": "single",
       "about": "<p>Roadtrips, sex, drugs, cigarettes and loneliness.</p>\n"
+    },
+    {
+      "id": 7,
+      "artist": "Lance Jordan",
+      "title": "Eclipse 26 [d.j.r. remix]",
+      "year": 2011,
+      "genre": "Tech House",
+      "url": "eclipse26",
+      "tracklists": [
+        10
+      ],
+      "defaultTracklist": 10,
+      "category": "remix",
+      "about": "<p>This was a remix commissioned by Lance Jordan for his label Dusk Recordings.</p>\n<p>He ended up rejecting my attempt but I was grateful and humbled by the opportunity to do a remix for someone whose work I greatly admire.</p>\n"
     }
   ],
   "tracklists": [
@@ -143,6 +157,13 @@
       "title": "tracklist",
       "tracks": [
         25
+      ]
+    },
+    {
+      "id": 10,
+      "title": "tracklist",
+      "tracks": [
+        26
       ]
     }
   ],
@@ -242,6 +263,12 @@
       "title": "unadilla",
       "file": "unadilla.mp3",
       "length": 427
+    },
+    {
+      "id": 26,
+      "title": "Lance Jordan - Eclipse 26 [d.j.r. remix]",
+      "file": "Lance_Jordan_-_Eclipse_26_[d.j.r._Remix].mp3",
+      "length": 410
     }
   ]
 }
