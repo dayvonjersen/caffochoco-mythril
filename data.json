@@ -42,6 +42,48 @@
       ],
       "defaultTracklist": 6,
       "category": "single"
+    },
+    {
+      "id": 5,
+      "artist": "Pierre Mottron",
+      "title": "Colorful [d.j.r. remix]",
+      "year": 2013,
+      "genre": "Music",
+      "url": "pierre-mottron-colorful",
+      "tracklists": [
+        7
+      ],
+      "defaultTracklist": 7,
+      "category": "remix",
+      "about": "<a href=\"https://www.youtube.com/watch?v=e8e9RBdCM38\">Original Version</a>\n\n<p>This was a remix contest.</p>\n\n<p>The songs lyrics have a subversive, almost sociopathic, or perhaps socially apathetic message. The opening verse \"What's your name / How's life like / How do you make a living\" reminded me of countless introductions in various social situations throughout my life. I was and still am sympathetic to the notion of disillusionment.</p>\n\n<p>I was trying to go for some sort of electro-pop-dubstep inspired sound. It's sort of incomplete/not what I wanted and I never submitted it for consideration.</p>\n"
+    },
+    {
+      "id": 6,
+      "artist": "d.j.r.",
+      "title": "Untitledfunk(2)",
+      "year": 2013,
+      "genre": "Tech House",
+      "url": "untitledfunk2",
+      "tracklists": [
+        8
+      ],
+      "defaultTracklist": 8,
+      "category": "single",
+      "about": "<p>This track was heavily inspired by Booka Shade. It features a VST called daHornet and I used a Yamaha RE7 reverb unit on the shaker percussion. The mixdown was recorded through an analog mixer</p>\n\n<p>The reverb unit broke shortly after recording.</p>\n"
+    },
+    {
+      "id": 6,
+      "artist": "d.j.r.",
+      "title": "unadilla",
+      "year": 2012,
+      "genre": "Tech House",
+      "url": "unadilla",
+      "tracklists": [
+        9
+      ],
+      "defaultTracklist": 9,
+      "category": "single",
+      "about": "<p>Roadtrips, sex, drugs, cigarettes and loneliness.</p>\n"
     }
   ],
   "tracklists": [
@@ -80,6 +122,27 @@
       "title": "tracklist",
       "tracks": [
         22
+      ]
+    },
+    {
+      "id": 7,
+      "title": "tracklist",
+      "tracks": [
+        23
+      ]
+    },
+    {
+      "id": 8,
+      "title": "tracklist",
+      "tracks": [
+        24
+      ]
+    },
+    {
+      "id": 9,
+      "title": "tracklist",
+      "tracks": [
+        25
       ]
     }
   ],
@@ -161,6 +224,24 @@
       "title": "coffee break",
       "file": "coffee-break.mp3",
       "length": 330
+    },
+    {
+      "id": 23,
+      "title": "Pierre Mottron - Colorful [d.j.r. remix]",
+      "file": "pierre_mottron_-_colorful_[d.j.r._remix].mp3",
+      "length": 343
+    },
+    {
+      "id": 24,
+      "title": "Untitledfunk(2)",
+      "file": "untitledfunk(2).mp3",
+      "length": 405
+    },
+    {
+      "id": 25,
+      "title": "unadilla",
+      "file": "unadilla.mp3",
+      "length": 427
     }
   ]
 }
