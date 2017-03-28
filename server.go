@@ -26,6 +26,8 @@ import (
 	"./strip"
 )
 
+var counter *Counter
+
 func main() {
 	var (
 		addr string
@@ -44,6 +46,9 @@ func main() {
 		"",
 	)
 	flag.Parse()
+
+	counter = NewCounter(".cache/caffo.db")
+	defer counter.Close()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		log.Println("->", r.Method, r.URL)
@@ -85,11 +90,16 @@ func main() {
 			zipHandler(w, r)
 			log.Println("<- 200 OK")
 			return
+		} else if strings.HasPrefix(req, "plays/") {
+			file := strings.TrimPrefix(req, "plays/")
+			fmt.Fprintf(w, "%s - %d play(s)", file, counter.Plays(file))
+			log.Println("<- 200 OK")
+			return
 		}
 		log.Println("<- 200 OK")
-		// if strings.HasSuffix(req, ".mp3") {
-		// 	<-time.After(time.Second * 2)
-		// }
+		if strings.HasSuffix(req, ".mp3") {
+			counter.Increment(req, r.RemoteAddr)
+		}
 		http.ServeFile(w, r, file)
 	})
 
