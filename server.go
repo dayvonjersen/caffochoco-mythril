@@ -17,6 +17,7 @@ import (
 	"regexp"
 	"strings"
 	"text/template"
+	"unicode/utf8"
 
 	_ "image/jpeg"
 	_ "image/png"
@@ -296,7 +297,7 @@ func getData() data {
 }
 
 func strpad(s string, l int) string {
-	amt := l - len(s)
+	amt := l - utf8.RuneCountInString(s)
 	if amt > 0 {
 		return s + strings.Repeat(" ", amt)
 	}
@@ -312,15 +313,15 @@ func strwrap(s string, l int, prefix, postfix string, noprefixfirst, nopostfixfi
 	parts := []string{}
 	sect := 0
 	j := 0
-	for i := 0; i < len(s); i++ {
-		if (i < len(s)-1 && s[i] == '\n') || (j > 0 && j%l == 0) || i == len(s)-1 {
+	for i := 0; i < utf8.RuneCountInString(s); i++ {
+		if (i < utf8.RuneCountInString(s)-1 && s[i] == '\n') || (j > 0 && j%l == 0) || i == utf8.RuneCountInString(s)-1 {
 			part := s[sect:i]
-			if i == len(s)-1 {
+			if i == utf8.RuneCountInString(s)-1 {
 				part = s[sect:]
 			}
 			part = strings.TrimSpace(part)
 			part = strpad(part, l)
-			if part[len(part)-1] != ' ' {
+			if part[utf8.RuneCountInString(part)-1] != ' ' {
 				for s[i-1] != ' ' && s[i-1] != '\n' {
 					i--
 				}
