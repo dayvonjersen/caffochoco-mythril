@@ -368,13 +368,13 @@ func testHandler(w http.ResponseWriter, r *http.Request) {
 			Size: strings.Repeat(" ", 56),
 		}
 		rname := fmt.Sprintf("%02d %s - %s-%d-%s", 0, rel.Artist, rel.Title, rel.Year, sig)
-		tdata.Release = strwrap(rname, 56, "║                     ", " ║", true, false)
+		tdata.Release = strwrap(fmt.Sprintf("dayvonjersen.com/releases/%s", rel.Url), 56, "║                     ", " ║", true, false)
 		tdata.Artist = strpad(rel.Artist, 56)
 		tdata.Title = strpad(rel.Title, 56)
 		tdata.Genre = strpad(rel.Genre, 56)
 		tdata.Encoder = strpad("LAME", 56)
 		tdata.Quality = strpad("320kbps MP3", 56)
-		tdata.About = strwrap(rel.About, 56, "║           ", "           ║", false, false)
+		tdata.About = strwrap(rel.About, 55, "║           ", "            ║", false, false)
 		tdata.HasArt = fileExists("./image/" + rel.Url + ".jpg")
 		rname = re.ReplaceAllString(rname, "_")
 		fmt.Fprintln(w, rname+".m3u")
