@@ -3,6 +3,7 @@ package main
 import (
 	"archive/zip"
 	"bytes"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"hash/crc32"
@@ -13,12 +14,16 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
+	"text/template"
 
 	_ "image/jpeg"
 	_ "image/png"
 
 	"github.com/generaltso/vibrant"
+
+	"./strip"
 )
 
 func main() {
@@ -48,6 +53,12 @@ func main() {
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		w.Header().Set("Pragma", "no-cache")
 		w.Header().Set("Expires", "0")
+
+		if req == "test" {
+			testHandler(w, r)
+			log.Println("<- 418 Teapot")
+			return
+		}
 
 		if fileExists(req) {
 			file = req
@@ -202,4 +213,191 @@ func checkErr(err error) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+type track struct {
+	Id     int    `json:"id"`
+	Title  string `json:"title"`
+	File   string `json:"file"`
+	Length int    `json:"length"`
+}
+
+type tracklist struct {
+	Id       int    `json:"id"`
+	Title    string `json:"title"`
+	TrackIds []int  `json:"tracks"`
+	Tracks   map[int]track
+}
+
+type release struct {
+	Id                 int    `json:"id"`
+	Artist             string `json:"artist"`
+	Title              string `json:"title"`
+	Year               int    `json:"year"`
+	Genre              string `json:"genre"`
+	Url                string `json:"url"`
+	TracklistIds       []int  `json:"tracklists"`
+	DefaultTracklistId int    `json:"defaultTracklist"`
+	Category           string `json:"category"`
+	About              string `json:"about"`
+	Tracklists         map[int]tracklist
+}
+
+type data struct {
+	Releases   []release   `json:"releases"`
+	Tracklists []tracklist `json:"tracklists"`
+	Tracks     []track     `json:"tracks"`
+}
+
+func getData() data {
+	f, err := os.Open("data.json")
+	checkErr(err)
+	defer f.Close()
+	b, err := ioutil.ReadAll(f)
+	checkErr(err)
+
+	var d data
+	checkErr(json.Unmarshal(b, &d))
+
+	tracklists := map[int]tracklist{}
+	tracks := map[int]track{}
+
+	for _, t := range d.Tracks {
+		tracks[t.Id] = t
+	}
+	for i := range d.Tracklists {
+		d.Tracklists[i].Tracks = map[int]track{}
+	}
+	for _, tl := range d.Tracklists {
+		for _, t := range tl.TrackIds {
+			tl.Tracks[t] = tracks[t]
+		}
+		tracklists[tl.Id] = tl
+	}
+	for i := range d.Releases {
+		d.Releases[i].Tracklists = map[int]tracklist{}
+	}
+	for _, r := range d.Releases {
+		for _, tl := range r.TracklistIds {
+			r.Tracklists[tl] = tracklists[tl]
+		}
+	}
+	return d
+}
+
+func strpad(s string, l int) string {
+	amt := l - len(s)
+	if amt > 0 {
+		return s + strings.Repeat(" ", amt)
+	}
+	return s
+}
+
+func strwrap(s string, l int, prefix, postfix string) string {
+	s = strip.StripTags(s)
+	s = strings.TrimSpace(s)
+	if len(s) == 0 {
+		return prefix + strpad("[NO TEXT]", l) + postfix
+	}
+	parts := []string{}
+	sect := 0
+	j := 0
+	for i := 0; i < len(s); i++ {
+		if (i < len(s)-1 && s[i] == '\n') || (j > 0 && j%l == 0) || i == len(s)-1 {
+			part := s[sect:i]
+			if i == len(s)-1 {
+				part = s[sect:]
+			}
+			part = strings.TrimSpace(part)
+			part = strpad(part, l)
+			if part[len(part)-1] != ' ' {
+				for s[i-1] != ' ' && s[i-1] != '\n' {
+					i--
+				}
+				part = s[sect:i]
+				part = strings.TrimSpace(part)
+				part = strpad(part, l)
+			}
+			sect = i
+			part = prefix + part + postfix
+			parts = append(parts, part)
+			j = 0
+		} else {
+			j++
+		}
+	}
+	return strings.Join(parts, "\n")
+}
+
+func formattime(t int) string {
+	m := t / 60
+	s := t % 60
+	return fmt.Sprintf("%02d:%02d", m, s)
+}
+
+func renderTemplate(filename string, data interface{}) string {
+	t, err := template.ParseFiles(filename)
+	checkErr(err)
+	buf := new(bytes.Buffer)
+	checkErr(t.Execute(buf, data))
+	return buf.String()
+}
+
+func testHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	d := getData()
+	re := regexp.MustCompile(`[^\w-.]+`)
+	sig := "dayvonjersen"
+	for _, rel := range d.Releases {
+		tdata := struct {
+			Release, Artist, Title, Genre, Encoder, Quality, About, NumTracks, Length, Size string
+			numTracks, length, size                                                         int
+			HasArt                                                                          bool
+			Tracks                                                                          []struct {
+				Num, Title, Time string
+			}
+		}{
+			Tracks: []struct {
+				Num, Title, Time string
+			}{},
+			Size: strings.Repeat(" ", 56),
+		}
+		rname := fmt.Sprintf("%02d %s - %s-%d-%s", 0, rel.Artist, rel.Title, rel.Year, sig)
+		tdata.Release = strpad(rname, 56)
+		tdata.Artist = strpad(rel.Artist, 56)
+		tdata.Title = strpad(rel.Title, 56)
+		tdata.Genre = strpad(rel.Genre, 56)
+		tdata.Encoder = strpad("LAME", 56)
+		tdata.Quality = strpad("320kbps MP3", 56)
+		tdata.About = strwrap(rel.About, 56, "║                     ", " ║")
+		tdata.HasArt = fileExists("./image/" + rel.Url + ".jpg")
+		rname = re.ReplaceAllString(rname, "_")
+		fmt.Fprintln(w, rname+".m3u")
+		fmt.Fprintln(w, rname+".nfo")
+		fmt.Fprintln(w, rname+".sfv")
+		i := 1
+		for _, tl := range rel.TracklistIds {
+			//fmt.Fprintf(w, "\t%s:\n", rel.Tracklists[tl].Title)
+			for _, t := range rel.Tracklists[tl].TrackIds {
+				track := rel.Tracklists[tl].Tracks[t]
+				tdata.numTracks++
+				tdata.length += track.Length
+				tdata.Tracks = append(tdata.Tracks, struct {
+					Num, Title, Time string
+				}{
+					fmt.Sprintf("%02d", i),
+					strpad(track.Title, 40),
+					formattime(track.Length),
+				})
+				fname := fmt.Sprintf("%02d %s - %s-%s.mp3", i, rel.Artist, track.Title, sig)
+				i++
+				fname = re.ReplaceAllString(fname, "_")
+				fmt.Fprintln(w, fname)
+			}
+		}
+		tdata.NumTracks = strpad(fmt.Sprintf("%d", tdata.numTracks), 56)
+		tdata.Length = strpad(formattime(tdata.length), 56)
+		fmt.Fprint(w, renderTemplate("awesome-tmpl.txt", tdata))
+	}
+	fmt.Fprintln(w)
 }
