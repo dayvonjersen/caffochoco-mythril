@@ -293,7 +293,7 @@ func strpad(s string, l int) string {
 	return s
 }
 
-func strwrap(s string, l int, prefix, postfix string) string {
+func strwrap(s string, l int, prefix, postfix string, noprefixfirst, nopostfixfirst bool) string {
 	s = strip.StripTags(s)
 	s = strings.TrimSpace(s)
 	if len(s) == 0 {
@@ -319,7 +319,12 @@ func strwrap(s string, l int, prefix, postfix string) string {
 				part = strpad(part, l)
 			}
 			sect = i
-			part = prefix + part + postfix
+			if !noprefixfirst || len(parts) > 0 {
+				part = prefix + part
+			}
+			if !nopostfixfirst || len(parts) > 0 {
+				part += postfix
+			}
 			parts = append(parts, part)
 			j = 0
 		} else {
@@ -363,13 +368,13 @@ func testHandler(w http.ResponseWriter, r *http.Request) {
 			Size: strings.Repeat(" ", 56),
 		}
 		rname := fmt.Sprintf("%02d %s - %s-%d-%s", 0, rel.Artist, rel.Title, rel.Year, sig)
-		tdata.Release = strpad(rname, 56)
+		tdata.Release = strwrap(rname, 56, "║                     ", " ║", true, false)
 		tdata.Artist = strpad(rel.Artist, 56)
 		tdata.Title = strpad(rel.Title, 56)
 		tdata.Genre = strpad(rel.Genre, 56)
 		tdata.Encoder = strpad("LAME", 56)
 		tdata.Quality = strpad("320kbps MP3", 56)
-		tdata.About = strwrap(rel.About, 56, "║                     ", " ║")
+		tdata.About = strwrap(rel.About, 56, "║           ", "           ║", false, false)
 		tdata.HasArt = fileExists("./image/" + rel.Url + ".jpg")
 		rname = re.ReplaceAllString(rname, "_")
 		fmt.Fprintln(w, rname+".m3u")
@@ -382,11 +387,20 @@ func testHandler(w http.ResponseWriter, r *http.Request) {
 				track := rel.Tracklists[tl].Tracks[t]
 				tdata.numTracks++
 				tdata.length += track.Length
+
+				title := track.Title
+				if len(title) > 44 {
+					title = title[:44] + " " + formattime(track.Length) + " ║           ║\n" + strwrap(title[44:], 45, "║          ║    ",
+						"      ║           ║", false, false)
+				} else {
+					title = strpad(title, 45) + formattime(track.Length) + " ║           ║"
+				}
+
 				tdata.Tracks = append(tdata.Tracks, struct {
 					Num, Title, Time string
 				}{
 					fmt.Sprintf("%02d", i),
-					strpad(track.Title, 40),
+					title,
 					formattime(track.Length),
 				})
 				fname := fmt.Sprintf("%02d %s - %s-%s.mp3", i, rel.Artist, track.Title, sig)

@@ -21,7 +21,7 @@ c  'kXd..kMMMMMMMMMMMMMMMk..dXXXXXXXXXXx:..xMMMMMMMMMMMMMMMMMMk..dXXXXXXXXXx.  l
   .kXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx.  
   .dXXXXKkddddddddddddddddddddddddddddddddddddddddddddddddddddx0XXXXXXXXXXXXd.  
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║             RELEASE {{.Release}} ║
+║             RELEASE {{.Release}}
 ║              ARTiST {{.Artist}} ║
 ║               TiTLE {{.Title}} ║
 ║               GENRE {{.Genre}} ║
@@ -32,12 +32,15 @@ c  'kXd..kMMMMMMMMMMMMMMMk..dXXXXXXXXXXx:..xMMMMMMMMMMMMMMMMMMk..dXXXXXXXXXx.  l
 ║                SiZE {{.Size}} ║
 ║              COVERS  YES [{{if .HasArt}}X{{else}} {{end}}]  NO [{{if not .HasArt}}X{{else}} {{end}}]                                         ║
 ║                                                                              ║
-║         ╔════════════════════════════════════════════════════╗               ║
-║         ║   # TRACKNAME                                 TIME ║               ║
-{{range .Tracks}}║         ║  {{.Num}} {{.Title}} {{.Time}} ║               ║
-{{end}}║         ╚════════════════════════════════════════════════════╝               ║
-║               ABOUT                                                          ║
+║          ╔═══════════════════════════════════════════════════════╗           ║
+║          ║  # TRACKNAME                                     TIME ║           ║
+{{range .Tracks}}║          ║ {{.Num}} {{.Title}}
+{{end}}║          ╚═══════════════════════════════════════════════════════╝           ║
+║                                                                              ║
+║                                                                              ║
 {{.About}}
+║                                                                              ║
+║                                                                              ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ,  ;OXXXKK0x' ................................................ .xXXXXXXXXXXO,  ;
 d. .oKXXXXX0:  .'.............................................  lKXXXXXXXXKo. .d
