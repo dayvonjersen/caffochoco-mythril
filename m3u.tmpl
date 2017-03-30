@@ -1,0 +1,4 @@
+#EXTM3U
+{{range .Tracks}}#EXTINF:{{.Length}},{{.Title}}
+{{.File}}
+{{end}}

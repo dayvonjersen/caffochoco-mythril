@@ -389,6 +389,7 @@ func testHandler(w http.ResponseWriter, r *http.Request) {
 		tdata.HasArt = fileExists("./image/" + rel.Url + ".jpg")
 		rname = re.ReplaceAllString(rname, "_")
 		fmt.Fprintln(w, rname+".m3u")
+		fmt.Fprint(w, renderTemplate("m3u.tmpl", rel.Tracklists[rel.DefaultTracklistId]))
 		fmt.Fprintln(w, rname+".nfo")
 		fmt.Fprintln(w, rname+".sfv")
 		i := 1
