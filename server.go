@@ -19,6 +19,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"text/template"
@@ -53,6 +54,11 @@ func main() {
 		"",
 	)
 	flag.Parse()
+
+	if flag.NArg() > 0 && flag.Arg(0) == "precache" {
+		zipPrecache()
+		return
+	}
 
 	counter = NewCounter(".cache/caffo.db")
 	defer counter.Close()
@@ -211,6 +217,28 @@ func zipHandler(w http.ResponseWriter, r *http.Request) {
 	checkErr(err)
 	defer f.Close()
 	io.Copy(w, f)
+}
+
+func zipPrecache() {
+	filepath.Walk("audio/", func(path string, info os.FileInfo, err error) error {
+		if info.IsDir() {
+			rel := getReleaseByURL(strings.TrimPrefix(path, "audio/"))
+			rname := fmt.Sprintf("00 %s - %s-%d", rel.Artist, rel.Title, rel.Year)
+			rname = re.ReplaceAllString(rname, "_")
+			zipFile := ".cache/" + rname + ".zip"
+			log.Println("generating", zipFile)
+			if fileExists(zipFile) {
+				log.Println("removing existing", zipFile)
+				checkErr(os.Remove(zipFile))
+			}
+			f, err := os.Create(zipFile)
+			checkErr(err)
+			n, _ := io.Copy(f, createZip(path, rname, rel))
+			log.Println(n, "bytes written [ OK ]")
+			f.Close()
+		}
+		return nil
+	})
 }
 
 func createZipHeader(name string) *zip.FileHeader {
