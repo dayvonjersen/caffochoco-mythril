@@ -83,7 +83,6 @@ func main() {
 				return
 			}
 			imageHandler(w, r)
-			log.Println("<- 200 OK")
 			return
 		} else if strings.HasPrefix(req, "audio/") && strings.HasSuffix(req, ".zip") {
 			if !fileExists(strings.TrimSuffix(req, ".zip")) {
@@ -91,12 +90,9 @@ func main() {
 				return
 			}
 			zipHandler(w, r)
-			log.Println("<- 200 OK")
 			return
-		} else if strings.HasPrefix(req, "plays/") {
-			file := strings.TrimPrefix(req, "plays/")
-			fmt.Fprintf(w, "%s - %d play(s)", file, counter.Plays(file))
-			log.Println("<- 200 OK")
+		} else if req == "stats.json" {
+			statsHandler(w, r)
 			return
 		}
 		log.Println("<- 200 OK")
@@ -109,7 +105,12 @@ func main() {
 	listenAddr := fmt.Sprintf("%s:%d", addr, port)
 	log.Println("listening on", listenAddr)
 	log.Fatalln(http.ListenAndServe(listenAddr, nil))
+}
 
+func statsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	log.Println("<- 200 OK")
+	io.WriteString(w, `{"error": "not implemented yet :x"}`)
 }
 
 func notfoundHandler(w http.ResponseWriter, r *http.Request) {
@@ -141,6 +142,7 @@ var vibrantFallback = map[string]string{
 }
 
 func imageHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("<- 200 OK")
 	w.Header().Set("Content-Type", "text/css; charset=UTF-8")
 
 	path := "." + r.URL.Path
@@ -193,6 +195,7 @@ func crc32sum(filename string) string {
 var re = regexp.MustCompile(`[^\w-.]+`)
 
 func zipHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("<- 200 OK")
 	w.Header().Set("Content-Type", "application/zip")
 
 	path := "." + r.URL.Path
