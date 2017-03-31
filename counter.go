@@ -32,8 +32,8 @@ func (c *Counter) IncrementPlays(file, ip string) {
 	checkErr(err)
 }
 
-func (c *Counter) Plays(file string) int {
-	rows, err := c.db.Query("SELECT COUNT(*) FROM `plays` WHERE `file` = ?", file)
+func (c *Counter) Plays(file string, since int) int {
+	rows, err := c.db.Query("SELECT COUNT(*) FROM `plays` WHERE `file` = ? AND `time` >= ?", file, since)
 	checkErr(err)
 	defer rows.Close()
 
@@ -51,8 +51,8 @@ func (c *Counter) IncrementDownloads(file, ip string) {
 	checkErr(err)
 }
 
-func (c *Counter) Downloads(file string) int {
-	rows, err := c.db.Query("SELECT COUNT(*) FROM `downloads` WHERE `file` = ?", file)
+func (c *Counter) Downloads(file string, since int) int {
+	rows, err := c.db.Query("SELECT COUNT(*) FROM `downloads` WHERE `file` = ? AND `time` >= ?", file, since)
 	checkErr(err)
 	defer rows.Close()
 
