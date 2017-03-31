@@ -66,11 +66,6 @@
       transform-origin: 50% -22%;
     }
 
-    .stack > *:last-child {
-      position: relative;
-      width: 24rem;
-    }
-
     .stack:hover > :nth-last-child(2) {
       transform:scale(.8888) translateY(-12.6667%);
     }
@@ -85,6 +80,10 @@
     .stack > *:nth-last-child(8) {  transform: scale(0.4783); }
     .stack > *:nth-last-child(9) {  transform: scale(0.43047); }
     .stack > *:nth-last-child(10) {  transform: scale(0.38742); }
+
+    .stack > *:nth-last-child(n+11) {
+      display: none;
+    }
 
     .flipforward__container {
       perspective: 1000px;
@@ -201,14 +200,6 @@ class CaffoCrate extends Polymer.Element {
     }
   }
 
-  _previousTab() {
-    this.$.tabs.selectPrevious();
-  }
-
-  _nextTab() {
-    this.$.tabs.selectNext();
-  }
-
   // click handler on this.$.stack
   // if target is lastChild then follow link
   // otherwise advance queue
@@ -231,7 +222,6 @@ class CaffoCrate extends Polymer.Element {
   _render() {
     this.$.stack.innerHTML = '';
     this.releases.forEach((item, i) => {
-      if(i > 9) return;
       let record = document.createElement("caffo-record");
       record.setAttribute("class", "flipforward__item");
       record.setAttribute("artist", item.artist);
@@ -249,14 +239,34 @@ class CaffoCrate extends Polymer.Element {
   }
 
   _tabChanged(event, details) {
+    this._setReleases();
     let category = details.item.dataset.category;
-    this.releases = category == 'all' ? window.releases : window.releases.filter(r=>r.category===category);
+    if(category != 'all') {
+      this.releases = this.releases.filter(r => r.category == category);
+    }
     this._render();
+  }
+
+  _setReleases() {
+    let releases = window.releases;
+    releases.sort((a,b) => a.year < b.year ? -1 : 1)
+    if(this.route.path != '/') {
+      let path = this.route.path.replace('/release/', '');
+      let selectedIndex = releases.findIndex(r => r.url == path);
+      if(selectedIndex != -1) {
+        releases = [].concat(
+          releases.slice(0,selectedIndex),
+          releases.slice(selectedIndex+1),
+          releases[selectedIndex]
+        );
+      }
+    }
+    this.releases = releases;
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.releases = window.releases;
+    this._setReleases();
     this.selectedTab = 0;
     this._render();
     let setScrollable = () => {
