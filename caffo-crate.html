@@ -51,6 +51,13 @@
       transition: all 0.3s;
     }
 
+    @media (min-width: 1024px) {
+      .stack {
+        width: 33.3333vmin;
+        height: 33.3333vmin;
+      }
+    }
+
     :host(.rotated) .stack {
       transform: translateY(10.6%) rotateY(31deg) rotateX(-4deg) rotateZ(-17deg);
     }
@@ -144,7 +151,7 @@
       opacity: 0;
     }
 
-    #nextButton {
+    .navButton {
       padding-left: 2rem;
       padding-right: 1.6667rem;
       margin-top: 4rem;
@@ -153,14 +160,15 @@
       font-weight: bold;
       border: 1px solid;
       transition: 1s;
+      vertical-align: text-bottom;
     }
-    #nextButton:active {
+    .navButton:active {
       background: var(--darkvibrant);
     }
-    #nextButton[disabled] {
+    .navButton[disabled] {
       opacity: 0;
     }
-    #nextButton iron-icon {
+    .navButton iron-icon {
       --iron-icon-width: .8rem;
       --iron-icon-height: .8rem;
     }
@@ -178,7 +186,10 @@
 
     <div class='container'>
       <div class='stack' id='stack' on-click="_clickHandler"></div>
-      <paper-button id='nextButton' on-click="_advance" elevation='2'>NEXT&ensp;<iron-icon src="/svg/chevron-right.svg"></iron-icon></paper-button>
+      <nav>
+        <paper-button id='prevButton' class='navButton' on-click="_previous" elevation='2'><iron-icon src="/svg/chevron-left.svg"></iron-icon>&ensp;PREV</paper-button>
+        <paper-button id='nextButton' class='navButton' on-click="_advance" elevation='2'>NEXT&ensp;<iron-icon src="/svg/chevron-right.svg"></iron-icon></paper-button>
+      </nav>
     </div>
   </template>
   <script>
@@ -219,6 +230,14 @@ class CaffoCrate extends Polymer.Element {
     }, 200);
   }
 
+  _previous() {
+    this.$.stack.firstElementChild.classList.add('flipforward__container--animate');
+    this.$.stack.appendChild(this.$.stack.removeChild(this.$.stack.firstElementChild));
+    setTimeout(() => {
+      this.$.stack.lastElementChild.classList.remove('flipforward__container--animate');
+    }, 10);
+  }
+
   _render() {
     this.$.stack.innerHTML = '';
     this.releases.forEach((item, i) => {
@@ -235,6 +254,7 @@ class CaffoCrate extends Polymer.Element {
       containerElement.appendChild(record);
       this.$.stack.appendChild(containerElement);
     });
+    this.$.prevButton.disabled = (this.releases.length < 2);
     this.$.nextButton.disabled = (this.releases.length < 2);
   }
 
