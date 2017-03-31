@@ -290,12 +290,19 @@ class CaffoRelease extends Polymer.Element {
     this.release = _caffoCache.get(name);
 
     fetch('/image/'+this.release.url+'.jpg.css')
-      .then(response=>response.json())
-      .then(json=>this.updateStyles(json))
-      .catch(err=>console.error(err))
+      .then(response => response.json())
+      .then(json => {
+        this.updateStyles(json);
+        this.$.thumbnail.src = '/image/'+this.release.url+'.jpg';
+        this.$.albumartlink.href = '/image/'+this.release.url+'.jpg';
+      })
+      .catch(err => {
+        console.error(err);
+        // probably a 404
+        this.$.thumbnail.src = '/image/picture-not-available.png';
+        this.$.albumartlink.href = '/image/picture-not-available.png';
+      })
 
-    this.$.thumbnail.src = '/image/'+this.release.url+'.jpg';
-    this.$.albumartlink.href = '/image/'+this.release.url+'.jpg';
     document.title = this.release.title;
 
     this.$.about.innerHTML = this.release.about;
