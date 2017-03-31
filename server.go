@@ -187,6 +187,7 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 func crc32sum(filename string) string {
 	f, err := os.Open(filename)
 	checkErr(err)
+	defer f.Close()
 	b, err := ioutil.ReadAll(f)
 	checkErr(err)
 	return fmt.Sprintf("%08x", crc32.ChecksumIEEE(b))
