@@ -23,7 +23,7 @@ func (c *Counter) Close() {
 	c.db.Close()
 }
 
-func (c *Counter) Increment(file, ip string) {
+func (c *Counter) IncrementPlays(file, ip string) {
 	stmt, err := c.db.Prepare("INSERT INTO `plays` (`file`, `ip`, `time`) VALUES (?, ?, ?)")
 	checkErr(err)
 	defer stmt.Close()
@@ -34,6 +34,25 @@ func (c *Counter) Increment(file, ip string) {
 
 func (c *Counter) Plays(file string) int {
 	rows, err := c.db.Query("SELECT COUNT(*) FROM `plays` WHERE `file` = ?", file)
+	checkErr(err)
+	defer rows.Close()
+
+	var p int
+	rows.Next()
+	rows.Scan(&p)
+	return p
+}
+func (c *Counter) IncrementDownloads(file, ip string) {
+	stmt, err := c.db.Prepare("INSERT INTO `downloads` (`file`, `ip`, `time`) VALUES (?, ?, ?)")
+	checkErr(err)
+	defer stmt.Close()
+
+	_, err = stmt.Exec(file, ip, time.Now().Unix())
+	checkErr(err)
+}
+
+func (c *Counter) Downloads(file string) int {
+	rows, err := c.db.Query("SELECT COUNT(*) FROM `downloads` WHERE `file` = ?", file)
 	checkErr(err)
 	defer rows.Close()
 

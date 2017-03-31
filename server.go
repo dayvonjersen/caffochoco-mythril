@@ -97,7 +97,7 @@ func main() {
 		}
 		log.Println("<- 200 OK")
 		if strings.HasSuffix(req, ".mp3") {
-			counter.Increment(req, r.RemoteAddr)
+			counter.IncrementPlays(req, r.RemoteAddr)
 		}
 		http.ServeFile(w, r, file)
 	})
@@ -110,7 +110,32 @@ func main() {
 func statsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	log.Println("<- 200 OK")
-	io.WriteString(w, `{"error": "not implemented yet :x"}`)
+
+	d := getData()
+	plays := map[string]int{}
+	downloads := map[string]int{}
+	for _, rel := range d.Releases {
+		downloads[rel.Url] = counter.Downloads(rel.Url)
+		for _, tl := range rel.Tracklists {
+			for _, t := range tl.Tracks {
+				file := rel.Url + "/" + t.File
+				plays[file] = counter.Plays("audio/" + file)
+			}
+		}
+	}
+
+	type q struct {
+		Plays     map[string]int `json:"plays"`
+		Downloads map[string]int `json:"downloads"`
+	}
+	stats := struct {
+		All q `json:"all"`
+	}{q{plays, downloads}}
+
+	b, err := json.MarshalIndent(stats, "", "\t")
+	checkErr(err)
+	io.WriteString(w, string(b))
+
 }
 
 func notfoundHandler(w http.ResponseWriter, r *http.Request) {
@@ -203,6 +228,8 @@ func zipHandler(w http.ResponseWriter, r *http.Request) {
 	path = strings.TrimSuffix(path, ".zip")
 
 	rel := getReleaseByURL(strings.TrimPrefix(path, "./audio/"))
+
+	counter.IncrementDownloads(rel.Url, r.RemoteAddr)
 
 	rname := fmt.Sprintf("00 %s - %s-%d", rel.Artist, rel.Title, rel.Year)
 	rname = re.ReplaceAllString(rname, "_")
