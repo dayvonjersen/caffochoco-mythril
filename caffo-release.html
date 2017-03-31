@@ -290,6 +290,8 @@ class CaffoRelease extends Polymer.Element {
     if(!('_caffoCache' in window && window._caffoCache.has(name)))  return;
     this.release = _caffoCache.get(name);
 
+    player.stopPlayback();
+
     let updateFn = () => {
       document.title = this.release.title;
 
