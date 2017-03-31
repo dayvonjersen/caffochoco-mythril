@@ -1,3 +1,9 @@
+/*
+	this was just supposed to be a "simple" server
+	to use instead of polymer serve
+
+	fml
+*/
 package main
 
 import (
@@ -66,9 +72,9 @@ func main() {
 			return
 		}
 
-		if fileExists(req) {
+		if fileExists(req) && !isDir(req) {
 			file = req
-		} else if strings.HasPrefix(req, "bower_components/") {
+		} else if strings.HasPrefix(req, "bower_components") {
 			notfoundHandler(w, r)
 			return
 		} else if strings.HasPrefix(req, "image/") && strings.HasSuffix(req, ".css") {
@@ -222,6 +228,12 @@ func fileExists(filename string) bool {
 	return true
 }
 
+func isDir(filename string) bool {
+	finfo, err := os.Stat(filename)
+	checkErr(err)
+	return finfo.IsDir()
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic(err)
@@ -368,10 +380,11 @@ func testHandler(w http.ResponseWriter, r *http.Request) {
 	sig := "dayvonjersen"
 	for _, rel := range d.Releases {
 		tdata := struct {
-			Release, Artist, Title, Genre, Encoder, Quality, About, NumTracks, Length, Size string
-			numTracks, length, size                                                         int
-			HasArt                                                                          bool
-			Tracks                                                                          []struct {
+			Release, Artist, Title, Genre, Encoder,
+			Quality, About, NumTracks, Length, Size string
+			numTracks, length, size int
+			HasArt                  bool
+			Tracks                  []struct {
 				Num, Title, Time string
 			}
 		}{
