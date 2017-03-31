@@ -69,14 +69,11 @@ func main() {
 		if fileExists(req) {
 			file = req
 		} else if strings.HasPrefix(req, "bower_components/") {
-			w.WriteHeader(404)
-			log.Println("<- 404 Not Found")
-			io.WriteString(w, "File Not Found")
+			notfoundHandler(w, r)
 			return
 		} else if strings.HasPrefix(req, "image/") && strings.HasSuffix(req, ".css") {
 			if !fileExists(strings.TrimSuffix(req, ".css")) {
-				log.Println("<- 404 Not Found")
-				io.WriteString(w, "File Not Found")
+				notfoundHandler(w, r)
 				return
 			}
 			imageHandler(w, r)
@@ -84,8 +81,7 @@ func main() {
 			return
 		} else if strings.HasPrefix(req, "audio/") && strings.HasSuffix(req, ".zip") {
 			if !fileExists(strings.TrimSuffix(req, ".zip")) {
-				log.Println("<- 404 Not Found")
-				io.WriteString(w, "File Not Found")
+				notfoundHandler(w, r)
 				return
 			}
 			zipHandler(w, r)
@@ -108,6 +104,12 @@ func main() {
 	log.Println("listening on", listenAddr)
 	log.Fatalln(http.ListenAndServe(listenAddr, nil))
 
+}
+
+func notfoundHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(404)
+	log.Println("<- 404 Not Found")
+	io.WriteString(w, "File Not Found")
 }
 
 type file struct {
