@@ -290,37 +290,55 @@ class CaffoRelease extends Polymer.Element {
     if(!('_caffoCache' in window && window._caffoCache.has(name)))  return;
     this.release = _caffoCache.get(name);
 
+    let updateFn = () => {
+      document.title = this.release.title;
+
+      this.$.about.innerHTML = this.release.about;
+
+      this.tracklists = this.release.tracklists;
+      for(let i = 0; i < this.release.tracklists.length; i++) {
+        if(this.release.defaultTracklist === this.release.tracklists[i].id) {
+          this.selectedTab = i+1;
+          break;
+        }
+      }
+      this._loadTracklist(this.release.defaultTracklist);
+      if(player) {
+        player.togglePlayback();
+      } else {
+        this.willPlay = true;
+      }
+    };
+
     fetch('/image/'+this.release.url+'.jpg.css')
       .then(response => response.json())
       .then(json => {
         this.updateStyles(json);
         this.$.thumbnail.src = '/image/'+this.release.url+'.jpg';
         this.$.albumartlink.href = '/image/'+this.release.url+'.jpg';
+        updateFn();
       })
       .catch(err => {
         console.error(err);
         // probably a 404
+        this.updateStyles({
+          "--vibrant":           "#acaaaa",
+          "--vibrant-text":      "#000",
+          "--lightvibrant":      "#fff",
+          "--lightvibrant-text": "#000",
+          "--darkvibrant":       "#2b2b2b",
+          "--darkvibrant-text":  "#fff",
+          "--muted":             "#6d6a6a",
+          "--muted-text":        "#fff",
+          "--lightmuted":        "#6d6a6a",
+          "--lightmuted-text":   "#fff",
+          "--darkmuted":         "#32312f",
+          "--darkmuted-text":    "#fff",
+        })
         this.$.thumbnail.src = '/image/picture-not-available.png';
         this.$.albumartlink.href = '/image/picture-not-available.png';
-      })
-
-    document.title = this.release.title;
-
-    this.$.about.innerHTML = this.release.about;
-
-    this.tracklists = this.release.tracklists;
-    for(let i = 0; i < this.release.tracklists.length; i++) {
-      if(this.release.defaultTracklist === this.release.tracklists[i].id) {
-        this.selectedTab = i+1;
-        break;
-      }
-    }
-    this._loadTracklist(this.release.defaultTracklist);
-    if(player) {
-      player.togglePlayback();
-    } else {
-      this.willPlay = true;
-    }
+        updateFn();
+      });
   }
 
   _formatUrl(url) {
