@@ -22,6 +22,7 @@ import (
 	"regexp"
 	"strings"
 	"text/template"
+	"time"
 	"unicode/utf8"
 
 	_ "image/jpeg"
@@ -212,53 +213,64 @@ func zipHandler(w http.ResponseWriter, r *http.Request) {
 	io.Copy(w, f)
 }
 
+func createZipHeader(name string) *zip.FileHeader {
+	h := &zip.FileHeader{
+		Name:   name,
+		Method: zip.Store,
+	}
+	h.SetModTime(time.Now())
+	return h
+}
+
 func createZip(path, rname string, rel release) io.Reader {
 	buf := new(bytes.Buffer)
 	zw := zip.NewWriter(buf)
 
-	nfo, err := zw.Create(rname + ".nfo")
+	nfo, err := zw.CreateHeader(createZipHeader(rname + ".nfo"))
 	checkErr(err)
 	io.WriteString(nfo, createNfo(rel))
 
-	sfv, err := zw.Create(rname + ".sfv")
-	checkErr(err)
+	sfvText := ""
+	m3uText := "#EXTM3U\n"
 
-	m3u, err := zw.Create(rname + ".m3u")
-	checkErr(err)
-
-	io.WriteString(m3u, "#EXTM3U\n")
 	i := 1
 	for _, tl := range rel.TracklistIds {
 		for _, t := range rel.Tracklists[tl].TrackIds {
 			track := rel.Tracklists[tl].Tracks[t]
+
 			fname := fmt.Sprintf("%02d %s - %s.mp3", i, rel.Artist, track.Title)
 			fname = re.ReplaceAllString(fname, "_")
 			i++
 
-			io.WriteString(sfv, fmt.Sprintf("%s\t%s\n", fname, crc32sum(path+"/"+track.File)))
+			sfvText += fmt.Sprintf("%s\t%s\n", fname, crc32sum(path+"/"+track.File))
 
-			fmt.Fprintf(m3u, "#EXTINF:%d,%s\n%s\n", track.Length, track.Title, fname)
+			m3uText += fmt.Sprintf("#EXTINF:%d,%s\n%s\n", track.Length, track.Title, fname)
 
-			zf, err := zw.Create(fname)
+			zf, err := zw.CreateHeader(createZipHeader(fname))
 			checkErr(err)
 			f, err := os.Open(path + "/" + track.File)
 			checkErr(err)
 			io.Copy(zf, f)
 			f.Close()
-
-			track.File = fname
-			rel.Tracklists[tl].Tracks[t] = track
 		}
 	}
 
 	if fileExists("./image/" + rel.Url + ".jpg") {
-		zf, err := zw.Create("AlbumArt.jpg")
+		zf, err := zw.CreateHeader(createZipHeader("AlbumArt.jpg"))
 		checkErr(err)
 		f, err := os.Open("./image/" + rel.Url + ".jpg")
 		checkErr(err)
 		io.Copy(zf, f)
 		f.Close()
 	}
+
+	sfv, err := zw.CreateHeader(createZipHeader(rname + ".sfv"))
+	checkErr(err)
+	io.WriteString(sfv, sfvText)
+
+	m3u, err := zw.CreateHeader(createZipHeader(rname + ".m3u"))
+	checkErr(err)
+	io.WriteString(m3u, m3uText)
 
 	checkErr(zw.Close())
 	return buf
