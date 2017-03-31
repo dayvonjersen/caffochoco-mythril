@@ -5,3 +5,4 @@ image/
 audio/
 data.json
 data.yaml
+.cache/

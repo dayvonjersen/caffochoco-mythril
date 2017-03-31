@@ -19,7 +19,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"text/template"
@@ -65,12 +64,6 @@ func main() {
 		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 		w.Header().Set("Pragma", "no-cache")
 		w.Header().Set("Expires", "0")
-
-		if req == "test" {
-			testHandler(w, r)
-			log.Println("<- 418 Teapot")
-			return
-		}
 
 		if fileExists(req) && !isDir(req) {
 			file = req
@@ -182,40 +175,93 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 	imageCache[path] = &file{modtime: modtime, stylesheet: stylesheet}
 }
 
-func crc32sum(f io.Reader) string {
+func crc32sum(filename string) string {
+	f, err := os.Open(filename)
+	checkErr(err)
 	b, err := ioutil.ReadAll(f)
 	checkErr(err)
 	return fmt.Sprintf("%08x", crc32.ChecksumIEEE(b))
 }
 
+var re = regexp.MustCompile(`[^\w-.]+`)
+
 func zipHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO: cache created zips on disk
-	// TODO: add license, nfo, m3u, album art
-	// TODO: add tracknumbers, artist, etc (from data.json maybe?)
 	w.Header().Set("Content-Type", "application/zip")
 
 	path := "." + r.URL.Path
 	path = strings.TrimSuffix(path, ".zip")
 
-	w.Header().Set("Content-Disposition", "attachment; filename=\""+path+".zip\"")
+	rel := getReleaseByURL(strings.TrimPrefix(path, "./audio/"))
 
+	rname := fmt.Sprintf("00 %s - %s-%d", rel.Artist, rel.Title, rel.Year)
+	rname = re.ReplaceAllString(rname, "_")
+
+	zipFile := rname + ".zip"
+
+	w.Header().Set("Content-Disposition", "attachment; filename=\""+zipFile+"\"")
+
+	if !fileExists(".cache/" + zipFile) {
+		f, err := os.Create(".cache/" + zipFile)
+		checkErr(err)
+		io.Copy(f, createZip(path, rname, rel))
+		f.Close()
+	}
+	f, err := os.Open(".cache/" + zipFile)
+	checkErr(err)
+	defer f.Close()
+	io.Copy(w, f)
+}
+
+func createZip(path, rname string, rel release) io.Reader {
 	buf := new(bytes.Buffer)
 	zw := zip.NewWriter(buf)
 
-	filepath.Walk(path, func(path string, file os.FileInfo, err error) error {
-		if strings.HasSuffix(file.Name(), ".mp3") {
-			zf, err := zw.Create(file.Name())
+	nfo, err := zw.Create(rname + ".nfo")
+	checkErr(err)
+	io.WriteString(nfo, createNfo(rel))
+
+	sfv, err := zw.Create(rname + ".sfv")
+	checkErr(err)
+
+	m3u, err := zw.Create(rname + ".m3u")
+	checkErr(err)
+
+	io.WriteString(m3u, "#EXTM3U\n")
+	i := 1
+	for _, tl := range rel.TracklistIds {
+		for _, t := range rel.Tracklists[tl].TrackIds {
+			track := rel.Tracklists[tl].Tracks[t]
+			fname := fmt.Sprintf("%02d %s - %s.mp3", i, rel.Artist, track.Title)
+			fname = re.ReplaceAllString(fname, "_")
+			i++
+
+			io.WriteString(sfv, fmt.Sprintf("%s\t%s\n", fname, crc32sum(path+"/"+track.File)))
+
+			fmt.Fprintf(m3u, "#EXTINF:%d,%s\n%s\n", track.Length, track.Title, fname)
+
+			zf, err := zw.Create(fname)
 			checkErr(err)
-			f, err := os.Open(path)
+			f, err := os.Open(path + "/" + track.File)
 			checkErr(err)
 			io.Copy(zf, f)
 			f.Close()
+
+			track.File = fname
+			rel.Tracklists[tl].Tracks[t] = track
 		}
-		return nil
-	})
+	}
+
+	if fileExists("./image/" + rel.Url + ".jpg") {
+		zf, err := zw.Create("AlbumArt.jpg")
+		checkErr(err)
+		f, err := os.Open("./image/" + rel.Url + ".jpg")
+		checkErr(err)
+		io.Copy(zf, f)
+		f.Close()
+	}
 
 	checkErr(zw.Close())
-	io.Copy(w, buf)
+	return buf
 }
 
 func fileExists(filename string) bool {
@@ -310,6 +356,16 @@ func getData() data {
 	return d
 }
 
+func getReleaseByURL(url string) release {
+	data := getData()
+	for _, rel := range data.Releases {
+		if rel.Url == url {
+			return rel
+		}
+	}
+	return release{}
+}
+
 func strpad(s string, l int) string {
 	amt := l - utf8.RuneCountInString(s)
 	if amt > 0 {
@@ -373,72 +429,54 @@ func renderTemplate(filename string, data interface{}) string {
 	return buf.String()
 }
 
-func testHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	d := getData()
-	re := regexp.MustCompile(`[^\w-.]+`)
-	sig := "dayvonjersen"
-	for _, rel := range d.Releases {
-		tdata := struct {
-			Release, Artist, Title, Genre, Encoder,
-			Quality, About, NumTracks, Length, Size string
-			numTracks, length, size int
-			HasArt                  bool
-			Tracks                  []struct {
-				Num, Title, Time string
-			}
-		}{
-			Tracks: []struct {
-				Num, Title, Time string
-			}{},
-			Size: strings.Repeat(" ", 56),
+func createNfo(rel release) string {
+	tdata := struct {
+		Release, Artist, Title, Genre, Encoder,
+		Quality, About, NumTracks, Length, Size string
+		numTracks, length, size int
+		HasArt                  bool
+		Tracks                  []struct {
+			Num, Title, Time string
 		}
-		rname := fmt.Sprintf("%02d %s - %s-%d-%s", 0, rel.Artist, rel.Title, rel.Year, sig)
-		tdata.Release = strwrap(fmt.Sprintf("dayvonjersen.com/releases/%s", rel.Url), 56, "║                     ", " ║", true, false)
-		tdata.Artist = strpad(rel.Artist, 56)
-		tdata.Title = strpad(rel.Title, 56)
-		tdata.Genre = strpad(rel.Genre, 56)
-		tdata.Encoder = strpad("LAME", 56)
-		tdata.Quality = strpad("320kbps MP3", 56)
-		tdata.About = strwrap(rel.About, 55, "║           ", "            ║", false, false)
-		tdata.HasArt = fileExists("./image/" + rel.Url + ".jpg")
-		rname = re.ReplaceAllString(rname, "_")
-		fmt.Fprintln(w, rname+".m3u")
-		fmt.Fprint(w, renderTemplate("m3u.tmpl", rel.Tracklists[rel.DefaultTracklistId]))
-		fmt.Fprintln(w, rname+".nfo")
-		fmt.Fprintln(w, rname+".sfv")
-		i := 1
-		for _, tl := range rel.TracklistIds {
-			//fmt.Fprintf(w, "\t%s:\n", rel.Tracklists[tl].Title)
-			for _, t := range rel.Tracklists[tl].TrackIds {
-				track := rel.Tracklists[tl].Tracks[t]
-				tdata.numTracks++
-				tdata.length += track.Length
-
-				title := track.Title
-				if len(title) > 44 {
-					title = title[:44] + " " + formattime(track.Length) + " ║           ║\n" + strwrap(title[44:], 45, "║          ║    ",
-						"      ║           ║", false, false)
-				} else {
-					title = strpad(title, 45) + formattime(track.Length) + " ║           ║"
-				}
-
-				tdata.Tracks = append(tdata.Tracks, struct {
-					Num, Title, Time string
-				}{
-					fmt.Sprintf("%02d", i),
-					title,
-					formattime(track.Length),
-				})
-				fname := fmt.Sprintf("%02d %s - %s-%s.mp3", i, rel.Artist, track.Title, sig)
-				i++
-				fname = re.ReplaceAllString(fname, "_")
-				fmt.Fprintln(w, fname)
-			}
-		}
-		tdata.NumTracks = strpad(fmt.Sprintf("%d", tdata.numTracks), 56)
-		tdata.Length = strpad(formattime(tdata.length), 56)
-		fmt.Fprint(w, renderTemplate("awesome-tmpl.txt", tdata))
+	}{
+		Tracks: []struct {
+			Num, Title, Time string
+		}{},
+		Size: strings.Repeat(" ", 56),
 	}
-	fmt.Fprintln(w)
+	tdata.Release = strwrap(fmt.Sprintf("dayvonjersen.com/releases/%s", rel.Url), 56, "║                     ", " ║", true, false)
+	tdata.Artist = strpad(rel.Artist, 56)
+	tdata.Title = strpad(rel.Title, 56)
+	tdata.Genre = strpad(rel.Genre, 56)
+	tdata.Encoder = strpad("LAME", 56)
+	tdata.Quality = strpad("320kbps MP3", 56)
+	tdata.About = strwrap(rel.About, 55, "║           ", "            ║", false, false)
+	tdata.HasArt = fileExists("./image/" + rel.Url + ".jpg")
+	i := 1
+	for _, tl := range rel.TracklistIds {
+		for _, t := range rel.Tracklists[tl].TrackIds {
+			track := rel.Tracklists[tl].Tracks[t]
+			tdata.numTracks++
+			tdata.length += track.Length
+
+			title := track.Title
+			if len(title) > 44 {
+				title = title[:44] + " " + formattime(track.Length) + " ║           ║\n" + strwrap(title[44:], 45, "║          ║    ",
+					"      ║           ║", false, false)
+			} else {
+				title = strpad(title, 45) + formattime(track.Length) + " ║           ║"
+			}
+
+			tdata.Tracks = append(tdata.Tracks, struct {
+				Num, Title, Time string
+			}{
+				fmt.Sprintf("%02d", i),
+				title,
+				formattime(track.Length),
+			})
+		}
+	}
+	tdata.NumTracks = strpad(fmt.Sprintf("%d", tdata.numTracks), 56)
+	tdata.Length = strpad(formattime(tdata.length), 56)
+	return renderTemplate("nfo.tmpl", tdata)
 }
