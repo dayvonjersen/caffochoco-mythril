@@ -232,7 +232,11 @@ class CaffoRelease extends Polymer.Element {
       route: {
         type: Object,
         notify: true
-      }
+      },
+      currentTracklist: {
+        type: Object,
+        notify: true
+      },      
     };
   }
   static get observers() {
@@ -271,6 +275,8 @@ class CaffoRelease extends Polymer.Element {
     if(!tracklist) throw new Error("Tracklist "+tracklistId+" not found.");
 
     if(player.state.tracklistId == tracklistId && player.state.playlist.length == tracklist.length) return;
+    if(this.currentTracklist == tracklistId) return;
+    this.currentTracklist = tracklistId;
 
     player.clear();
 
@@ -298,6 +304,7 @@ class CaffoRelease extends Polymer.Element {
       player.state.playlist = playlist;
       player.state.nowPlayingIndex = nowPlayingIndex;
     }
+    player.load();
 
     this.total = formatTime(total);
     this._render(tracklistId);

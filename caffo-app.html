@@ -163,7 +163,7 @@
       <div class='drawerCloser' on-click="_closeDrawer" title="stop playback &amp; close player">
         <paper-icon-button id='drawerCloserIcon' src="/svg/chevron-right.svg"></paper-icon-button>
       </div>
-      <caffo-release route='{{subroute}}'></caffo-release>
+      <caffo-release id='release' route='{{subroute}}'></caffo-release>
     </app-drawer>
 
     <div class='crate-container'>
@@ -222,6 +222,7 @@ class CaffoApp extends Polymer.Element {
           player.clear();
           player.state.tracklistId = 0;
         }
+        this.$.release.currentTracklist = -1;
         document.title = 'dayvonjersen discography'
         break;
     }
