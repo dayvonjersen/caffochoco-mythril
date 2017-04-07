@@ -19,8 +19,8 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -84,15 +84,17 @@ func main() {
 			}
 			imageHandler(w, r)
 			return
-		} else if strings.HasPrefix(req, "audio/") && strings.HasSuffix(req, ".zip") {
-			if !fileExists(strings.TrimSuffix(req, ".zip")) {
-				notfoundHandler(w, r)
-				return
-			}
+		} else if strings.HasPrefix(req, "download/") {
 			zipHandler(w, r)
 			return
 		} else if req == "stats.json" {
 			statsHandler(w, r)
+			return
+		} else if strings.HasPrefix(req, "nfo/") {
+			// XXX TEMP
+			tracklistId, _ := strconv.Atoi(strings.TrimPrefix(req, "nfo/"))
+			rel, _ := getReleaseByTracklist(tracklistId)
+			io.WriteString(w, createNfo(tracklistId, rel))
 			return
 		}
 		log.Println("<- 200 OK")
@@ -290,17 +292,26 @@ func crc32sum(filename string) string {
 var re = regexp.MustCompile(`[^\w-.]+`)
 
 func zipHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("<- 200 OK")
-	w.Header().Set("Content-Type", "application/zip")
 
-	path := "." + r.URL.Path
-	path = strings.TrimSuffix(path, ".zip")
+	tracklistId, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/download/"))
 
-	rel := getReleaseByURL(strings.TrimPrefix(path, "./audio/"))
+	if err != nil {
+		log.Printf("strconv.Atoi(%v): %v", strings.TrimPrefix(r.URL.Path, "/download/"), err)
+		notfoundHandler(w, r)
+		return
+	}
+
+	rel, err := getReleaseByTracklist(tracklistId)
+
+	if err != nil {
+		log.Printf("getReleaseByTracklist(%v): %v", tracklistId, err)
+		notfoundHandler(w, r)
+		return
+	}
 
 	counter.IncrementDownloads(rel.Url, r.RemoteAddr)
 
-	rname := fmt.Sprintf("00 %s - %s-%d", rel.Artist, rel.Title, rel.Year)
+	rname := fmt.Sprintf("%03d %s - %s-%d", tracklistId, rel.Artist, rel.Title, rel.Year)
 	rname = re.ReplaceAllString(rname, "_")
 
 	zipFile := rname + ".zip"
@@ -310,7 +321,7 @@ func zipHandler(w http.ResponseWriter, r *http.Request) {
 	if !fileExists(".cache/" + zipFile) {
 		f, err := os.Create(".cache/" + zipFile)
 		checkErr(err)
-		io.Copy(f, createZip(path, rname, rel))
+		io.Copy(f, createZip(tracklistId, rname, rel))
 		f.Close()
 	}
 	f, err := os.Open(".cache/" + zipFile)
@@ -320,10 +331,10 @@ func zipHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func zipPrecache() {
-	filepath.Walk("audio/", func(path string, info os.FileInfo, err error) error {
-		if info.IsDir() {
-			rel := getReleaseByURL(strings.TrimPrefix(path, "audio/"))
-			rname := fmt.Sprintf("00 %s - %s-%d", rel.Artist, rel.Title, rel.Year)
+	d := getData()
+	for _, rel := range d.Releases {
+		for _, tracklistId := range rel.TracklistIds {
+			rname := fmt.Sprintf("%03d %s - %s-%d", tracklistId, rel.Artist, rel.Title, rel.Year)
 			rname = re.ReplaceAllString(rname, "_")
 			zipFile := ".cache/" + rname + ".zip"
 			log.Println("generating", zipFile)
@@ -333,12 +344,11 @@ func zipPrecache() {
 			}
 			f, err := os.Create(zipFile)
 			checkErr(err)
-			n, _ := io.Copy(f, createZip(path, rname, rel))
+			n, _ := io.Copy(f, createZip(tracklistId, rname, rel))
 			log.Println(n, "bytes written [ OK ]")
 			f.Close()
 		}
-		return nil
-	})
+	}
 }
 
 func createZipHeader(name string) *zip.FileHeader {
@@ -350,37 +360,37 @@ func createZipHeader(name string) *zip.FileHeader {
 	return h
 }
 
-func createZip(path, rname string, rel release) io.Reader {
+func createZip(tracklistId int, rname string, rel release) io.Reader {
 	buf := new(bytes.Buffer)
 	zw := zip.NewWriter(buf)
 
 	nfo, err := zw.CreateHeader(createZipHeader(rname + ".nfo"))
 	checkErr(err)
-	io.WriteString(nfo, createNfo(rel))
+	io.WriteString(nfo, createNfo(tracklistId, rel))
+
+	path := "./audio/" + rel.Url
 
 	sfvText := ""
 	m3uText := "#EXTM3U\n"
 
 	i := 1
-	for _, tl := range rel.TracklistIds {
-		for _, t := range rel.Tracklists[tl].TrackIds {
-			track := rel.Tracklists[tl].Tracks[t]
+	for _, t := range rel.Tracklists[tracklistId].TrackIds {
+		track := rel.Tracklists[tracklistId].Tracks[t]
 
-			fname := fmt.Sprintf("%02d %s - %s.mp3", i, rel.Artist, track.Title)
-			fname = re.ReplaceAllString(fname, "_")
-			i++
+		fname := fmt.Sprintf("%02d %s - %s.mp3", i, rel.Artist, track.Title)
+		fname = re.ReplaceAllString(fname, "_")
+		i++
 
-			sfvText += fmt.Sprintf("%s\t%s\n", fname, crc32sum(path+"/"+track.File))
+		sfvText += fmt.Sprintf("%s\t%s\n", fname, crc32sum(path+"/"+track.File))
 
-			m3uText += fmt.Sprintf("#EXTINF:%d,%s\n%s\n", track.Length, track.Title, fname)
+		m3uText += fmt.Sprintf("#EXTINF:%d,%s\n%s\n", track.Length, track.Title, fname)
 
-			zf, err := zw.CreateHeader(createZipHeader(fname))
-			checkErr(err)
-			f, err := os.Open(path + "/" + track.File)
-			checkErr(err)
-			io.Copy(zf, f)
-			f.Close()
-		}
+		zf, err := zw.CreateHeader(createZipHeader(fname))
+		checkErr(err)
+		f, err := os.Open(path + "/" + track.File)
+		checkErr(err)
+		io.Copy(zf, f)
+		f.Close()
 	}
 
 	if fileExists("./image/" + rel.Url + ".jpg") {
@@ -496,14 +506,16 @@ func getData() data {
 	return d
 }
 
-func getReleaseByURL(url string) release {
+func getReleaseByTracklist(tracklistId int) (release, error) {
 	data := getData()
 	for _, rel := range data.Releases {
-		if rel.Url == url {
-			return rel
+		for _, id := range rel.TracklistIds {
+			if id == tracklistId {
+				return rel, nil
+			}
 		}
 	}
-	return release{}
+	return release{}, fmt.Errorf("tracklist id %d does not exist", tracklistId)
 }
 
 func strpad(s string, l int) string {
@@ -569,12 +581,13 @@ func renderTemplate(filename string, data interface{}) string {
 	return buf.String()
 }
 
-func createNfo(rel release) string {
+func createNfo(tracklistId int, rel release) string {
 	tdata := struct {
 		Release, Artist, Title, Genre, Encoder,
 		Quality, About, NumTracks, Length, Size string
 		numTracks, length, size int
 		HasArt                  bool
+		TracklistTitle          string
 		Tracks                  []struct {
 			Num, Title, Time string
 		}
@@ -584,7 +597,8 @@ func createNfo(rel release) string {
 		}{},
 		Size: strings.Repeat(" ", 56),
 	}
-	tdata.Release = strwrap(fmt.Sprintf("dayvonjersen.com/releases/%s", rel.Url), 56, "║                     ", " ║", true, false)
+	tdata.TracklistTitle = strpad(strings.ToUpper(rel.Tracklists[tracklistId].Title), 45)
+	tdata.Release = strwrap(fmt.Sprintf("%03d dayvonjersen.com/releases/%s", tracklistId, rel.Url), 56, "║                     ", " ║", true, false)
 	tdata.Artist = strpad(rel.Artist, 56)
 	tdata.Title = strpad(rel.Title, 56)
 	tdata.Genre = strpad(rel.Genre, 56)
@@ -593,28 +607,26 @@ func createNfo(rel release) string {
 	tdata.About = strwrap(rel.About, 55, "║           ", "            ║", false, false)
 	tdata.HasArt = fileExists("./image/" + rel.Url + ".jpg")
 	i := 1
-	for _, tl := range rel.TracklistIds {
-		for _, t := range rel.Tracklists[tl].TrackIds {
-			track := rel.Tracklists[tl].Tracks[t]
-			tdata.numTracks++
-			tdata.length += track.Length
+	for _, t := range rel.Tracklists[tracklistId].TrackIds {
+		track := rel.Tracklists[tracklistId].Tracks[t]
+		tdata.numTracks++
+		tdata.length += track.Length
 
-			title := track.Title
-			if len(title) > 44 {
-				title = title[:44] + " " + formattime(track.Length) + " ║           ║\n" + strwrap(title[44:], 45, "║          ║    ",
-					"      ║           ║", false, false)
-			} else {
-				title = strpad(title, 45) + formattime(track.Length) + " ║           ║"
-			}
-
-			tdata.Tracks = append(tdata.Tracks, struct {
-				Num, Title, Time string
-			}{
-				fmt.Sprintf("%02d", i),
-				title,
-				formattime(track.Length),
-			})
+		title := track.Title
+		if len(title) > 44 {
+			title = title[:44] + " " + formattime(track.Length) + " ║           ║\n" + strwrap(title[44:], 45, "║          ║    ",
+				"      ║           ║", false, false)
+		} else {
+			title = strpad(title, 45) + formattime(track.Length) + " ║           ║"
 		}
+
+		tdata.Tracks = append(tdata.Tracks, struct {
+			Num, Title, Time string
+		}{
+			fmt.Sprintf("%02d", i),
+			title,
+			formattime(track.Length),
+		})
 	}
 	tdata.NumTracks = strpad(fmt.Sprintf("%d", tdata.numTracks), 56)
 	tdata.Length = strpad(formattime(tdata.length), 56)

@@ -51,7 +51,7 @@ Wk.  :0XXXXX0c. ..............................................  cKXXXXXXX0:  .k
 ║              COVERS  YES [{{if .HasArt}}X{{else}} {{end}}]  NO [{{if not .HasArt}}X{{else}} {{end}}]                                         ║
 ║                                                                              ║
 ║          ╔═══════════════════════════════════════════════════════╗           ║
-║          ║  # TRACKNAME                                     TIME ║           ║
+║          ║  # {{.TracklistTitle}} TIME ║           ║
 {{range .Tracks}}║          ║ {{.Num}} {{.Title}}
 {{end}}║          ╚═══════════════════════════════════════════════════════╝           ║
 ║                                                                              ║

@@ -214,7 +214,7 @@
 
     <footer>
       <div class='info'>
-        <a href='[[_zipUrl(release.url)]]' tabindex="-1" target="_blank">
+        <a href='[[downloadUrl]]' tabindex="-1" target="_blank" id='downloadBtn'>
           <paper-button raised>DOWNLOAD .ZIP <iron-icon src='/svg/download.svg'></iron-icon></paper-button>
         </a>
 
@@ -237,6 +237,10 @@ class CaffoRelease extends Polymer.Element {
         type: Object,
         notify: true
       },
+      downloadUrl: {
+        type: String,
+        notify: true,
+      }
     };
   }
   static get observers() {
@@ -322,6 +326,7 @@ class CaffoRelease extends Polymer.Element {
       playlistItem.setAttribute('url', this._formatUrl(item.file));
       this.$.tracklist.appendChild(playlistItem);
     });
+    this.downloadUrl = `/download/${this.currentTracklist}`;
   }
 
   _pageChanged(name) {
@@ -385,17 +390,15 @@ class CaffoRelease extends Polymer.Element {
     return `/audio/${this.release.url}/${url}`;
   }
 
-  _zipUrl() {
-    return `/audio/${this.release.url}.zip`;
-  }
-
   _tabChanged(event) {
     if(!event.detail.item.dataset.tracklist) {
       this.$.about.classList.remove('gone');
       this.$.tracklist.classList.add('gone');
+      this.$.downloadBtn.classList.add('gone');
     } else {
       this.$.about.classList.add('gone');
       this.$.tracklist.classList.remove('gone');
+      this.$.downloadBtn.classList.remove('gone');
       let e = Polymer.dom(event);
       this._loadTracklist(parseInt(e.localTarget.selectedItem.dataset.tracklist));
       if(this.willPlay) {
