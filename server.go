@@ -309,6 +309,9 @@ func zipHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Println("<- 200 OK")
+	w.Header().Set("Content-Type", "application/zip")
+
 	counter.IncrementDownloads(rel.Url, r.RemoteAddr)
 
 	rname := fmt.Sprintf("%03d %s - %s-%d", tracklistId, rel.Artist, rel.Title, rel.Year)
