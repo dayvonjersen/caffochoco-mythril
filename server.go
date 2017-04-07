@@ -289,7 +289,7 @@ func crc32sum(filename string) string {
 	return fmt.Sprintf("%08x", crc32.ChecksumIEEE(b))
 }
 
-var re = regexp.MustCompile(`[^\w-.]+`)
+var re = regexp.MustCompile(`[^\w-.\(\)\[\]]+`)
 
 func zipHandler(w http.ResponseWriter, r *http.Request) {
 
