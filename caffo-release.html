@@ -264,37 +264,48 @@ class CaffoRelease extends Polymer.Element {
     }
   }
 
-  _loadTracklist(tracklist) {
-    if(!player) return;
+  _loadTracklist(tracklistId) {
+    if(!player) throw new Error("Player Not Ready");
+
+    let tracklist = this.tracklists.find(tl => tl.id == tracklistId);
+    if(!tracklist) throw new Error("Tracklist "+tracklistId+" not found.");
+
+    if(player.state.tracklistId == tracklistId && player.state.playlist.length == tracklist.length) return;
+
+    player.clear();
 
     let total = 0;
-    for(let i = 0; i < this.tracklists.length; i++) {
-      if(this.tracklists[i].id == tracklist) {
-        let skip = false;
-        if(tracklist == player.state.tracklistId) {
-          skip = true;
-        } else {
-          player.clear();
-        }
-        this.tracklists[i].tracks.forEach((t) => {
-          total += t.length;
-          let url = this._formatUrl(t.file);
-          if(player.nowPlaying != url) {
-            if(!skip) player.add(url);
-          } else if(skip) {
-            skip = false;
-          }
-        });
-        break;
+    let playlist = [];
+    let nowPlayingIndex = 0;
+    tracklist.tracks.forEach((t, i) => {
+      let url = this._formatUrl(t.file);
+      if(url == player.state.nowPlaying) {
+        nowPlayingIndex = i;
       }
+      playlist.push(url);
+      total += t.length;
+    });
+
+    if(player.state.playlist.length && player.state.isPlaying) {
+      if(player.state.tracklistId == tracklistId) {
+        nowPlayingIndex = playlist.findIndex(url => url == player.state.nowPlaying);
+        player.state.playlist = playlist;
+        player.state.nowPlayingIndex = nowPlayingIndex;
+      } else {
+        playlist.forEach(url => player.add(url));
+      }
+    } else {
+      player.state.playlist = playlist;
+      player.state.nowPlayingIndex = nowPlayingIndex;
     }
+
     this.total = formatTime(total);
-    this._render(tracklist);
+    this._render(tracklistId);
   }
 
   _render(tracklistId) {
-    let tracklist = this.tracklists.find(tl=>tl.id == tracklistId);
-    if(!tracklist) return;
+    let tracklist = this.tracklists.find(tl => tl.id == tracklistId);
+    if(!tracklist) throw new Error("Tracklist "+tracklistId+" not found.");
     this.$.tracklist.innerHTML = '';
     tracklist.tracks.forEach(item => {
       let playlistItem = document.createElement('caffo-playlist-item');
