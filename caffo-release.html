@@ -358,8 +358,14 @@ class CaffoRelease extends Polymer.Element {
       }
     };
 
-    fetch('/image/'+this.release.url+'.jpg.css')
-      .then(response => response.json())
+    fetch('/image/'+this.release.url+'.jpg.json')
+      .then(response => {
+        if(response.status == 200) {
+          return response.json();
+        } else {
+          throw new Error(response.status + " " + response.statusText);
+        }
+      })
       .then(json => {
         this.updateStyles(json);
         this.vibrantText = json["--vibrant-text"];

@@ -77,11 +77,7 @@ func main() {
 		} else if strings.HasPrefix(req, "bower_components") {
 			notfoundHandler(w, r)
 			return
-		} else if strings.HasPrefix(req, "image/") && strings.HasSuffix(req, ".css") {
-			if !fileExists(strings.TrimSuffix(req, ".css")) {
-				notfoundHandler(w, r)
-				return
-			}
+		} else if strings.HasPrefix(req, "image/") && strings.HasSuffix(req, ".json") {
 			imageHandler(w, r)
 			return
 		} else if strings.HasPrefix(req, "download/") {
@@ -212,7 +208,11 @@ func statsHandler(w http.ResponseWriter, r *http.Request) {
 func notfoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(404)
 	log.Println("<- 404 Not Found")
-	io.WriteString(w, "File Not Found")
+	if w.Header().Get("Content-Type") == "application/json; charset=UTF-8" {
+		io.WriteString(w, `{"error":"file not found"}`)
+	} else {
+		io.WriteString(w, "File Not Found")
+	}
 }
 
 type file struct {
@@ -238,11 +238,16 @@ var vibrantFallback = map[string]string{
 }
 
 func imageHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("<- 200 OK")
-	w.Header().Set("Content-Type", "text/css; charset=UTF-8")
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 
 	path := "." + r.URL.Path
-	path = strings.TrimSuffix(path, ".css")
+	path = strings.TrimSuffix(path, ".json")
+
+	if !fileExists(path) {
+		notfoundHandler(w, r)
+		return
+	}
+	log.Println("<- 200 OK")
 
 	f, err := os.Open(path)
 	checkErr(err)
