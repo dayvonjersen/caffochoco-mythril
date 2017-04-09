@@ -49,6 +49,7 @@
         clear: both;
         --paper-tab-ink: var(--vibrant, #000);
         --paper-tabs-selection-bar-color: var(--vibrant, #000);
+        color: var(--darkmuted-text, #aaa);
       }
 
       paper-icon-button {
@@ -171,6 +172,8 @@
 
       paper-button {
         vertical-align: middle;
+        background: var(--vibrant, #fff);
+        color: var(--vibrant-text, #000);
       }
     </style>
 
@@ -188,12 +191,12 @@
         <sorbetto-spektrum id="spektrum" title="click to cycle through visualizations"></sorbetto-spektrum>
         <div class='controls'>
           <div>
-            <paper-icon-button id="playpauseBtn" on-click="_playpause" elevation="3" src="/svg/play.svg" title="toggle playback"></paper-icon-button>
-            <paper-icon-button id="previousBtn" on-click="_previous" elevation="2" src="/svg/fast-backward.svg" title="previous track"></paper-icon-button>
-            <paper-icon-button id="nextBtn" on-click="_next" elevation="2" src="/svg/fast-forward.svg" title="next track"></paper-icon-button>
+            <paper-icon-button id="playpauseBtn" on-click="_playpause" elevation="3" src="/svg/play--black.svg" title="toggle playback"></paper-icon-button>
+            <paper-icon-button id="previousBtn" on-click="_previous" elevation="2" src="/svg/fast-backward--black.svg" title="previous track"></paper-icon-button>
+            <paper-icon-button id="nextBtn" on-click="_next" elevation="2" src="/svg/fast-forward--black.svg" title="next track"></paper-icon-button>
           </div>
           <div>
-            <paper-icon-button id="muteBtn" on-click="_toggleMute" elevation="0" src="/svg/volume-mute.svg" title="toggle mute"></paper-icon-button>
+            <paper-icon-button id="muteBtn" on-click="_toggleMute" elevation="0" src="/svg/volume-mute--black.svg" title="toggle mute"></paper-icon-button>
             <paper-slider id="volume" on-immediate-value-change="_setVolume" min="0" max="100" title="adjust volume"></paper-slider>
           </div>
         </div>
@@ -215,7 +218,7 @@
     <footer>
       <div class='info'>
         <a href='[[downloadUrl]]' tabindex="-1" target="_blank" id='downloadBtn'>
-          <paper-button raised>DOWNLOAD .ZIP <iron-icon src='/svg/download.svg'></iron-icon></paper-button>
+          <paper-button raised>DOWNLOAD .ZIP <iron-icon src='/svg/download--black.svg'></iron-icon></paper-button>
         </a>
 
         <span class='year' title="release year">[[release.year]]</span>
@@ -359,6 +362,8 @@ class CaffoRelease extends Polymer.Element {
       .then(response => response.json())
       .then(json => {
         this.updateStyles(json);
+        this.vibrantText = json["--vibrant-text"];
+        this._updateSvg();
         this.$.thumbnail.src = '/image/'+this.release.url+'.jpg';
         this.$.albumartlink.href = '/image/'+this.release.url+'.jpg';
         updateFn();
@@ -380,6 +385,8 @@ class CaffoRelease extends Polymer.Element {
           "--darkmuted":         "#32312f",
           "--darkmuted-text":    "#fff",
         })
+        this.vibrantText = "#000";
+        this._updateSvg();
         this.$.thumbnail.src = '/image/picture-not-available.png';
         this.$.albumartlink.href = '/image/picture-not-available.png';
         updateFn();
@@ -408,9 +415,16 @@ class CaffoRelease extends Polymer.Element {
     }
   }
 
+  _updateSvg() {
+    [].forEach.call(this.shadowRoot.querySelectorAll("paper-icon-button, iron-icon"), (icon) => {
+      icon.src = icon.src.replace(/--\w+\.svg/, `--${ this.vibrantText == "#ffffff" ? "white" : "black" }.svg`);
+    });
+  }
+
   notify(playerState) {
-    this.$.playpauseBtn.src = playerState.isLoading ? '/svg/loading-bubbles.svg' : (playerState.isPlaying ? '/svg/pause.svg' : '/svg/play.svg');
-    this.$.muteBtn.src = playerState.currentVolume == 0 || playerState.muted ? '/svg/volume-mute.svg' : (playerState.currentVolume > 50 ? '/svg/volume-full.svg' : '/svg/volume-mid.svg');
+    this.$.playpauseBtn.src = playerState.isLoading ? '/svg/loading-bubbles--black.svg' : (playerState.isPlaying ? '/svg/pause--black.svg' : '/svg/play--black.svg');
+    this.$.muteBtn.src = playerState.currentVolume == 0 || playerState.muted ? '/svg/volume-mute--black.svg' : (playerState.currentVolume > 50 ? '/svg/volume-full--black.svg' : '/svg/volume-mid--black.svg');
+    this._updateSvg();
     if(!playerState.muted && this.$.volume.value != playerState.currentVolume) {
       this.$.volume.value = playerState.currentVolume;
     } else if(playerState.muted && this.$.volume.value != 0) {

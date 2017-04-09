@@ -7,3 +7,4 @@ data.json
 data.yaml
 .cache/
 svg2datauri.php
+find_missing_files.php
