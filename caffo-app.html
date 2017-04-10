@@ -5,6 +5,7 @@
 
 <link rel='import' href='/bower_components/app-layout/app-drawer/app-drawer.html'>
 
+<link rel='import' href='/bower_components/paper-button/paper-button.html'>
 <link rel='import' href='/bower_components/paper-icon-button/paper-icon-button.html'>
 
 <link rel='import' href='/caffo-crate.html'>
@@ -140,8 +141,77 @@
       app-drawer[opened] ~ footer .with-love {
         z-index: -1;
       }
+      .gone, #notFound.gone {
+        display: none;
+      }
+      #notFound {
+        --vibrant:rgba(183,153,99,1);
+        --lightvibrant-text:#000000;
+        --darkvibrant-text:#ffffff;
+        --muted-text:#ffffff;
+        --lightmuted-text:#000000;
+        --darkmuted-text:#ffffff;
+        --vibrant-text:#000000;
+        --lightvibrant:rgba(234,205,141,1);
+        --darkvibrant:rgba(91,73,42,1);
+        --muted:rgba(166,137,88,1);
+        --lightmuted:rgba(211,202,172,1);
+        --darkmuted:rgba(44,77,72,1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: calc(100vh - 1rem);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+      }
+      #notFound h1, #notFound h2 {
+        font-family: "Akkurat";
+        color: var(--darkmuted);
+        text-shadow: -1px 0px 0 #fff,
+                      0px -1px 0 #fff,
+                      0px 0px 0 #fff,
+                      0px 1px 0 #fff,
+                      1px 0px 0 #fff,
+                      0.0075em -0.01em 0 rgba(44,77,72,.9),
+                      0.0225em -0.03em 0 rgba(44,77,72,.7),
+                      0.06em -0.08em 0 rgba(44,77,72,.5);
+      }
+      #notFound h1 {
+        font-size: 10vmin;
+      }
+      #notFound h2 {
+        font-size: 2.6667vmin;
+        line-height: 1.2;
+        text-align: center;
+      }
+      paper-button {
+        background: var(--darkmuted);
+        padding-left: 1.6667rem;
+        padding-right: 1.6667rem;
+        margin-top: 4rem;
+        color: #fff;
+        --paper-button-ink-color: #fff;
+        font-weight: bold;
+        border: 1px solid;
+        transition: 1s;
+        vertical-align: text-bottom;
+      }
+      paper-button:active {
+        background: var(--darkvibrant);
+      }
+      paper-button iron-icon {
+        --iron-icon-width: 2rem;
+        --iron-icon-height: 2rem;
+      }
+      a {
+        text-decoration: none;
+      }
     </style>
 
+  <div id='app'>
     <header>
       <div>
         <h1><a href="https://dayvonjersen.com" title="return to dayvonjersen.com"><img src='/image/awesome.png'>dayvonjersen</a></h1>
@@ -175,6 +245,12 @@
       <caffo-license></caffo-license>
       <div class="with-love" title="less than three from new jersey">with <span style='color:#f39'>&lt;3</span> from nj</div>
     </footer>
+  </div>
+  <div id='notFound' class='gone'>
+    <h1>404 Not Found</h1>
+    <h2>Requested URL: <span id='notFoundURL'></span></h2>
+    <a href="/"><paper-button elevation='3'><iron-icon src="/image/awesome.png"></iron-icon>&emsp;RETURN</paper-button></a>
+  </div>
   </template>
   <script>
 class CaffoApp extends Polymer.Element {
@@ -207,14 +283,40 @@ class CaffoApp extends Polymer.Element {
     }
   }
 
+  _notFound() {
+    this.$.notFound.classList.remove('gone');
+    this.$.app.classList.add('gone');
+    this.$.notFoundURL.innerText = this.route.path;
+    document.body.style.backgroundImage = `url(/image/404.jpg)`;
+  }
+
+  _found() {
+    if(this.$.app.classList.contains('gone')) {
+      let loader = document.querySelector('.loader');
+      loader.classList.remove('loaded');
+      setTimeout(() => {
+        loader.classList.add('loaded');
+      }, 350);
+    }
+    this.$.notFound.classList.add('gone');
+    this.$.app.classList.remove('gone');
+    document.body.style.backgroundImage = `url(/image/background.jpg)`;
+  }
+
   _pageChanged() {
     switch(this.routeData.page) {
       case "release":
+        let name = this.route.path.replace("/release/", "");
+        if(!('_caffoCache' in window && window._caffoCache.has(name))) {
+          this._notFound();
+          break;
+        }
         this.$.drawer.open();
         this.$.crate.classList.add('rotated');
+        this._found();
         break;
 
-      default:
+      case "":
         this.$.drawer.close();
         this.$.crate.classList.remove('rotated');
         if(player) {
@@ -224,6 +326,11 @@ class CaffoApp extends Polymer.Element {
         }
         this.$.release.currentTracklist = -1;
         document.title = 'dayvonjersen discography'
+        this._found();
+        break;
+
+      default:
+        this._notFound();
         break;
     }
   }
