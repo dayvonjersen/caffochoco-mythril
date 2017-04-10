@@ -288,6 +288,7 @@ class CaffoApp extends Polymer.Element {
     this.$.app.classList.add('gone');
     this.$.notFoundURL.innerText = this.route.path;
     document.body.style.backgroundImage = `url(/image/404.jpg)`;
+    document.title = '404'
   }
 
   _found() {
@@ -325,7 +326,7 @@ class CaffoApp extends Polymer.Element {
           player.state.tracklistId = 0;
         }
         this.$.release.currentTracklist = -1;
-        document.title = 'dayvonjersen discography'
+        document.title = 'discography'
         this._found();
         break;
 
