@@ -44,8 +44,10 @@ class PlayerModel {
     //
     this.audioElement = audioElement;
     this.audioElement.addEventListener('ended', () => {
-      this.next();
-      this.togglePlayback();
+      if(this.state.playlist.length != this.state.nowPlayingIndex+1) {
+        this.next();
+        this.togglePlayback();
+      }
     });
     this.audioElement.addEventListener('timeupdate', () => {
       this.state.currentTime = this.audioElement.currentTime;

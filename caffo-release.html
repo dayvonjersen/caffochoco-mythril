@@ -443,15 +443,12 @@ class CaffoRelease extends Polymer.Element {
     } else if(playerState.muted && this.$.volume.value != 0) {
       this.$.volume.value = 0;
     }
-    if(playerState.nowPlayingIndex == 0) {
-      this.$.previousBtn.classList.add('gone');
-    } else {
+    if(playerState.playlist.length != 1) {
       this.$.previousBtn.classList.remove('gone');
-    }
-    if(playerState.nowPlayingIndex == playerState.playlist.length - 1) {
-      this.$.nextBtn.classList.add('gone');
-    } else {
       this.$.nextBtn.classList.remove('gone');
+    } else {
+      this.$.previousBtn.classList.add('gone');
+      this.$.nextBtn.classList.add('gone');
     }
     this.$.spektrum.bars = 64;
     this.$.spektrum.padY = 0;
