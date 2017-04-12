@@ -90,18 +90,20 @@ class CaffoPlayer extends Polymer.Element {
       e.preventDefault();
       player.togglePlayback();
     });
-    key('m',                   () => player.toggleMute());
-    key('ctrl+up',             () => player.toggleMute(false));
-    key('ctrl+down',           () => player.toggleMute(true));
-    key('up',                  () => player.setVolume(Math.min(100,player.state.currentVolume+5)));
-    key('down',                () => player.setVolume(Math.max(0,player.state.currentVolume-5)));
-    key('home',                () => player.seekTo(0));
-    key('end',                 () => player.seekTo(player.audioElement.duration));
-    key('left',                () => player.seekTo(Math.max(0,player.audioElement.currentTime-1)));
-    key('right',               () => player.seekTo(Math.min(player.audioElement.duration, player.audioElement.currentTime+1)));
-    key('ctrl+left,pageup',    () => player.seekTo(Math.max(0,player.audioElement.currentTime-15)));
-    key('ctrl+right,pagedown', () => player.seekTo(Math.min(player.audioElement.duration,player.audioElement.currentTime+15)));
-    key('s',                   () => player.stopPlayback());
+    key('m',          () => player.toggleMute());
+    key('ctrl+up',    () => player.toggleMute(false));
+    key('ctrl+down',  () => player.toggleMute(true));
+    key('up',         () => player.setVolume(Math.min(100,player.state.currentVolume+5)));
+    key('down',       () => player.setVolume(Math.max(0,player.state.currentVolume-5)));
+    key('home',       () => player.seekTo(0));
+    key('end',        () => player.seekTo(player.audioElement.duration));
+    key('left',       () => player.seekTo(Math.max(0,player.audioElement.currentTime-1)));
+    key('right',      () => player.seekTo(Math.min(player.audioElement.duration, player.audioElement.currentTime+1)));
+    key('ctrl+left',  () => player.seekTo(Math.max(0,player.audioElement.currentTime-15)));
+    key('ctrl+right', () => player.seekTo(Math.min(player.audioElement.duration,player.audioElement.currentTime+15)));
+    key('s',          () => player.stopPlayback());
+    key('pageup',     () => player.previous());
+    key('pagedown',   () => player.next());
   }
 
   notify(playerState) {

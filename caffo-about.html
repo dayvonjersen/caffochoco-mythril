@@ -1,0 +1,80 @@
+<link rel='import' href='/bower_components/polymer/polymer-element.html'>
+<link rel='import' href='/caffo-modal.html'>
+<dom-module id='caffo-about'>
+  <template>
+    <style>
+      kbd {
+        display: inline-block;
+        padding: 3px 5px;
+        font: 11px/10px Consolas,"Liberation Mono",Menlo,Courier,monospace;
+        color: #555;
+        vertical-align: middle;
+        background-color: #FCFCFC;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #CCC #CCC #BBB;
+        border-radius: 3px;
+        box-shadow: 0px -1px 0px #BBB inset;
+
+        white-space: pre;
+      }
+      ul {
+        list-style: none;
+        margin: 0 2rem 1rem;
+        padding: 0;
+      }
+      li {
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
+    <caffo-modal text="about">
+      <div slot="header">
+        <h1>About</h1>
+      </div>
+      <div slot="main">
+        <blockquote>
+          <p>hi I'm day from nj and these are a few of my tracks</p>
+          <p>oh oh oh my gosh</p>
+        </blockquote>
+        <hr>
+        <h2>Keyboard Shortcuts</h2>
+        <ul>
+        <li><kbd>up</kbd> <span>increase volume</span></li>
+        <li><kbd>down</kbd> <span>decrease volume</span></li>
+        <li><kbd>m</kbd> <span>toggle mute on/off</span></li>
+        <li><kbd>ctrl+up</kbd> <span>force unmute</span></li>
+        <li><kbd>ctrl+down</kbd> <span>force mute</span></li>
+      </ul><ul>
+        <li><kbd>home</kbd> <span>rewind to beginning of current track</span></li>
+        <li><kbd>end</kbd> <span>fast-forward to end of current track</span></li>
+        <li><kbd>left</kbd> <span>rewind 1 second</span></li>
+        <li><kbd>right</kbd> <span>fast-forward 1 second</span></li>
+        <li><kbd>ctrl+left</kbd> <span>rewind 15 seconds</span></li>
+        <li><kbd>ctrl+right</kbd> <span>fast-forward 15 seconds</span></li>
+      </ul><ul>
+        <li><kbd>space</kbd> <span>toggle playback play/pause</span></li>
+        <li><kbd>s</kbd> <span>stop playback</span></li>
+        <li><kbd>pageup</kbd> <span>previous track</span></li>
+        <li><kbd>pagedown</kbd> <span>next track</span></li>
+      </ul>
+      </div>
+    </caffo-modal>
+  </template>
+  <script>
+class CaffoAbout extends Polymer.Element {
+  static get is() { return 'caffo-about'; }
+  static get properties() {
+    return {
+      /*something: String,*/
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    // ...
+  }
+}
+customElements.define(CaffoAbout.is, CaffoAbout);
+  </script>
+</dom-module>

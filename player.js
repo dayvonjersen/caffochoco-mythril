@@ -141,7 +141,7 @@ class PlayerModel {
         this.audioElement.src = this.nowPlaying;
       }
     }
-    if(this.isPlaying) this.audioElement.play();
+    if(this.state.isPlaying) this.audioElement.play();
     this.update();
   }
 

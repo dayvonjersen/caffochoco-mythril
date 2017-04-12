@@ -1,71 +1,14 @@
 <link rel='import' href='/bower_components/polymer/polymer-element.html'>
-
-<link rel='import' href='/bower_components/paper-button/paper-button.html'>
-<link rel='import' href='/bower_components/paper-dialog/paper-dialog.html'>
-<link rel='import' href='/bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html'>
-
+<link rel='import' href='/caffo-modal.html'>
 <dom-module id='caffo-license'>
   <template>
-    <style>
-      :host {
-        display: block;
-        position: relative;
-        overflow: hidden;
-        font-size: 14px;
-        font-weight: normal;
-      }
-      paper-dialog {
-        padding: 0 2em;
-        max-width: 60em;
-      }
-      code {
-        font-family: 'Roboto Mono', monospace;
-        background-color: rgba(0, 0, 0, 0.12);
-      }
-      pre {
-        font-family: 'Roboto Mono', monospace;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-        padding: 8px 16px;
-        background-color: white;
-        overflow: auto;
-      }
-      pre code {
-        background-color: transparent;
-      }
-      li > p {
-        margin-top: 16px;
-      }
-      blockquote {
-        margin: 0;
-        padding: 0 16px;
-        border-left: 4px solid rgba(0, 0, 0, 0.12);
-        color: rgba(0, 0, 0, 0.54);
-      }
-      blockquote:before {
-        content: none;
-      }
-      blockquote:after {
-        content: none;
-      }
-      ol {
-        list-style-type: lower-latin;
-      }
-      ol ol {
-        list-style-type: lower-roman;
-      }
-      paper-button.opener {
-        color: #fff;
-        font-weight: bold;
-        text-transform: none;
-      }
-    </style>
 
-    <paper-button on-click='_openModal' class='opener'>license</paper-button>
-
-    <paper-dialog id='modal' on-iron-overlay-closed="_closed">
-      <h1 id='peer-production-license-a-model-for-copyfarleft'>Peer Production License</h1>
-      <h2>A Model for Copyfarleft</h2>
-        <paper-dialog-scrollable>
+    <caffo-modal text="license">
+      <div slot="header">
+        <h1 id='peer-production-license-a-model-for-copyfarleft'>Peer Production License</h1>
+        <h2>A Model for Copyfarleft</h2>
+      </div>
+      <div slot="main">
 <blockquote>
 <p>Created by John Magyar, B.A., J.D. and Dmytri Kleiner, the following <em>Peer Production License</em>, a model for a
 copyfarleft license, has been derived from the <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/'><img style='vertical-align:sub;margin-right:.2em' src='/image/cc_by-nc-sa80x15.png'>‘Attribution-NonCommercial-ShareAlike’ Creative Commons
@@ -295,29 +238,21 @@ under this License, such additional rights are deemed to be included in the Lice
 this License is not intended to restrict the license of any rights under applicable law</li>
 </ol>
 
-</paper-dialog-scrollable>
-  <div class='buttons'>
-    <paper-button dialog-confirm autofocus>Close</paper-button>
-  </div>
-</paper-dialog>
-</template>
+</div>
+</caffo-modal>
+  </template>
   <script>
 class CaffoLicense extends Polymer.Element {
   static get is() { return 'caffo-license'; }
-
-  _openModal() {
-    this.$.modal.open();
-    let app = document.querySelector("caffo-app");
-    app.$.drawer.style.zIndex = app.$.drawer.opened ? 0 : "";
-  }
-
-  _closed() {
-    let app = document.querySelector("caffo-app");
-    app.$.drawer.style.zIndex = "";
+  static get properties() {
+    return {
+      /*something: String,*/
+    }
   }
 
   connectedCallback() {
     super.connectedCallback();
+    // ...
   }
 }
 customElements.define(CaffoLicense.is, CaffoLicense);

@@ -9,6 +9,7 @@
 <link rel='import' href='/bower_components/paper-icon-button/paper-icon-button.html'>
 
 <link rel='import' href='/caffo-crate.html'>
+<link rel='import' href='/caffo-about.html'>
 <link rel='import' href='/caffo-license.html'>
 <link rel='import' href='/caffo-player.html'>
 
@@ -123,6 +124,9 @@
         margin: 0;
         margin-bottom: -.5rem;
         padding: .15rem .75rem;
+      }
+      footer .modals > * {
+        display: inline-block;
       }
       footer .with-love {
         position: fixed;
@@ -242,7 +246,10 @@
 
     <footer>
       <p>&copy; 2006-2017</p>
-      <caffo-license></caffo-license>
+      <div class='modals'>
+        <caffo-about></caffo-about>
+        <caffo-license></caffo-license>
+      </div>
       <div class="with-love" title="less than three from new jersey">with <span style='color:#f39'>&lt;3</span> from nj</div>
     </footer>
   </div>
