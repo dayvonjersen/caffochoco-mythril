@@ -12,6 +12,7 @@
     :host {
       display: block;
       position: relative;
+      user-select: none;
       --vibrant: rgba(167,131,64,1);
       --vibrant-text: #ffffff;
       --darkvibrant: rgba(23,81,114,1);
@@ -111,42 +112,12 @@
       transform: translateY(12.6667%)
     }
 
-    .flipforward__container .flipforward__edge {
-      width: 100%;
-      height: 5px;
-      background: hotpink;
-      position: relative;
-      top: 0;
-      transform-origin: center top;
-      transform: rotateX(-90deg);
-    }
-
-    .flipforward__container .flipforward__item::before /* shadow */ {
-      content: '';
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
-      box-shadow: 0 0 100px 50px rgba(0, 0, 0, 0.1), inset 0 0 250px 250px rgba(0, 0, 0, 0.1);
-      transition: 1s;
-      transform: rotateX(95deg) translateZ(-20px) scale(0.75);
-      transform-origin: inherit;
-    }
-
     .flipforward__container--animate .flipforward__item {
       transform: rotateX(-75deg) translateZ(5vw);
       opacity: 0;
     }
 
     :host(.rotated) .flipforward__container--animate .flipforward__item {
-      transform: translateY(100%) translateZ(5vw);
-      opacity: 0;
-    }
-
-    .flipforward__container--animate .flipforward__item::before {
-      box-shadow: 0 0 25px 25px rgba(0, 0, 0, 0.5), inset 0 0 250px 250px rgba(0, 0, 0, 0.5);
-      transform: rotateX(-5deg) translateZ(80px) scale(1);
-    }
-
-    :host(.rotated) .flipforward__container--animate .flipforward__item::before {
       transform: translateY(100%) translateZ(5vw);
       opacity: 0;
     }
@@ -248,7 +219,7 @@ class CaffoCrate extends Polymer.Element {
       record.setAttribute("year", item.year);
       record.setAttribute("genre", item.genre);
       record.setAttribute("url", item.url);
-      record.setAttribute("image", `/image/${item.url}.jpg`);
+      record.setAttribute("image", `/image/${item.url}--square.jpg`);
       let containerElement = document.createElement("div");
       containerElement.setAttribute("class", "flipforward__container");
       containerElement.appendChild(record);

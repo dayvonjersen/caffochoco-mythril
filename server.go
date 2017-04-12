@@ -92,7 +92,15 @@ func main() {
 			rel, _ := getReleaseByTracklist(tracklistId)
 			io.WriteString(w, createNfo(tracklistId, rel))
 			return
+		} else if strings.HasSuffix(r.URL.Path, "--square.jpg") {
+			f, err := os.Open("./image/imagefallback.jpg")
+			checkErr(err)
+			defer f.Close()
+			w.Header().Set("Content-Type", "image/jpeg")
+			io.Copy(w, f)
+			return
 		}
+
 		log.Println("<- 200 OK")
 		if strings.HasSuffix(req, ".mp3") {
 			counter.IncrementPlays(req, r.RemoteAddr)
