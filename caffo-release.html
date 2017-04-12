@@ -465,6 +465,9 @@ class CaffoRelease extends Polymer.Element {
       (item) => player.subject.add(item)
     );
     player.subject.add(this);
+    [].forEach.call(this.shadowRoot.querySelectorAll("paper-icon-button"), (paperIconButton) => {
+      paperIconButton.$.icon.style.verticalAlign = "top";
+    });
   }
 }
 customElements.define(CaffoRelease.is, CaffoRelease);
