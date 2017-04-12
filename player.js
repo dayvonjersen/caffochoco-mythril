@@ -139,9 +139,7 @@ class PlayerModel {
         this.audioElement.src = srcUrl;
       }
     } else if(!this.audioElement.src || new URL(this.audioElement.src).pathname !== this.nowPlaying) {
-      if(this.nowPlaying != "") {
-        this.audioElement.src = this.nowPlaying;
-      }
+      this.audioElement.src = this.nowPlaying;
     }
     if(this.state.isPlaying) this.audioElement.play();
     this.update();
