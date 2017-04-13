@@ -72,7 +72,6 @@ var Z = {
             canvasCtx.fillRect(0,0,canvas.width,canvas.height);
 
             canvasCtx.fillStyle = cs.color;
-            analyser.getByteFrequencyData(dataArray);
             var w = (canvas.width-that.padX*that.bars)/that.bars;
             var h = canvas.height;
             var sum = 0;
@@ -99,11 +98,8 @@ var Z = {
         analyser.fftSize = 2048;
         var bufferLength = analyser.frequencyBinCount;
         var oscDataArray = new Uint8Array(bufferLength);
-        analyser.getByteTimeDomainData(oscDataArray);
 
         function oscilliscope() {
-            analyser.getByteTimeDomainData(oscDataArray);
-
             // chrome is a "good" browser
             var cs = getComputedStyle(that);
 
@@ -142,6 +138,13 @@ var Z = {
 
         this.addEventListener('click', function() {
             if(++animationIndex > animations.length-1) animationIndex = 0;
+            if(audioElement.paused) {
+              if(!canvas.width || !canvas.height) resizeFn();
+              requestAnimationFrame(draw);
+
+              canvasCtx.clearRect(0,0,canvas.width,canvas.height);
+              animations[animationIndex]();
+            }
         });
 
         function draw() {
@@ -149,6 +152,8 @@ var Z = {
               audioElement.addEventListener("play", draw);
               return;
             }
+            analyser.getByteTimeDomainData(oscDataArray);
+            analyser.getByteFrequencyData(dataArray);
             if(!canvas.width || !canvas.height) resizeFn();
             requestAnimationFrame(draw);
 
