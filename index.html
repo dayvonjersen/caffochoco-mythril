@@ -173,5 +173,13 @@ fetch("/data.json")
 })
 .catch(err => console.error(err));
     </script>
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" style='position:fixed;pointer-events:none'>
+      <defs>
+        <mask id='cutout' maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+          <rect width="1" height="1" fill="white"/>
+          <circle r=".1667" cx=".5" cy=".5" fill="black"/>
+        </mask>
+      </defs>
+    </svg>
   </body>
 </html>
