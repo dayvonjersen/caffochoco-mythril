@@ -41,8 +41,9 @@ class PlayerModel {
       isLoading: true,
     };
 
-    //
     this.audioElement = audioElement;
+    let previousVolume = localStorage.getItem('volume');
+    this.audioElement.volume = previousVolume === null ? this.DEFAULT_VOLUME : previousVolume;
     this.audioElement.addEventListener('ended', () => {
       if(this.state.playlist.length != this.state.nowPlayingIndex+1) {
         this.next();
@@ -69,6 +70,7 @@ class PlayerModel {
 
   // observer pattern
   update() {
+    localStorage.setItem('volume', this.audioElement.volume);
     this.state.isPlaying = !this.audioElement.paused;
     this.state.lastPlaying = this.state.nowPlaying;
     this.state.nowPlaying = this.nowPlaying;
