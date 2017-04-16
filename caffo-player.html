@@ -31,7 +31,7 @@
         font-weight: bold;
       }
       /*
-      input[type='checkbox'] {
+      label, input[type='checkbox'] {
         display: none;
       }
       */
@@ -49,19 +49,17 @@
     </style>
     <label for='checkBox'>&emsp;debug player</label>
     <input id='checkBox' type='checkbox'><br>
-    <audio id="audioElement" controls></audio>
+    <audio id='audioElement' controls></audio>
     <ol>
       <dom-repeat items='{{playlist}}' id='list'>
         <template>
-          <li selected$=[[item.selected]] data-index$=[[item.index]] on-click="_play">
+          <li selected$=[[item.selected]] data-index$=[[item.index]] on-click='_play'>
             {{item.value}}
           </li>
         </template>
       </dom-repeat>
     </ol>
   </template>
-  <script src='/player.js'></script>
-  <script src='/keymaster.min.js'></script>
   <script>
 var player;
 class CaffoPlayer extends Polymer.Element {
@@ -108,7 +106,11 @@ class CaffoPlayer extends Polymer.Element {
 
   notify(playerState) {
     let playlist = [];
-    playerState.playlist.forEach((item, i) => playlist.push({index:i,value:item,selected:playerState.nowPlayingIndex==i}));
+    playerState.playlist.forEach((item, i) => playlist.push({
+      index: i,
+      value: item,
+      selected: playerState.nowPlayingIndex == i
+    }));
     this.playlist = playlist;
     this.$.list.render();
   }

@@ -1,13 +1,9 @@
 <link rel='import' href='/bower_components/polymer/polymer-element.html'>
-
 <link rel='import' href='/bower_components/app-route/app-location.html'>
 <link rel='import' href='/bower_components/app-route/app-route.html'>
-
 <link rel='import' href='/bower_components/app-layout/app-drawer/app-drawer.html'>
-
 <link rel='import' href='/bower_components/paper-button/paper-button.html'>
 <link rel='import' href='/bower_components/paper-icon-button/paper-icon-button.html'>
-
 <link rel='import' href='/caffo-crate.html'>
 <link rel='import' href='/caffo-about.html'>
 <link rel='import' href='/caffo-license.html'>
@@ -39,7 +35,6 @@
         align-items: center;
         width: 100vw;
         height: 100vh;
-        /*position: fixed;*/
         top: 0;
         left: 0;
         perspective: 1000px;
@@ -74,7 +69,6 @@
         background: radial-gradient(circle, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.08) 50%, transparent 100%);
         box-shadow: -10px 0 15px -10px rgba(255, 255, 255, 0.51);
       }
-
       header {
         color: #fff;
         display: flex;
@@ -85,7 +79,7 @@
         text-decoration: none;
       }
       header h1 {
-        font-family: "CafeAndBrewery";
+        font-family: 'CafeAndBrewery', sans-serif;
         font-weight: normal;
         font-size: 24px;
         margin-top: .25em;
@@ -95,7 +89,7 @@
         background-position: 100% 100%;
       }
       header h2 {
-        font-family: "Operator";
+        font-family: 'Operator', sans-serif;
         font-weight: normal;
         font-style: italic;
         text-align: right;
@@ -172,7 +166,7 @@
         align-items: center;
       }
       #notFound h1, #notFound h2 {
-        font-family: "Akkurat";
+        font-family: 'Akkurat';
         color: var(--darkmuted);
         text-shadow: -1px 0px 0 #fff,
                       0px -1px 0 #fff,
@@ -192,12 +186,12 @@
         text-align: center;
       }
       paper-button {
+        --paper-button-ink-color: #fff;
         background: var(--darkmuted);
         padding-left: 1.6667rem;
         padding-right: 1.6667rem;
         margin-top: 4rem;
         color: #fff;
-        --paper-button-ink-color: #fff;
         font-weight: bold;
         border: 1px solid;
         transition: 1s;
@@ -214,50 +208,49 @@
         text-decoration: none;
       }
     </style>
+    <div id='app'>
+      <app-location route='{{route}}'></app-location>
+      <app-route
+        route='{{route}}'
+        pattern='/:page'
+        data='{{routeData}}'
+        tail='{{subroute}}'>
+      </app-route>
 
-  <div id='app'>
-    <header>
-      <div>
-        <h1><a href="https://dayvonjersen.com" title="return to dayvonjersen.com"><img src='/image/awesome.png'>dayvonjersen</a></h1>
-        <h2>discography</h2>
+      <header>
+        <div>
+          <h1><a href='https://dayvonjersen.com' title='return to dayvonjersen.com'><img src='/image/awesome.png'>dayvonjersen</a></h1>
+          <h2>discography</h2>
+        </div>
+        <caffo-player></caffo-player>
+      </header>
+
+      <app-drawer id='drawer' align='right' on-app-drawer-transitioned='_drawerFn' persistent>
+        <div class='drawerCloser' on-click='_closeDrawer' title='stop playback &amp; close player'>
+          <paper-icon-button id='drawerCloserIcon' src='/svg/chevron-right.svg'></paper-icon-button>
+        </div>
+        <caffo-release id='release' route='{{subroute}}'></caffo-release>
+      </app-drawer>
+
+      <div class='crate-container'>
+        <caffo-crate id='crate' route='{{route}}'></caffo-crate>
       </div>
-      <caffo-player></caffo-player>
-    </header>
 
-    <app-location route='{{route}}'></app-location>
-    <app-route
-      route='{{route}}'
-      pattern='/:page'
-      data='{{routeData}}'
-      tail='{{subroute}}'>
-    </app-route>
-
-
-    <app-drawer id="drawer" align='right' on-app-drawer-transitioned='_drawerFn' persistent>
-      <div class='drawerCloser' on-click="_closeDrawer" title="stop playback &amp; close player">
-        <paper-icon-button id='drawerCloserIcon' src="/svg/chevron-right.svg"></paper-icon-button>
-      </div>
-      <caffo-release id='release' route='{{subroute}}'></caffo-release>
-    </app-drawer>
-
-    <div class='crate-container'>
-      <caffo-crate id='crate' route='{{route}}'></caffo-crate>
+      <footer>
+        <p>&copy; 2006-2017</p>
+        <div class='modals'>
+          <caffo-about></caffo-about>
+          <caffo-license></caffo-license>
+        </div>
+        <div class='with-love' title='less than three from new jersey'>with <span style='color:#f39'>&lt;3</span> from nj</div>
+      </footer>
     </div>
 
-    <footer>
-      <p>&copy; 2006-2017</p>
-      <div class='modals'>
-        <caffo-about></caffo-about>
-        <caffo-license></caffo-license>
-      </div>
-      <div class="with-love" title="less than three from new jersey">with <span style='color:#f39'>&lt;3</span> from nj</div>
-    </footer>
-  </div>
-  <div id='notFound' class='gone'>
-    <h1>404 Not Found</h1>
-    <h2>Requested URL: <span id='notFoundURL'></span></h2>
-    <a href="/"><paper-button elevation='3'><iron-icon src="/image/awesome.png"></iron-icon>&emsp;RETURN</paper-button></a>
-  </div>
+    <div id='notFound' class='gone'>
+      <h1>404 Not Found</h1>
+      <h2>Requested URL: <span id='notFoundURL'></span></h2>
+      <a href='/'><paper-button elevation='3'><iron-icon src='/image/awesome.png'></iron-icon>&emsp;RETURN</paper-button></a>
+    </div>
   </template>
   <script>
 class CaffoApp extends Polymer.Element {
@@ -295,7 +288,7 @@ class CaffoApp extends Polymer.Element {
     this.$.app.classList.add('gone');
     this.$.notFoundURL.innerText = this.route.path;
     document.body.style.backgroundImage = `url(/image/404.jpg)`;
-    document.title = '404'
+    document.title = '404';
   }
 
   _found() {
@@ -313,8 +306,8 @@ class CaffoApp extends Polymer.Element {
 
   _pageChanged() {
     switch(this.routeData.page) {
-      case "release":
-        let name = this.route.path.replace("/release/", "");
+      case 'release':
+        let name = this.route.path.replace('/release/', '');
         if(!('_caffoCache' in window && window._caffoCache.has(name))) {
           this._notFound();
           break;
@@ -324,7 +317,7 @@ class CaffoApp extends Polymer.Element {
         this._found();
         break;
 
-      case "":
+      case '':
         this.$.drawer.close();
         this.$.crate.classList.remove('rotated');
         if(player) {
@@ -333,7 +326,7 @@ class CaffoApp extends Polymer.Element {
           player.state.tracklistId = 0;
         }
         this.$.release.currentTracklist = -1;
-        document.title = 'discography'
+        document.title = 'discography';
         this._found();
         break;
 

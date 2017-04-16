@@ -1,14 +1,14 @@
 <link rel='import' href='/bower_components/polymer/polymer-element.html'>
 <link rel='import' href='/caffo-modal.html'>
+
 <dom-module id='caffo-license'>
   <template>
-
-    <caffo-modal text="license">
-      <div slot="header">
+    <caffo-modal text='license'>
+      <div slot='header'>
         <h1 id='peer-production-license-a-model-for-copyfarleft'>Peer Production License</h1>
         <h2>A Model for Copyfarleft</h2>
       </div>
-      <div slot="main">
+      <div slot='main'>
 <blockquote>
 <p>Created by John Magyar, B.A., J.D. and Dmytri Kleiner, the following <em>Peer Production License</em>, a model for a
 copyfarleft license, has been derived from the <a href='http://creativecommons.org/licenses/by-nc-sa/3.0/'><img style='vertical-align:sub;margin-right:.2em' src='/image/cc_by-nc-sa80x15.png'>‘Attribution-NonCommercial-ShareAlike’ Creative Commons
@@ -16,9 +16,6 @@ license</a>.</p>
 </blockquote>
 <h2 id='license'>LICENSE</h2>
 <pre class='editor-colors lang-text'><div class='line'><span class='text plain'><span class='meta paragraph text'><span>THE&nbsp;WORK&nbsp;(AS&nbsp;DEFINED&nbsp;BELOW)&nbsp;IS&nbsp;PROVIDED&nbsp;UNDER&nbsp;THE&nbsp;TERMS</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>OF&nbsp;THIS&nbsp;COPYFARLEFT&nbsp;PUBLIC&nbsp;LICENSE&nbsp;(“LICENSE”).&nbsp;THE&nbsp;WORK</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>IS&nbsp;PROTECTED&nbsp;BY&nbsp;COPYRIGHT&nbsp;AND&nbsp;ALL&nbsp;OTHER&nbsp;APPLICABLE&nbsp;LAWS.</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>ANY&nbsp;USE&nbsp;OF&nbsp;THE&nbsp;WORK&nbsp;OTHER&nbsp;THAN&nbsp;AS&nbsp;AUTHORIZED&nbsp;UNDER&nbsp;THIS</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>LICENSE&nbsp;OR&nbsp;COPYRIGHT&nbsp;LAW&nbsp;IS&nbsp;PROHIBITED.</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>BY&nbsp;EXERCISING&nbsp;ANY&nbsp;RIGHTS&nbsp;TO&nbsp;THE&nbsp;WORK&nbsp;PROVIDED&nbsp;IN&nbsp;THIS&nbsp;LI-</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>CENSE,&nbsp;YOU&nbsp;AGREE&nbsp;TO&nbsp;BE&nbsp;BOUND&nbsp;BY&nbsp;THE&nbsp;TERMS&nbsp;OF&nbsp;THIS&nbsp;LICENSE.</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>TO&nbsp;THE&nbsp;EXTENT&nbsp;THIS&nbsp;LICENSE&nbsp;MAY&nbsp;BE&nbsp;CONSIDERED&nbsp;TO&nbsp;BE&nbsp;A&nbsp;CON-</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>TRACT,&nbsp;THE&nbsp;LICENSOR&nbsp;GRANTS&nbsp;YOU&nbsp;THE&nbsp;RIGHTS&nbsp;CONTAINED&nbsp;HERE</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>IN&nbsp;AS&nbsp;CONSIDERATION&nbsp;FOR&nbsp;ACCEPTING&nbsp;THE&nbsp;TERMS&nbsp;AND&nbsp;CONDI-</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>TIONS&nbsp;OF&nbsp;THIS&nbsp;LICENSE&nbsp;AND&nbsp;FOR&nbsp;AGREEING&nbsp;TO&nbsp;BE&nbsp;BOUND&nbsp;BY&nbsp;THE</span></span></span></div><div class='line'><span class='text plain'><span class='meta paragraph text'><span>TERMS&nbsp;AND&nbsp;CONDITIONS&nbsp;OF&nbsp;THIS&nbsp;LICENSE.</span></span></span></div></pre><h3 id='1-definitions'>1. DEFINITIONS</h3>
-<style>
-</style>
-
 <ol>
 <li><strong>“Adaptation”</strong> means a work based upon the Work, or upon the Work and other pre-existing
 works, such as a translation, adaptation, derivative work, arrangement of music or
@@ -238,21 +235,15 @@ under this License, such additional rights are deemed to be included in the Lice
 this License is not intended to restrict the license of any rights under applicable law</li>
 </ol>
 
-</div>
-</caffo-modal>
+      </div>
+    </caffo-modal>
   </template>
   <script>
 class CaffoLicense extends Polymer.Element {
   static get is() { return 'caffo-license'; }
-  static get properties() {
-    return {
-      /*something: String,*/
-    }
-  }
 
   connectedCallback() {
     super.connectedCallback();
-    // ...
   }
 }
 customElements.define(CaffoLicense.is, CaffoLicense);

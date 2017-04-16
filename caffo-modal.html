@@ -1,5 +1,4 @@
 <link rel='import' href='/bower_components/polymer/polymer-element.html'>
-
 <link rel='import' href='/bower_components/paper-button/paper-button.html'>
 <link rel='import' href='/bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html'>
 <link rel='import' href='/bower_components/paper-dialog/paper-dialog.html'>
@@ -24,7 +23,9 @@
       }
       pre {
         font-family: 'Roboto Mono', monospace;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                    0 3px 1px -2px rgba(0, 0, 0, 0.2),
+                    0 1px 5px 0 rgba(0, 0, 0, 0.12);
         padding: 8px 16px;
         background-color: white;
         overflow: auto;
@@ -62,18 +63,18 @@
 
     <paper-button on-click='_openModal' class='opener'>[[text]]</paper-button>
 
-    <paper-dialog id='modal' on-iron-overlay-closed="_closed">
-      <slot name="header"></slot>
+    <paper-dialog id='modal' on-iron-overlay-closed='_closed'>
+      <slot name='header'></slot>
 
       <paper-dialog-scrollable>
-        <slot name="main"></slot>
+        <slot name='main'></slot>
       </paper-dialog-scrollable>
 
       <div class='buttons'>
         <paper-button dialog-confirm autofocus>Close</paper-button>
       </div>
     </paper-dialog>
-</template>
+  </template>
   <script>
 class CaffoModal extends Polymer.Element {
   static get is() { return 'caffo-modal'; }
@@ -81,19 +82,19 @@ class CaffoModal extends Polymer.Element {
     return {
       text: {
         type: String
-      }
+      },
     };
   }
 
   _openModal() {
     this.$.modal.open();
-    let app = document.querySelector("caffo-app");
-    app.$.drawer.style.zIndex = app.$.drawer.opened ? 0 : "";
+    let app = document.querySelector('caffo-app');
+    app.$.drawer.style.zIndex = app.$.drawer.opened ? 0 : '';
   }
 
   _closed() {
-    let app = document.querySelector("caffo-app");
-    app.$.drawer.style.zIndex = "";
+    let app = document.querySelector('caffo-app');
+    app.$.drawer.style.zIndex = '';
   }
 
   connectedCallback() {

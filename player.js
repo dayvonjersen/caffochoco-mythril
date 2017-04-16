@@ -1,21 +1,13 @@
 // observer pattern
 function Subject() {
-    var observers = new Set();
+  let observers = new Set();
 
-    return {
-        add: function(item) {
-            observers.add(item);
-        },
-        remove: function(item) {
-            observers.delete(item);
-        },
-        removeAll: function() {
-            observers.clear();
-        },
-        notifyObservers: function(data) {
-            observers.forEach((o) => o.notify(data));
-        }
-    }
+  return {
+      add:    (item) => observers.add(item),
+      remove: (item) => observers.delete(item),
+      removeAll:  () => observers.clear(),
+      notifyObservers: (data) => observers.forEach((o) => o.notify(data))
+  };
 };
 
 class PlayerModel {
@@ -31,13 +23,10 @@ class PlayerModel {
       nowPlayingIndex: 0,
       playlist: [],
       previousVolume: 0,
-
       isPlaying: false,
       currentTime: 0,
-
       tracklistId: 0,
       lastPlaying: '',
-
       isLoading: true,
     };
 
@@ -71,15 +60,14 @@ class PlayerModel {
   // observer pattern
   update() {
     localStorage.setItem('volume', this.audioElement.volume);
-    this.state.isPlaying = !this.audioElement.paused;
-    this.state.lastPlaying = this.state.nowPlaying;
-    this.state.nowPlaying = this.nowPlaying;
+    this.state.isPlaying     = !this.audioElement.paused;
+    this.state.lastPlaying   = this.state.nowPlaying;
+    this.state.nowPlaying    = this.nowPlaying;
     this.state.currentVolume = parseInt(this.audioElement.volume * 100);
-    this.state.muted = this.audioElement.muted;
+    this.state.muted         = this.audioElement.muted;
     this.subject.notifyObservers(this.state);
   }
 
-  // playlist
   get nowPlaying() {
     if(this.state.playlist.length) {
       return this.state.playlist[this.state.nowPlayingIndex];
@@ -97,7 +85,7 @@ class PlayerModel {
     --this.state.nowPlayingIndex;
 
     if(this.state.nowPlayingIndex < 0) {
-      this.state.nowPlayingIndex = this.state.playlist.length - 1
+      this.state.nowPlayingIndex = this.state.playlist.length - 1;
     }
 
     this.load();
@@ -135,7 +123,7 @@ class PlayerModel {
 
   load(srcUrl) {
     if(srcUrl) {
-      let idx = this.state.playlist.findIndex(u=>u===srcUrl);
+      let idx = this.state.playlist.findIndex(u => u === srcUrl);
       if(idx != -1) {
         this.state.nowPlayingIndex = idx;
         this.audioElement.src = srcUrl;
@@ -147,7 +135,6 @@ class PlayerModel {
     this.update();
   }
 
-  // playback
   togglePlayback() {
     if(this.audioElement.paused) {
       this.audioElement.play();
@@ -172,7 +159,6 @@ class PlayerModel {
     this.update();
   }
 
-  // volume
   toggleMute(force=null) {
     let mute;
     let volume = this.audioElement.volume;
@@ -210,7 +196,6 @@ class PlayerModel {
     this.update();
   }
 
-  // seek
   seekTo(position) {
       position = parseInt(position);
       if(position < 0) {
@@ -222,16 +207,4 @@ class PlayerModel {
       this.audioElement.currentTime = position;
       this.update();
   }
-
-
-}
-
-class PlayerView {
-  notify(playerState) {
-    // update something
-  }
-}
-
-class PlayerController {
-  constructor() {}
 }

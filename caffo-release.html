@@ -1,23 +1,13 @@
 <link rel='import' href='/bower_components/polymer/polymer-element.html'>
-
 <link rel='import' href='/bower_components/app-route/app-route.html'>
-
 <link rel='import' href='/bower_components/paper-icon-button/paper-icon-button.html'>
 <link rel='import' href='/bower_components/paper-tabs/paper-tabs.html'>
 <link rel='import' href='/paper-slider-custom.html'>
-
 <link rel='import' href='/caffo-playlist-item.html'>
 
 <dom-module id='caffo-release'>
   <template>
     <style>
-      :host {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        text-align: left;
-      }
-
       ::selection {
         background: var(--vibrant, #9cf);
         color: var(--vibrant-text, #000);
@@ -30,32 +20,33 @@
         background: var(--vibrant, #9cf);
         color: var(--vibrant-text, #000);
       }
-
+      :host {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        text-align: left;
+      }
       h1 {
         font-size: 2rem;
         margin: 0;
         padding: .5rem;
         line-height: 1;
       }
-
       h2 {
         margin: .5rem 1.5rem;
         line-height: 1;
         font-size: 1.25rem;
       }
-
       paper-tabs {
-        text-transform: uppercase;
-        clear: both;
         --paper-tab-ink: var(--vibrant, #000);
         --paper-tabs-selection-bar-color: var(--vibrant, #000);
+        text-transform: uppercase;
+        clear: both;
         color: var(--darkmuted-text, #aaa);
       }
-
       paper-icon-button {
         --paper-icon-button-ink-color: var(--vibrant);
       }
-
       .info {
         background: var(--darkmuted, #333);
         color: var(--darkmuted-text, #aaa);
@@ -66,44 +57,31 @@
         align-items: center;
         flex-wrap: wrap;
       }
-
       .info span {
         display: inline-block;
         line-height: 3;
       }
-
       header {
         background: var(--darkmuted, rgba(252,252,252,0.8));
         color: var(--darkmuted-text, #000);
       }
-
       @keyframes imageZoom {
-        0% {}
         100% { object-fit: contain; }
       }
-
-      @-webkit-keyframes imageZoom {
-        0% {}
-        100% { object-fit: contain; }
-      }
-
       header img {
         width: 100%;
         max-height: 8rem;
         transition: 0.35s all 0.1s ease-in-out;
         object-fit: cover;
       }
-
       header img:hover {
         max-height: 100vh;
         animation-delay: .45s;
         animation-name: imageZoom;
       }
-
       .gone {
         display: none;
       }
-
       .content {
         flex: 1;
         min-height: 0;
@@ -113,15 +91,14 @@
         box-shadow: 0px 12px 10px -10px var(--darkmuted, #000) inset,
                     0px -12px 10px -10px var(--darkmuted, #000) inset;
       }
-
       sorbetto-spektrum {
         display: block;
         height: 3rem;
         color: var(--lightvibrant, #555);
         border-color: var(--vibrant, red);
         filter: drop-shadow(0 0 64px);
+        cursor: pointer;
       }
-
       paper-icon-button {
         display: inline-block;
         background: var(--vibrant, #ccc);
@@ -130,23 +107,19 @@
                     0 3px 1px -2px rgba(0, 0, 0, 0.2);
         border-radius: 50%;
       }
-
       #playpauseBtn {
         width: 60px;
         height: 60px;
       }
-
       #previousBtn, #nextBtn, #muteBtn {
         width: 28px;
         height: 28px;
         vertical-align: middle;
         margin-left: .25rem;
       }
-
       #muteBtn {
         margin-right: -1.25rem;
       }
-
       .controls {
         padding: .5rem;
         display: flex;
@@ -157,47 +130,40 @@
         align-items: center;
       }
       .controls paper-slider {
+        --paper-progress-active-color: var(--vibrant);
+        --paper-slider-knob-color: var(--vibrant);
         width: 5.25rem;
         display: inline-block;
         vertical-align: middle;
         padding: 0 1.25rem 0 1rem;
-        --paper-progress-active-color: var(--vibrant);
-        --paper-slider-knob-color: var(--vibrant);
       }
-
       a {
         color: inherit;
         text-decoration: none;
       }
-
       paper-button {
         vertical-align: middle;
         background: var(--vibrant, #fff);
         color: var(--vibrant-text, #000);
       }
     </style>
-
-    <app-route
-      route='{{route}}'
-      pattern='/:tabName'
-      data='{{data}}'>
-    </app-route>
+    <app-route route='{{route}}' pattern='/:tabName' data='{{data}}'></app-route>
 
     <header>
       <div>
         <a id='albumartlink' target='_blank' title='click to open full-size album art in new window'><img id='thumbnail'></a>
         <h2>[[release.artist]]</h2>
         <h1>&ldquo;[[release.title]]&rdquo;</h1>
-        <sorbetto-spektrum id="spektrum" title="click to cycle through visualizations"></sorbetto-spektrum>
+        <sorbetto-spektrum id='spektrum' title='click to cycle through visualizations'></sorbetto-spektrum>
         <div class='controls'>
           <div>
-            <paper-icon-button id="playpauseBtn" on-click="_playpause" elevation="3" src="/svg/play--black.svg" title="toggle playback"></paper-icon-button>
-            <paper-icon-button id="previousBtn" on-click="_previous" elevation="2" src="/svg/fast-backward--black.svg" title="previous track"></paper-icon-button>
-            <paper-icon-button id="nextBtn" on-click="_next" elevation="2" src="/svg/fast-forward--black.svg" title="next track"></paper-icon-button>
+            <paper-icon-button id='playpauseBtn' on-click='_togglePlayback' elevation='3' src='/svg/play--black.svg' title='toggle playback'></paper-icon-button>
+            <paper-icon-button id='previousBtn' on-click='_previous' elevation='2' src='/svg/fast-backward--black.svg' title='previous track'></paper-icon-button>
+            <paper-icon-button id='nextBtn' on-click='_next' elevation='2' src='/svg/fast-forward--black.svg' title='next track'></paper-icon-button>
           </div>
           <div>
-            <paper-icon-button id="muteBtn" on-click="_toggleMute" elevation="0" src="/svg/volume-mute--black.svg" title="toggle mute"></paper-icon-button>
-            <paper-slider id="volume" on-immediate-value-change="_setVolume" min="0" max="100" title="adjust volume"></paper-slider>
+            <paper-icon-button id='muteBtn' on-click='_toggleMute' elevation='0' src='/svg/volume-mute--black.svg' title='toggle mute'></paper-icon-button>
+            <paper-slider id='volume' on-immediate-value-change='_setVolume' min='0' max='100' title='adjust volume'></paper-slider>
           </div>
         </div>
       </div>
@@ -217,13 +183,13 @@
 
     <footer>
       <div class='info'>
-        <a href='[[downloadUrl]]' tabindex="-1" target="_blank" id='downloadBtn'>
+        <a href='[[downloadUrl]]' tabindex='-1' target='_blank' id='downloadBtn'>
           <paper-button raised>DOWNLOAD .ZIP <iron-icon src='/svg/download--black.svg'></iron-icon></paper-button>
         </a>
 
-        <span class='year' title="release year">[[release.year]]</span>
-        <span class='genre' title="genre">#[[release.genre]]</span>
-        <span class='total' title="total duration">[[total]]</span>
+        <span class='year' title='release year'>[[release.year]]</span>
+        <span class='genre' title='genre'>#[[release.genre]]</span>
+        <span class='total' title='total duration'>[[total]]</span>
       </div>
     </footer>
   </template>
@@ -252,7 +218,7 @@ class CaffoRelease extends Polymer.Element {
     ];
   }
 
-  _playpause() {
+  _togglePlayback() {
     player.togglePlayback();
   }
 
@@ -276,10 +242,10 @@ class CaffoRelease extends Polymer.Element {
   }
 
   _loadTracklist(tracklistId) {
-    if(!player) throw new Error("Player Not Ready");
+    if(!player) throw new Error('Player Not Ready');
 
     let tracklist = this.tracklists.find(tl => tl.id == tracklistId);
-    if(!tracklist) throw new Error("Tracklist "+tracklistId+" not found.");
+    if(!tracklist) throw new Error('Tracklist '+tracklistId+' not found.');
 
     if(player.state.tracklistId == tracklistId && player.state.playlist.length == tracklist.length) return;
     if(this.currentTracklist == tracklistId) return;
@@ -319,7 +285,8 @@ class CaffoRelease extends Polymer.Element {
 
   _render(tracklistId) {
     let tracklist = this.tracklists.find(tl => tl.id == tracklistId);
-    if(!tracklist) throw new Error("Tracklist "+tracklistId+" not found.");
+    if(!tracklist) throw new Error('Tracklist '+tracklistId+' not found.');
+
     this.$.tracklist.innerHTML = '';
     tracklist.tracks.forEach(item => {
       let playlistItem = document.createElement('caffo-playlist-item');
@@ -336,7 +303,7 @@ class CaffoRelease extends Polymer.Element {
     if(!('_caffoCache' in window && window._caffoCache.has(name)))  return;
     this.release = _caffoCache.get(name);
 
-    player.stopPlayback();
+    if(player) player.stopPlayback();
 
     let updateFn = () => {
       document.title = this.release.title;
@@ -363,12 +330,12 @@ class CaffoRelease extends Polymer.Element {
         if(response.status == 200) {
           return response.json();
         } else {
-          throw new Error(response.status + " " + response.statusText);
+          throw new Error(response.status + ' ' + response.statusText);
         }
       })
       .then(json => {
         this.updateStyles(json);
-        this.vibrantText = json["--vibrant-text"];
+        this.vibrantText = json['--vibrant-text'];
         this._updateSvg();
         this.$.thumbnail.src = '/image/'+this.release.url+'.jpg';
         this.$.albumartlink.href = '/image/'+this.release.url+'.jpg';
@@ -378,20 +345,20 @@ class CaffoRelease extends Polymer.Element {
         console.error(err);
         // probably a 404
         this.updateStyles({
-          "--vibrant":           "#acaaaa",
-          "--vibrant-text":      "#000",
-          "--lightvibrant":      "#fff",
-          "--lightvibrant-text": "#000",
-          "--darkvibrant":       "#2b2b2b",
-          "--darkvibrant-text":  "#fff",
-          "--muted":             "#6d6a6a",
-          "--muted-text":        "#fff",
-          "--lightmuted":        "#6d6a6a",
-          "--lightmuted-text":   "#fff",
-          "--darkmuted":         "#32312f",
-          "--darkmuted-text":    "#fff",
+          '--vibrant':           '#acaaaa',
+          '--vibrant-text':      '#000',
+          '--lightvibrant':      '#fff',
+          '--lightvibrant-text': '#000',
+          '--darkvibrant':       '#2b2b2b',
+          '--darkvibrant-text':  '#fff',
+          '--muted':             '#6d6a6a',
+          '--muted-text':        '#fff',
+          '--lightmuted':        '#6d6a6a',
+          '--lightmuted-text':   '#fff',
+          '--darkmuted':         '#32312f',
+          '--darkmuted-text':    '#fff',
         })
-        this.vibrantText = "#000";
+        this.vibrantText = '#000';
         this._updateSvg();
         this.$.thumbnail.src = '/image/picture-not-available.png';
         this.$.albumartlink.href = '/image/picture-not-available.png';
@@ -422,19 +389,19 @@ class CaffoRelease extends Polymer.Element {
   }
 
   _updateSvg() {
-    [].forEach.call(this.shadowRoot.querySelectorAll("paper-icon-button, iron-icon"), (icon) => {
-      icon.src = icon.src.replace(/--\w+\.svg/, `--${ this.vibrantText == "#ffffff" ? "white" : "black" }.svg`);
+    [].forEach.call(this.shadowRoot.querySelectorAll('paper-icon-button, iron-icon'), (icon) => {
+      icon.src = icon.src.replace(/--\w+\.svg/, `--${ this.vibrantText == '#ffffff' ? 'white' : 'black' }.svg`);
     });
   }
 
   notify(playerState) {
-    let color = this.vibrantText == "#ffffff" ? "white" : "black";
+    let color = this.vibrantText == '#ffffff' ? 'white' : 'black';
     this.$.playpauseBtn.src = `/svg/${
       playerState.isLoading ? 'loading-bubbles'
       : (playerState.isPlaying ? 'pause' : 'play')
     }--${color}.svg`;
     this.$.muteBtn.src = `/svg/volume-${
-      playerState.currentVolume == 0 || playerState.muted ? 'mute' 
+      playerState.currentVolume == 0 || playerState.muted ? 'mute'
       : (playerState.currentVolume > 50 ? 'full' : 'mid')
     }--${color}.svg`;
     this._updateSvg();
@@ -458,12 +425,12 @@ class CaffoRelease extends Polymer.Element {
     super.connectedCallback();
     this.$.volume.value = parseInt(player.audioElement.volume * 100);
     [].forEach.call(
-      this.shadowRoot.querySelectorAll("caffo-playlist-item"),
+      this.shadowRoot.querySelectorAll('caffo-playlist-item'),
       (item) => player.subject.add(item)
     );
     player.subject.add(this);
-    [].forEach.call(this.shadowRoot.querySelectorAll("paper-icon-button"), (paperIconButton) => {
-      paperIconButton.$.icon.style.verticalAlign = "top";
+    [].forEach.call(this.shadowRoot.querySelectorAll('paper-icon-button'), (paperIconButton) => {
+      paperIconButton.$.icon.style.verticalAlign = 'top';
     });
   }
 }

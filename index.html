@@ -5,7 +5,69 @@
     <meta name='viewport' content='width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes'>
 
     <title>dayvonjersen discography</title>
-
+    <style>
+      @font-face {
+        font-family: 'Akkurat';
+        font-weight: normal;
+        src: url('/font/akkurat.woff') format('woff');
+      }
+      @font-face {
+        font-family: 'Akkurat';
+        font-weight: bold;
+        src: url('/font/akkurat-bold.woff') format('woff');
+      }
+      @font-face {
+        font-family: 'CafeAndBrewery';
+        font-style: normal;
+        font-weight: 400;
+        src: url('/font/cafeandbrewery.woff') format('woff');
+        unicode-range: U+00-29, U+40-FFFF;
+      }
+      @font-face {
+        font-family: 'Operator';
+        font-style: normal;
+        font-weight: 400;
+        src: url('/font/operator-book.woff') format('woff');
+      }
+      html, body {
+        height: 100%;
+      }
+      html {
+        font-family: 'Akkurat', 'Roboto', sans-serif;
+        color: rgba(0,0,0, 0.87);
+        font-size: 1em;
+        line-height: 1.4;
+      }
+      body {
+        font-size: 14px;
+        line-height: 20px;
+        background-image: url('/image/background.jpg');
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center center;
+        margin: 0;
+        padding: 0;
+      }
+      .loader {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0,0,0,0.9);
+        transition: all 1s cubic-bezier(0, 1.38, 0.57, 0.38);
+      }
+      .loader img {
+        width: 100%;
+        transition: all 333ms linear;
+      }
+      .loader.loaded,
+      .loader.loaded img {
+        opacity: 0;
+      }
+    </style>
     <link rel='stylesheet' href='/css/sorbetto-waveform.css'>
     <link rel='stylesheet' href='/css/sorbetto-spektrum.css'>
 
@@ -39,76 +101,29 @@
         }
         // TODO: attributeChangedCallback
         // TODO: childListChangedCallback
-
       });
     }
     </script>
+    <script src='/sorbetto-waveform.js'></script>
+    <script src='/sorbetto-spektrum.js'></script>
+    <script>
+    function formatTime(time, isNegative) {
+      var h, m, s, ret;
+      h = time/3600|0;
+      time %= 3600;
+      m = time/60|0;
+      s = time%60|0;
+      ret = isNegative ? '-' : '';
+      if(h !== 0) ret += (h < 10 ? '0'+h : h)+':';
+      ret += (m < 10 ? '0'+m : m)+':';
+      ret += (s < 10 ? '0'+s : s);
+      return ret;
+    }
+    </script>
+    <script src='/player.js'></script>
+    <script src='/keymaster.min.js'></script>
 
     <link rel='import' href='/caffo-app.html'>
-    <style>
-      @font-face {
-        font-family: "Akkurat";
-        font-weight: normal;
-        src: url('/font/akkurat.woff') format('woff');
-      }
-      @font-face {
-        font-family: "Akkurat";
-        font-weight: bold;
-        src: url('/font/akkurat-bold.woff') format('woff');
-      }
-      @font-face {
-        font-family: "CafeAndBrewery";
-        font-style: normal;
-        font-weight: 400;
-        src: url('/font/cafeandbrewery.woff') format('woff');
-        unicode-range: U+00-29, U+40-FFFF;
-      }
-      @font-face {
-        font-family: "Operator";
-        font-style: normal;
-        font-weight: 400;
-        src: url('/font/operator-book.woff') format('woff');
-      }
-      html, body {
-        height: 100%;
-      }
-      html {
-        font-family: "Akkurat", "Roboto", sans-serif;
-        color: rgba(0,0,0, 0.87);
-        font-size: 1em;
-        line-height: 1.4;
-      }
-      body {
-        font-size: 14px;
-        line-height: 20px;
-        background-image: url(/image/background.jpg);
-        background-attachment: fixed;
-        background-size: cover;
-        background-position: center center;
-        margin: 0;
-        padding: 0;
-      }
-
-      .loader {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: rgba(0,0,0,0.9);
-        transition: all 1s cubic-bezier(0, 1.38, 0.57, 0.38);
-      }
-      .loader img {
-        width: 100%;
-        transition: all 333ms linear;
-      }
-      .loader.loaded,
-      .loader.loaded img {
-        opacity: 0;
-      }
-    </style>
   </head>
 
   <body>
@@ -116,70 +131,75 @@
       <img src='/svg/rings.svg'>
     </div>
 
-    <script>
-fetch("/data.json")
-.then(response=>response.json())
-.then(data => {
-  let _caffoCache = new Map();
-  let releases = [];
-  let categories = new Map();
-
-  let tracks = {};
-  data.tracks.forEach(track => {
-    tracks[track.id] = track;
-  });
-
-  let tracklists = {};
-  data.tracklists.forEach(tracklist => {
-    let _tracks = [];
-    tracklist.tracks.forEach(t => {
-      let track = tracks[t];
-      track.tracklistId = tracklist.id;
-      _tracks[_tracks.length] = track;
-    });
-    tracklist.tracks = _tracks;
-    tracklists[tracklist.id] = tracklist;
-  });
-
-  data.releases.forEach(release => {
-    let _tracklists = [];
-    release.tracklists.forEach((tl,i) => {
-      let tracklist = tracklists[tl];
-      _tracklists[_tracklists.length] = tracklist;
-    });
-    release.tracklists = _tracklists;
-    releases.push(release);
-
-    _caffoCache.set(release.url, release);
-
-    let cat = categories.has(release.category) ? categories.get(release.category) :  [];
-    cat.push(release.url);
-    categories.set(release.category, cat);
-  });
-
-  window._caffoCache = _caffoCache;
-  window.releases = releases;
-  window.categories = categories;
-
-  let removeLoader = () => {
-    let loader = document.querySelector('.loader');
-    loader.classList.add('loaded');
-  };
-  window.addEventListener('WebComponentsReady', removeLoader);
-  document.body.appendChild(document.createElement('caffo-app'));
-  if(window.chrome) {
-    removeLoader();
-  }
-})
-.catch(err => console.error(err));
-    </script>
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" style='position:fixed;pointer-events:none'>
+    <svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 300 300' style='position:fixed;pointer-events:none'>
       <defs>
-        <mask id='cutout' maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
-          <rect width="1" height="1" fill="white"/>
-          <circle r=".1667" cx=".5" cy=".5" fill="black"/>
+        <mask id='cutout' maskUnits='objectBoundingBox' maskContentUnits='objectBoundingBox'>
+          <rect width='1' height='1' fill='white'/>
+          <circle r='.1667' cx='.5' cy='.5' fill='black'/>
         </mask>
       </defs>
     </svg>
+
+    <script>
+    fetch('/data.json')
+      .then(response => {
+        if(response.status == 200) {
+          return response.json();
+        } else {
+          throw new Error(response.status + ' ' + response.statusText);
+        }
+      })
+      .then(data => {
+        let _caffoCache = new Map();
+        let releases = [];
+        let categories = new Map();
+
+        let tracks = {};
+        data.tracks.forEach(track => {
+          tracks[track.id] = track;
+        });
+
+        let tracklists = {};
+        data.tracklists.forEach(tracklist => {
+          let _tracks = [];
+          tracklist.tracks.forEach(t => {
+            let track = tracks[t];
+            track.tracklistId = tracklist.id;
+            _tracks[_tracks.length] = track;
+          });
+          tracklist.tracks = _tracks;
+          tracklists[tracklist.id] = tracklist;
+        });
+
+        data.releases.forEach(release => {
+          let _tracklists = [];
+          release.tracklists.forEach((tl,i) => {
+            let tracklist = tracklists[tl];
+            _tracklists[_tracklists.length] = tracklist;
+          });
+          release.tracklists = _tracklists;
+          releases.push(release);
+
+          _caffoCache.set(release.url, release);
+
+          let cat = categories.has(release.category) ? categories.get(release.category) :  [];
+          cat.push(release.url);
+          categories.set(release.category, cat);
+        });
+
+        window._caffoCache = _caffoCache;
+        window.releases = releases;
+        window.categories = categories;
+
+        let removeLoader = () => {
+          let loader = document.querySelector('.loader');
+          loader.classList.add('loaded');
+        };
+        window.addEventListener('WebComponentsReady', removeLoader);
+        document.body.appendChild(document.createElement('caffo-app'));
+        if(window.chrome) removeLoader();
+      })
+      .catch(err => console.error(err));
+    </script>
   </body>
 </html>

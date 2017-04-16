@@ -1,4 +1,5 @@
 <link rel='import' href='/bower_components/polymer/polymer-element.html'>
+
 <dom-module id='caffo-playlist-item'>
   <template>
     <style>
@@ -15,11 +16,9 @@
         padding: .25rem 0;
         height: 3.5em;
       }
-      
       :host(.nowplaying) {
         font-weight: bold;
       }
-
       paper-slider {
         --paper-slider-container-color: var(--vibrant-text);
         --paper-slider-active-color: var(--vibrant);
@@ -27,14 +26,16 @@
         --paper-slider-pin-color: var(--vibrant);
         --paper-slider-font-color: var(--vibrant-text);
         --paper-slider-height: 3px;
-
         position: absolute;
         width: calc(100% + 32px);
         left: -16px;
         bottom: -16px;
         cursor: grab;
       }
-
+      :host(:not(.nowplaying)) paper-slider {
+        height: 0;
+        overflow: hidden;
+      }
       .title {
         flex: 1;
       }
@@ -90,7 +91,6 @@
         width: 100%;
         cursor: pointer;
       }
-
       sorbetto-waveform {
         position: absolute;
         z-index: -1;
@@ -100,28 +100,20 @@
       sorbetto-waveform img {
         height: 100%;
       }
-      :host(:not(.nowplaying)) paper-slider {
-        height: 0;
-        overflow: hidden;
-      }
-
     </style>
-    <!--<img src='/svg/pause.svg'>-->
-    <span class='title' title="toggle playback" on-click="_play">[[title]]</span>
-    <span class='time' title='toggle time remaining' on-click='_timeRemaining'>[[currentTime]]</span>
+    <span class='title' title='toggle playback' on-click='_togglePlayback'>[[title]]</span>
+    <span class='time' title='toggle time remaining' on-click='_toggleTimeRemaining'>[[currentTime]]</span>
     <paper-slider
-      title="seek to time"
-      on-immediate-value-change="_seek"
-      on-value-change="_done"
-      id="seek"
+      title='seek to time'
+      on-immediate-value-change='_seek'
+      on-value-change='_done'
+      id='seek'
       pin
       min='0'
       max='[[length]]'
       value='0'>
     </paper-slider>
   </template>
-  <script src="/sorbetto-waveform.js"></script>
-  <script src="/sorbetto-spektrum.js"></script>
   <script>
 class CaffoPlaylistItem extends Polymer.Element {
   static get is() { return 'caffo-playlist-item'; }
@@ -138,7 +130,7 @@ class CaffoPlaylistItem extends Polymer.Element {
     return formatTime(time);
   }
 
-  _timeRemaining() {
+  _toggleTimeRemaining() {
     this.timeRemaining = !this.timeRemaining;
   }
 
@@ -151,7 +143,7 @@ class CaffoPlaylistItem extends Polymer.Element {
     this.isSeeking = false;
   }
 
-  _play(event) {
+  _togglePlayback(event) {
     if(player.state.nowPlaying != this.url) {
       player.stopPlayback();
       player.load(this.url);
@@ -160,8 +152,8 @@ class CaffoPlaylistItem extends Polymer.Element {
   }
 
   notify(playerState) {
-    if(this.notSynced || playerState.lastPlaying != playerState.nowPlaying) {
-      if(playerState.nowPlaying == this.url) {
+    if(this.notSynced || playerState.lastPlaying !== playerState.nowPlaying) {
+      if(playerState.nowPlaying === this.url) {
         player.state.tracklistId = parseInt(this.tracklistId);
         this.classList.add('nowplaying');
         this.scrollIntoView();
@@ -172,7 +164,7 @@ class CaffoPlaylistItem extends Polymer.Element {
       this.notSynced = false;
     }
 
-    if(playerState.nowPlaying == this.url) {
+    if(playerState.nowPlaying === this.url) {
       if(!this.isSeeking) this.$.seek.value = playerState.currentTime;
       this.currentTime = formatTime(
         this.timeRemaining ? this.length - playerState.currentTime : playerState.currentTime,
@@ -187,22 +179,24 @@ class CaffoPlaylistItem extends Polymer.Element {
     let style = getComputedStyle(this);
     let rgba = style.getPropertyValue(v)
                 .trim().replace(/[^\d]+/, '')
-                .split(",").map(c=>("0"+(c|0).toString(16)).slice(-2));
+                .split(',').map(c=>('0'+(c|0).toString(16)).slice(-2));
     rgba.pop();
     return '#'+rgba.join('');
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this.currentTime = formatTime(this.length);
-    this.isSeeking = false;
+
+    this.currentTime   = formatTime(this.length);
+    this.isSeeking     = false;
     this.timeRemaining = true;
-    this.notSynced = true;
+    this.notSynced     = true;
 
     player.subject.add(this);
+    
     Polymer.RenderStatus.afterNextRender(this, () => {
       let imageElement = document.createElement('img')
-      imageElement.setAttribute("src", this.url.replace(/\.mp3$/, '.png'));
+      imageElement.setAttribute('src', this.url.replace(/\.mp3$/, '.png'));
       let waveformElement = document.createElement('sorbetto-waveform');
       waveformElement.setAttribute('id', 'waveform')
       waveformElement.setAttribute('data-top-color', this._getCSSVar('--vibrant'));

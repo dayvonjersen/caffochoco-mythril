@@ -391,20 +391,6 @@ Custom property | Description | Default
   </template>
 
   <script>
-
-  function formatTime(time, isNegative) {
-      var h, m, s, ret;
-      h = time/3600|0;
-      time %= 3600;
-      m = time/60|0;
-      s = time%60|0;
-      ret = isNegative ? '-' : '';
-      if(h !== 0) ret += (h < 10 ? '0'+h : h)+':';
-      ret += (m < 10 ? '0'+m : m)+':';
-      ret += (s < 10 ? '0'+s : s);
-      return ret;
-  }
-
     Polymer({
       is: 'paper-slider',
 

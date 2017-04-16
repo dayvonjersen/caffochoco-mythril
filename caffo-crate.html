@@ -1,165 +1,171 @@
 <link rel='import' href='/bower_components/polymer/polymer-element.html'>
-
 <link rel='import' href='/bower_components/paper-button/paper-button.html'>
 <link rel='import' href='/bower_components/iron-icon/iron-icon.html'>
-
 <link rel='import' href='/caffo-record.html'>
 <link rel='import' href='/caffo-release.html'>
 
 <dom-module id='caffo-crate'>
   <template>
     <style>
-    :host {
-      display: block;
-      position: relative;
-      user-select: none;
-      --vibrant: rgba(167,131,64,1);
-      --vibrant-text: #ffffff;
-      --darkvibrant: rgba(23,81,114,1);
-      --darkvibrant-text: #ffffff;
-      --muted: rgba(159,97,86,1);
-      --muted-text: #ffffff;
-      --lightmuted: rgba(200,166,168,1);
-      --lightmuted-text: #000000;
-      --darkmuted: rgba(52,69,85,1);
-      --darkmuted-text: #ffffff;
-    }
-
-    paper-tabs {
-      --paper-tab-ink: var(--darkvibrant);
-      --paper-tabs-selection-bar-color: var(--darkvibrant);
-      color: #fff;
-      -webkit-text-stroke: .5px #ccc;
-      width: 100%;
-      margin: auto;
-    }
-
-    .container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-    }
-
-    .stack {
-      margin: 20px;
-      width: 300px;
-      height: 300px;
-      padding: 0;
-      position: relative;
-      max-width: 100%;
-      transform: translateY(10.6%);
-      transition: all 0.3s;
-    }
-
-    @media (min-width: 1024px) {
-      .stack {
-        width: 33.3333vmin;
-        height: 33.3333vmin;
+      :host {
+        --vibrant: rgba(167,131,64,1);
+        --vibrant-text: #ffffff;
+        --darkvibrant: rgba(23,81,114,1);
+        --darkvibrant-text: #ffffff;
+        --muted: rgba(159,97,86,1);
+        --muted-text: #ffffff;
+        --lightmuted: rgba(200,166,168,1);
+        --lightmuted-text: #000000;
+        --darkmuted: rgba(52,69,85,1);
+        --darkmuted-text: #ffffff;
+        display: block;
+        position: relative;
+        user-select: none;
       }
-    }
-
-    :host(.rotated) .stack {
-      transform: translateY(10.6%) rotateY(31deg) rotateX(-4deg) rotateZ(-17deg);
-    }
-
-    .stack > * /*caffo-record*/ {
-      max-width: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      transition: all 0.3s;
-      outline: 1px solid transparent;
-      backface-visibility: hidden;
-      transform-origin: 50% -22%;
-    }
-
-    .stack:hover > :nth-last-child(2) {
-      transform:scale(.8888) translateY(-12.6667%);
-    }
-    .stack > *:last-child {  transform: scale(1); }
-    .stack > *:nth-last-child(1) {  transform: scale(1); }
-    .stack > *:nth-last-child(2) {  transform: scale(0.9); }
-    .stack > *:nth-last-child(3) {  transform: scale(0.81); }
-    .stack > *:nth-last-child(4) {  transform: scale(0.729); }
-    .stack > *:nth-last-child(5) {  transform: scale(0.6561); }
-    .stack > *:nth-last-child(6) {  transform: scale(0.59049); }
-    .stack > *:nth-last-child(7) {  transform: scale(0.53144); }
-    .stack > *:nth-last-child(8) {  transform: scale(0.4783); }
-    .stack > *:nth-last-child(9) {  transform: scale(0.43047); }
-    .stack > *:nth-last-child(10) {  transform: scale(0.38742); }
-
-    .stack > *:nth-last-child(n+11) {
-      display: none;
-    }
-
-    .flipforward__container {
-      perspective: 1000px;
-    }
-
-    .flipforward__container .flipforward__item {
-      transform-origin: center bottom;
-      transform-style: preserve-3d;
-      transition: 400ms transform, 400ms opacity;
-      opacity: 1;
-    }
-
-    .flipforward__container:hover ~ .flipforward__container:not(.flipforward__container--animate) .flipforward__item {
-      transform: rotateX(-35deg);
-    }
-
-    :host(.rotated) .flipforward__container:hover ~ .flipforward__container:not(.flipforward__container--animate) .flipforward__item {
-      transform: translateY(12.6667%)
-    }
-
-    .flipforward__container--animate .flipforward__item {
-      transform: rotateX(-75deg) translateZ(5vw);
-      opacity: 0;
-    }
-
-    :host(.rotated) .flipforward__container--animate .flipforward__item {
-      transform: translateY(100%) translateZ(5vw);
-      opacity: 0;
-    }
-
-    .navButton {
-      padding-left: 2rem;
-      padding-right: 1.6667rem;
-      margin-top: 4rem;
-      color: #fff;
-      --paper-button-ink-color: #fff;
-      font-weight: bold;
-      border: 1px solid;
-      transition: 1s;
-      vertical-align: text-bottom;
-    }
-    .navButton:active {
-      background: var(--darkvibrant);
-    }
-    .navButton[disabled] {
-      opacity: 0;
-    }
-    .navButton iron-icon {
-      --iron-icon-width: .8rem;
-      --iron-icon-height: .8rem;
-    }
+      paper-tabs {
+        --paper-tab-ink: var(--darkvibrant);
+        --paper-tabs-selection-bar-color: var(--darkvibrant);
+        color: #fff;
+        width: 100%;
+        margin: auto;
+      }
+      .container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      .stack {
+        margin: 20px;
+        width: 300px;
+        height: 300px;
+        padding: 0;
+        position: relative;
+        max-width: 100%;
+        transform: translateY(10.6%);
+        transition: all 0.3s;
+      }
+      @media (min-width: 1024px) {
+        .stack {
+          width: 33.3333vmin;
+          height: 33.3333vmin;
+        }
+      }
+      :host(.rotated) .stack {
+        transform: translateY(10.6%) rotateY(31deg) rotateX(-4deg) rotateZ(-17deg);
+      }
+      .stack > * /*caffo-record*/ {
+        max-width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: all 0.3s;
+        outline: 1px solid transparent;
+        backface-visibility: hidden;
+        transform-origin: 50% -22%;
+      }
+      .stack:hover > :nth-last-child(2) {
+        transform: scale(.8888) translateY(-12.6667%);
+      }
+      .stack > :last-child {
+        transform: scale(1);
+      }
+      .stack > :nth-last-child(1) {
+        transform: scale(1);
+      }
+      .stack > :nth-last-child(2) {
+        transform: scale(0.9);
+      }
+      .stack > :nth-last-child(3) {
+        transform: scale(0.81);
+      }
+      .stack > :nth-last-child(4) {
+        transform: scale(0.729);
+      }
+      .stack > :nth-last-child(5) {
+        transform: scale(0.6561);
+      }
+      .stack > :nth-last-child(6) {
+        transform: scale(0.59049);
+      }
+      .stack > :nth-last-child(7) {
+        transform: scale(0.53144);
+      }
+      .stack > :nth-last-child(8) {
+        transform: scale(0.4783);
+      }
+      .stack > :nth-last-child(9) {
+        transform: scale(0.43047);
+      }
+      .stack > :nth-last-child(10) {
+        transform: scale(0.38742);
+      }
+      .stack > :nth-last-child(n+11) {
+        display: none;
+      }
+      .flipforward__container {
+        perspective: 1000px;
+      }
+      .flipforward__container .flipforward__item {
+        transform-origin: center bottom;
+        transform-style: preserve-3d;
+        transition: 400ms transform, 400ms opacity;
+        opacity: 1;
+      }
+      .flipforward__container:hover ~ .flipforward__container:not(.flipforward__container--animate) .flipforward__item {
+        transform: rotateX(-35deg);
+      }
+      :host(.rotated) .flipforward__container:hover ~ .flipforward__container:not(.flipforward__container--animate) .flipforward__item {
+        transform: translateY(12.6667%)
+      }
+      .flipforward__container--animate .flipforward__item {
+        transform: rotateX(-75deg) translateZ(5vw);
+        opacity: 0;
+      }
+      :host(.rotated) .flipforward__container--animate .flipforward__item {
+        transform: translateY(100%) translateZ(5vw);
+        opacity: 0;
+      }
+      .navButton {
+        --paper-button-ink-color: #fff;
+        padding-left: 2rem;
+        padding-right: 1.6667rem;
+        margin-top: 4rem;
+        color: #fff;
+        font-weight: bold;
+        border: 1px solid;
+        transition: 1s;
+        vertical-align: text-bottom;
+      }
+      .navButton:active {
+        background: var(--darkvibrant);
+      }
+      .navButton[disabled] {
+        opacity: 0;
+      }
+      .navButton iron-icon {
+        --iron-icon-width: .8rem;
+        --iron-icon-height: .8rem;
+      }
     </style>
-
-    <paper-tabs id="tabs" selected='{{selectedTab}}' on-iron-select='_tabChanged'>
+    <paper-tabs id='tabs' selected='{{selectedTab}}' on-iron-select='_tabChanged'>
       <paper-tab data-category='all'>ALL</paper-tab>
       <paper-tab data-category='album'>ALBUMS</paper-tab>
       <paper-tab data-category='ep'>EPs</paper-tab>
       <paper-tab data-category='single'>SINGLES</paper-tab>
       <paper-tab data-category='remix'>REMIXES</paper-tab>
       <paper-tab data-category='mashup'>MASHUPS</paper-tab>
-      <paper-tab data-category='sketch'>SKETCHES</paper-tab>
     </paper-tabs>
 
     <div class='container'>
-      <div class='stack' id='stack' on-click="_clickHandler"></div>
+      <div class='stack' id='stack' on-click='_clickHandler'></div>
       <nav>
-        <paper-button id='prevButton' class='navButton' on-click="_previous" elevation='2'><iron-icon src="/svg/chevron-left.svg"></iron-icon>&ensp;PREV</paper-button>
-        <paper-button id='nextButton' class='navButton' on-click="_advance" elevation='2'>NEXT&ensp;<iron-icon src="/svg/chevron-right.svg"></iron-icon></paper-button>
+        <paper-button id='prevButton' class='navButton' on-click='_previous' elevation='2'>
+          <iron-icon src='/svg/chevron-left.svg'></iron-icon>&ensp;PREV
+        </paper-button>
+        <paper-button id='nextButton' class='navButton' on-click='_advance' elevation='2'>
+          NEXT&ensp;<iron-icon src='/svg/chevron-right.svg'></iron-icon>
+        </paper-button>
       </nav>
     </div>
   </template>
@@ -182,12 +188,9 @@ class CaffoCrate extends Polymer.Element {
     }
   }
 
-  // click handler on this.$.stack
-  // if target is lastChild then follow link
-  // otherwise advance queue
   _clickHandler(event) {
     if(event.target.parentElement === this.$.stack.lastElementChild) {
-      this.set('route.path', '/release/'+event.target.getAttribute("url"));
+      this.set('route.path', '/release/'+event.target.getAttribute('url'));
     } else {
       this._advance()
     }
@@ -212,16 +215,16 @@ class CaffoCrate extends Polymer.Element {
   _render() {
     this.$.stack.innerHTML = '';
     this.releases.forEach((item, i) => {
-      let record = document.createElement("caffo-record");
-      record.setAttribute("class", "flipforward__item");
-      record.setAttribute("artist", item.artist);
-      record.setAttribute("title", item.title);
-      record.setAttribute("year", item.year);
-      record.setAttribute("genre", item.genre);
-      record.setAttribute("url", item.url);
-      record.setAttribute("image", `/image/${item.url}--square.jpg`);
-      let containerElement = document.createElement("div");
-      containerElement.setAttribute("class", "flipforward__container");
+      let record = document.createElement('caffo-record');
+      record.setAttribute('class',  'flipforward__item');
+      record.setAttribute('artist', item.artist);
+      record.setAttribute('title',  item.title);
+      record.setAttribute('year',   item.year);
+      record.setAttribute('genre',  item.genre);
+      record.setAttribute('url',    item.url);
+      record.setAttribute('image',  `/image/${item.url}--square.jpg`);
+      let containerElement = document.createElement('div');
+      containerElement.setAttribute('class', 'flipforward__container');
       containerElement.appendChild(record);
       this.$.stack.appendChild(containerElement);
     });
@@ -267,7 +270,7 @@ class CaffoCrate extends Polymer.Element {
         this.$.tabs.removeAttribute('scrollable');
       }
     };
-    window.addEventListener("resize", setScrollable);
+    window.addEventListener('resize', setScrollable);
     setScrollable();
   }
 }

@@ -1,4 +1,5 @@
 <link rel='import' href='/bower_components/polymer/polymer-element.html'>
+
 <dom-module id='caffo-record'>
   <template>
     <style>
@@ -8,17 +9,17 @@
         user-select: none;
       }
       * {
-          box-sizing: border-box;
+        box-sizing: border-box;
       }
       .record {
-          width: 300px;
-          height: 300px;
-          text-align: center;
-          border: 1px solid;
-          position: relative;
-          border-style: none;
-          cursor: pointer;
-          z-index: 1;
+        width: 300px;
+        height: 300px;
+        text-align: center;
+        border: 1px solid;
+        position: relative;
+        border-style: none;
+        cursor: pointer;
+        z-index: 1;
       }
       @media (min-width: 1024px) {
         .record {
@@ -27,46 +28,46 @@
         }
       }
       .record-top-label {
-          font-size: 1.3333rem;
-          font-weight: bold;
-          padding: 1rem;
-          position: absolute;
-          width: 100%;
-          top: 0;
-          min-height: 72px;
-          display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-          justify-content: space-around;
-          z-index: 2;
-          overflow: hidden;
-          pointer-events: none;
+        font-size: 1.3333rem;
+        font-weight: bold;
+        padding: 1rem;
+        position: absolute;
+        width: 100%;
+        top: 0;
+        min-height: 72px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-around;
+        z-index: 2;
+        overflow: hidden;
+        pointer-events: none;
       }
       .record-center-label {
-          position: absolute;
-          top: 33.3333%;
-          left: 33.3333%;
-          width: 33.3333%;
-          height: 33.3333%;
-          border-radius: 50%;
-          box-shadow: 2px 2px 5px #999 inset;
-          transition: all .2s ease-out;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          opacity: 1;
-          z-index: 1;
-          background: #fff;
+        position: absolute;
+        top: 33.3333%;
+        left: 33.3333%;
+        width: 33.3333%;
+        height: 33.3333%;
+        border-radius: 50%;
+        box-shadow: inset 2px 2px 5px #999;
+        transition: all .2s ease-out;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 1;
+        z-index: 1;
+        background: #fff;
       }
       .record-center-label::after {
-          content: '';
-          background-color: #000;
-          height: 8px;
-          width: 8px;
-          border-radius: 50%;
-          display: inline-block;
-          flex: 0 0 auto;
-          margin-left: 2px;
+        content: '';
+        background-color: #000;
+        height: 8px;
+        width: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        flex: 0 0 auto;
+        margin-left: 2px;
       }
       .record-bottom-label {
         position: absolute;
@@ -86,7 +87,6 @@
                       0px 1px 0 #000,
                       1px 0px 0 #000;
       }
-
       .record-vinyl {
         position: absolute;
         width: 100%;
@@ -139,8 +139,6 @@
         width: 100%; height: 100%;
         z-index: 2;
         mask: url(#cutout);
-      }
-      svg/*.record-cover*/ {
         pointer-events: none;
       }
       svg image {
@@ -157,19 +155,19 @@
       }
     </style>
     <div id='record' class='record'>
-        <div class='record-vinyl'></div>
-        <svg id='cover' class='record-cover' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <image width="100%" height="100%" xlink:href=""/>
-        </svg>
-        <div class='record-top-label'>
-          <span>[[artist]]</span>
-          <span>&ldquo;[[title]]&rdquo;</span>
-        </div>
-        <div class='record-center-label'></div>
-        <div class='record-bottom-label'>
-          <span class='year'>[[year]]</span>
-          <span class='genre'>#[[genre]]</span>
-        </div>
+      <div class='record-vinyl'></div>
+      <svg id='cover' class='record-cover' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+        <image width='100%' height='100%' xlink:href=''/>
+      </svg>
+      <div class='record-top-label'>
+        <span>[[artist]]</span>
+        <span>&ldquo;[[title]]&rdquo;</span>
+      </div>
+      <div class='record-center-label'></div>
+      <div class='record-bottom-label'>
+        <span class='year'>[[year]]</span>
+        <span class='genre'>#[[genre]]</span>
+      </div>
     </div>
   </template>
   <script>
@@ -188,7 +186,7 @@ class CaffoRecord extends Polymer.Element {
 
   connectedCallback() {
     super.connectedCallback();
-    this.$.cover.querySelector("image").setAttributeNS("http://www.w3.org/1999/xlink", "href", this.image);
+    this.$.cover.querySelector('image').setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image);
   }
 }
 customElements.define(CaffoRecord.is, CaffoRecord);
