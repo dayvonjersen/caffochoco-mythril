@@ -8,20 +8,15 @@
     "webcomponentsjs": "#v1",
     "paper-tabs": "PolymerElements/paper-tabs#2.0-preview",
     "paper-styles": "PolymerElements/paper-styles#2.0-preview",
-    "iron-pages": "PolymerElements/iron-pages#2.0-preview",
     "app-layout": "PolymerElements/app-layout#2.0-preview",
     "app-route": "PolymerElements/app-route#2.0-preview",
     "iron-selector": "PolymerElements/iron-selector#2.0-preview",
-    "iron-iconset": "PolymerElements/iron-iconset#2.0-preview",
-    "paper-fab": "PolymerElements/paper-fab#2.0-preview",
     "iron-iconset-svg": "PolymerElements/iron-iconset-svg#2.0-preview",
     "mathsass": "terkel/mathsass#^0.9.5",
     "paper-dialog": "PolymerElements/paper-dialog#2.0-preview",
     "paper-button": "PolymerElements/paper-button#2.0-preview",
     "paper-dialog-scrollable": "PolymerElements/paper-dialog-scrollable#2.0-preview",
-    "paper-icon-button": "PolymerElements/paper-icon-button#2.0-preview",
-    "paper-slider": "PolymerElements/paper-slider#2.0-preview",
-    "sanitize-css": "jonathantneal/sanitize.css#^4.1.0"
+    "paper-icon-button": "PolymerElements/paper-icon-button#2.0-preview"
   },
   "private": true,
   "resolutions": {
