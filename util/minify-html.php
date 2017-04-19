@@ -40,9 +40,9 @@ foreach($nodeList as $node) {
     file_put_contents($tmpfile, $node->textContent);
     $i++;
 
-    exec('bash -c "csso '.$tmpfile.' --restructure-off" 2>&1', $out, $exit_code);
+    exec('bash -c "csso '.$tmpfile.' --restructure-off" 2>&1 > '.$tmpfile.'.min', $out, $exit_code);
     if($exit_code == 0) {
-        $node->nodeValue = $out[0];
+        $node->nodeValue = file_get_contents($tmpfile.'.min');
     } else {
         echo 'WARN: ', $out[0], "\n";
     }
