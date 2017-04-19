@@ -1,11 +1,12 @@
 bower_components
 node_modules
 dist
+!dist/.keep
+tmp
+!tmp/.keep
 image/
 audio/
 data.json
 data.yaml
 .cache/
-svg2datauri.php
-find_missing_files.php
-audio - Copy/
+util/vendor/

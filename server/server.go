@@ -40,6 +40,7 @@ func main() {
 	var (
 		addr string
 		port int
+		prod bool
 	)
 	flag.StringVar(
 		&addr,
@@ -52,6 +53,12 @@ func main() {
 		"port",
 		8080,
 		"",
+	)
+	flag.BoolVar(
+		&prod,
+		"prod",
+		false,
+		"production mode",
 	)
 	flag.Parse()
 
@@ -68,9 +75,18 @@ func main() {
 		file := "index.html"
 		req := strings.TrimPrefix(r.URL.Path, "/")
 
-		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-		w.Header().Set("Pragma", "no-cache")
-		w.Header().Set("Expires", "0")
+		if !prod {
+			w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+			w.Header().Set("Pragma", "no-cache")
+			w.Header().Set("Expires", "0")
+		}
+		if prod {
+			if req == "app.min.js" {
+				file = "./dist/app.min.js"
+			} else {
+				file = "./dist/index.html"
+			}
+		}
 
 		if fileExists(req) && !isDir(req) {
 			file = req

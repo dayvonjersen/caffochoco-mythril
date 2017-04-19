@@ -173,7 +173,7 @@
         <paper-tab>about</paper-tab>
         <dom-repeat items='{{tracklists}}'>
           <template>
-            <paper-tab data-tracklist$='[[item.id]]'>[[item.title]]</paper-tab>
+            <paper-tab data-tracklist$=[[item.id]]>[[item.title]]</paper-tab>
           </template>
         </dom-repeat>
       </paper-tabs>
@@ -312,6 +312,7 @@ class CaffoRelease extends Polymer.Element {
       this.$.about.innerHTML = this.release.about;
 
       this.tracklists = this.release.tracklists;
+
       for(let i = 0; i < this.release.tracklists.length; i++) {
         if(this.release.defaultTracklist === this.release.tracklists[i].id) {
           this.selectedTab = i+1;
@@ -319,6 +320,15 @@ class CaffoRelease extends Polymer.Element {
         }
       }
       this._loadTracklist(this.release.defaultTracklist);
+      [].forEach.call(
+        this.shadowRoot.querySelectorAll('paper-tab'),
+        (tab) => {
+          let tracklist = this.tracklists.find(tl => tl.title == tab.textContent);
+          if(tracklist) {
+            tab.setAttribute('data-tracklist', tracklist.id);
+          }
+        }
+      );
       if(player) {
         player.togglePlayback();
       } else {

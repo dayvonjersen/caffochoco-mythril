@@ -128,6 +128,12 @@
       .record:hover > .record-center-label {
         transform: translate3d(150px, 0px, 0px) rotateZ(40deg);
       }
+      @media (min-width: 1024px) {
+        .record:hover > .record-vinyl,
+        .record:hover > .record-center-label {
+          transform: translate3d(16.6667vmin, 0px, 0px) rotateZ(40deg);
+        }
+      }
       .record:hover .record-center-label {
         box-shadow: none;
       }
@@ -157,7 +163,7 @@
     <div id='record' class='record'>
       <div class='record-vinyl'></div>
       <svg id='cover' class='record-cover' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
-        <image width='100%' height='100%' xlink:href=''/>
+        <image width='100%' height='100%' />
       </svg>
       <div class='record-top-label'>
         <span>[[artist]]</span>
