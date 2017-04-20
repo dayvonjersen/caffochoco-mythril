@@ -1,65 +1,107 @@
 <?php
-function call($cmd) {
-    exec("$cmd 2>&1", $output, $exit_code);
-    if($exit_code !== 0) {
-        echo implode("\n", $output), "\n";
-        exit($exit_code);
+/**
+ * usage: php -f minify-html.php -- [INPUT FILE]
+ */
+set_error_handler(function($errno, $errstr) {
+    // php is love
+    // php is life
+    $type = 'PHP ERROR';
+    switch($errno) {
+    case E_ERROR:             $type = 'E_ERROR'; break;
+    case E_WARNING:           $type = 'E_WARNING'; break;
+    case E_PARSE:             $type = 'E_PARSE'; break;
+    case E_NOTICE:            $type = 'E_NOTICE'; break;
+    case E_CORE_ERROR:        $type = 'E_CORE_ERROR'; break;
+    case E_CORE_WARNING:      $type = 'E_CORE_WARNING'; break;
+    case E_COMPILE_ERROR:     $type = 'E_COMPILE_ERROR'; break;
+    case E_COMPILE_WARNING:   $type = 'E_COMPILE_WARNING'; break;
+    case E_USER_ERROR:        $type = 'E_USER_ERROR'; break;
+    case E_USER_WARNING:      $type = 'E_USER_WARNING'; break;
+    case E_USER_NOTICE:       $type = 'E_USER_NOTICE'; break;
+    case E_STRICT:            $type = 'E_STRICT'; break;
+    case E_RECOVERABLE_ERROR: $type = 'E_RECOVERABLE_ERROR'; break;
+    case E_DEPRECATED:        $type = 'E_DEPRECATED'; break;
+    case E_USER_DEPRECATED:   $type = 'E_USER_DEPRECATED'; break;
     }
-    return $output;
-}
+    fwrite(STDERR, "\033[31m$type\033[0m: $errstr\n");
+});
+fwrite(STDERR, "minifying {$argv[1]}\n");
+fwrite(STDERR, "\n\033[32m".
+     'this is going to spew a bunch of warnings'."\033[0m".' because'."\n".
+     'polymer lets you assign the same id attribute to '."\n".
+     'multiple elements as long as they\'re contained in'. "\n".
+     'separate shadow trees.'."\n");
+
+// do `composer install` first
 
 require_once 'vendor/autoload.php';
 use Masterminds\HTML5;
 
-$document = new DOMDocument();
-$document->formatOutput = false;
-$document->preserveWhitespace = false;
-$html5 = new HTML5([
-    'encode_entities' => false,
-    'disable_html_ns' => true,
-    'target_document' => $document,
-]);
-$html5->loadHTML(file_get_contents($argv[1]));
-$document->normalizeDocument();
+$html5 = new HTML5();
+$document = $html5->loadHTML(file_get_contents($argv[1]));
+
+// process <script> tags
+//
+// dump tag contents into separate files which will be concatenated
+// and minified externally (see make-dist.sh)
+// 
+// NOTE: appending an extra semicolon is necessary for concatenation,
+// any amount of semicolons e.g. ;; is valid javascript.
+//
+// all these nodes are then removed from the document
 
 $nodes = [];
 $nodeList = $document->getElementsByTagName('script');
 $i = 0;
 foreach($nodeList as $node) {
     $tmpfile = sprintf('tmp/script_%03d.js', $i);
-    file_put_contents($tmpfile, $node->textContent . ';');
+    file_put_contents($tmpfile, $node->textContent . ';'); 
     $i++;
     $nodes[] = $node;
 }
+foreach($nodes as $node) {
+    $node->parentNode->removeChild($node);
+}
+$scriptElement = $document->createElement('script');
+$scriptElement->setAttribute('src', '/app.min.js');
+$headElement = $document->getElementsByTagName('head')->item(0);
+$headElement->appendChild($scriptElement);
+
+// process <style> tags
+//
+// polymer 1.0 uses <style is="custom-style"> which tends to have
+// invalid CSS like @apply and --variables: { --with-nested-properties: ...
+// so I'm just ignoring it for now
+//
+// the call to exec() is majorly slow because when you call node.js tools
+// like this it fires up a new instance of node every time
+//
+// exec() is reading each style tag into a file first because 
+// PHP was cutting it off if I passed it as a string
+// 
+// if the minification fails, the style tag is left unaltered
 
 $nodeList = $document->getElementsByTagName('style');
 $i = 0;
 foreach($nodeList as $node) {
     if(!$node->hasAttribute('is')) {
-    $tmpfile = sprintf('tmp/style_%03d.css', $i);
-    file_put_contents($tmpfile, $node->textContent);
-    $i++;
+        $tmpfile = sprintf('tmp/style_%03d.css', $i);
+        file_put_contents($tmpfile, $node->textContent);
+        $i++;
 
-    exec('bash -c "csso '.$tmpfile.' --restructure-off" 2>&1 > '.$tmpfile.'.min', $out, $exit_code);
-    if($exit_code == 0) {
-        $node->nodeValue = file_get_contents($tmpfile.'.min');
-    } else {
-        echo 'WARN: ', $out[0], "\n";
-    }
-    unset($out, $exit_code);
+        exec('bash -c "csso '.$tmpfile.' --restructure-off" 2>&1', $out, $exit_code);
+        $output = trim(implode('', str_replace("\r", '', $out)));
+        if($exit_code == 0) {
+            $node->nodeValue = $output;
+        } else {
+            trigger_error($output);
+        }
+        unset($out, $exit_code);
     }
 }
 
-foreach($nodes as $node) {
-    $node->parentNode->removeChild($node);
-}
-
-$head = $document->getElementsByTagName('head')->item(0);
-
-$scriptElement = $document->createElement('script');
-$scriptElement->setAttribute('src', '/app.min.js');
-$head->appendChild($scriptElement);
-
+// remove all HTML comments and whitespace textNodes 
+// (which are likely indentation and newlines)
 $nodes = [];
 $xpath = new DOMXPath($document);
 $commentNodes = $xpath->query('//comment()');
@@ -77,7 +119,4 @@ foreach($nodes as $node) {
 }
 
 $output = $html5->saveHTML($document);
-$output = str_replace('&NewLine;', "\n", $output);
-
-file_put_contents('tmp/index.min.html', $output); 
-/* echo $output; */
+echo $output;
