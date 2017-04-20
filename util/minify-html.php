@@ -64,8 +64,8 @@ foreach($nodes as $node) {
 }
 $scriptElement = $document->createElement('script');
 $scriptElement->setAttribute('src', '/app.min.js');
-$headElement = $document->getElementsByTagName('head')->item(0);
-$headElement->appendChild($scriptElement);
+$bodyElement = $document->getElementsByTagName('body')->item(0);
+$bodyElement->appendChild($scriptElement);
 
 // process <style> tags
 //
