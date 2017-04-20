@@ -1,4 +1,6 @@
 dist: 
 	./util/make-dist.sh
-all: dist
-.PHONY: dist
+server:
+	go build -o serve server/*.go
+all: server dist
+.PHONY: dist server
