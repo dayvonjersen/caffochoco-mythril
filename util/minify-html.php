@@ -71,7 +71,7 @@ $headElement->appendChild($scriptElement);
 //
 // polymer 1.0 uses <style is="custom-style"> which tends to have
 // invalid CSS like @apply and --variables: { --with-nested-properties: ...
-// so I'm just ignoring it for now
+// so I'm just collapsing the whitespace
 //
 // the call to exec() is majorly slow because when you call node.js tools
 // like this it fires up a new instance of node every time
@@ -79,7 +79,17 @@ $headElement->appendChild($scriptElement);
 // exec() is reading each style tag into a file first because 
 // PHP was cutting it off if I passed it as a string
 // 
-// if the minification fails, the style tag is left unaltered
+// if the minification fails, the style tag's whitespace is simply collapsed
+
+function collapseWhitespace($css) {
+    // removes /* */ comments
+    $css = preg_replace('/\/\*([^*]|[\r\n\s]|(\*+?([^*\/]|[\r\n\s])))*\*+?\//ms', '', $css);
+    // removes excess whitespace around and between { : ; ,
+    $css = preg_replace('/\s*(.*?)\s*([\{:;,])\s*/ms','\1\2',$css);
+    // removes leading and trailing whitespace
+    $css = trim($css);
+    return $css;
+}
 
 $nodeList = $document->getElementsByTagName('style');
 $i = 0;
@@ -95,8 +105,11 @@ foreach($nodeList as $node) {
             $node->nodeValue = $output;
         } else {
             trigger_error($output);
+            $node->nodeValue = collapseWhitespace($node->textContent);
         }
         unset($out, $exit_code);
+    } else {
+        $node->nodeValue = collapseWhitespace($node->textContent);
     }
 }
 
