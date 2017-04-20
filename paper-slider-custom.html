@@ -175,7 +175,6 @@ Custom property | Description | Default
 
       .transiting > .slider-knob {
         transition: left 1.08s ease;
-        /*transition: left 0.08s ease;*/
       }
 
       .slider-knob:focus {
@@ -218,34 +217,16 @@ Custom property | Description | Default
         border: 2px solid var(--paper-slider-knob-start-border-color, var(--paper-grey-400));
       }
 
-      .slider-knob-inner::before {
-        /*background-color: var(--paper-slider-pin-color, var(--google-blue-700));*/
-      }
-
       .pin > .slider-knob > .slider-knob-inner::before {
         content: '';
         position: absolute;
-        /*top: 0;
+        top: -4px;
         left: 50%;
         margin-left: -13px;
-        width: 26px;
-        height: 26px;*/
-        /*border-radius: 50% 50% 50% 0;*/
-
-
-        /*-webkit-transform: rotate(-45deg) scale(0) translate(0);
-        transform: rotate(-45deg) scale(0) translate(0);
-        */
-        top: -4px;
-    left: 50%;
-    margin-left: -13px;
-    width: 0;
-    height: 0;
-    /* border-radius: 50% 50% 50% 0; */
-    /* -webkit-transform: rotate(-45deg) scale(0) translate(0); */
-    /* transform: rotate(0) scale(0) translate(0); */
-    border: 12px transparent solid;
-      border-top-color: var(--paper-slider-pin-color, var(--google-blue-700));
+        width: 0;
+        height: 0;
+        border: 12px transparent solid;
+        border-top-color: var(--paper-slider-pin-color, var(--google-blue-700));
         transform: scale(0);
       }
 
@@ -263,45 +244,27 @@ Custom property | Description | Default
       }
 
       .pin.expand > .slider-knob > .slider-knob-inner::before {
-        /*-webkit-transform: rotate(-45deg) scale(1) translate(17px, -17px);
-        transform: rotate(-45deg) scale(1) translate(17px, -17px);*/
         transform: scale(1);
       }
 
       .pin > .slider-knob > .slider-knob-inner::after {
         content: attr(data-value);
-        /*position: absolute;
-        top: 0;
+        position: absolute;
+        top: -12px;
+        background-color: var(--paper-slider-pin-color, var(--google-blue-700));
         left: 50%;
-        margin-left: -16px;
+        margin-left: -18px; padding: 2px;
         width: 32px;
-        height: 26px;
+        height: 11px;
         text-align: center;
         color: var(--paper-slider-font-color, #fff);
         font-size: 10px;
-
         -webkit-transform: scale(0) translate(0);
-        transform: scale(0) translate(0);*/
-        position: absolute;
-    top: -12px;
-
-      background-color: var(--paper-slider-pin-color, var(--google-blue-700));
-    left: 50%;
-    margin-left: -18px; padding: 2px;
-    width: 32px;
-    height: 11px;
-    text-align: center;
-    color: var(--paper-slider-font-color, #fff);
-    font-size: 10px;
-    -webkit-transform: scale(0) translate(0);
-    transform: scale(0) translate(0);
-    line-height: 1;
+        transform: scale(0) translate(0);
+        line-height: 1;
       }
 
       .pin.expand > .slider-knob > .slider-knob-inner::after {
-        /*-webkit-transform: scale(1) translate(0, -17px);
-        transform: scale(1) translate(0, -17px);
-        */
         transform: scale(1);
       }
 
