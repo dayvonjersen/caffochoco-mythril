@@ -1,12 +1,13 @@
 package main
 
 import (
-	"./strip"
 	"bytes"
 	"fmt"
 	"html/template"
 	"strings"
 	"unicode/utf8"
+
+	"./strip"
 )
 
 func strpad(s string, l int) string {

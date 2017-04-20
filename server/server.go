@@ -13,7 +13,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -54,44 +53,36 @@ func main() {
 	defer counter.Close()
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("->", r.Method, r.URL)
-		file := "index.html"
-		req := strings.TrimPrefix(r.URL.Path, "/")
 
-		if !prod {
-			w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-			w.Header().Set("Pragma", "no-cache")
-			w.Header().Set("Expires", "0")
-		}
+		fallbackFile := "index.html"
 		if prod {
-			if req == "app.min.js" {
-				file = "./dist/app.min.js"
-			} else {
-				file = "./dist/index.html"
-			}
+			fallbackFile = "dist/" + fallbackFile
 		}
+		file := fallbackFile
 
-		if fileExists(req) && !isDir(req) {
-			file = req
-		} else if strings.HasPrefix(req, "bower_components") {
-			notfoundHandler(w, r)
-			return
-		} else if strings.HasPrefix(req, "image/") && strings.HasSuffix(req, ".json") {
+		path := strings.TrimPrefix(r.URL.Path, "/")
+		dir := strings.Split(path, "/")[0]
+
+		if prod &&
+			fileExists(dir) &&
+			(dir == "audio" || dir == "font" || dir == "image" || dir == "svg" || dir == "data.json") &&
+			fileExists(path) && !isDir(path) {
+			file = path
+		} else if prod && fileExists("dist/"+dir) {
+			file = "dist/" + dir
+		} else if !prod && fileExists(path) && !isDir(path) {
+			file = path
+		} else if strings.HasPrefix(path, "image/") && strings.HasSuffix(path, ".json") {
 			imageHandler(w, r)
 			return
-		} else if strings.HasPrefix(req, "download/") {
+		} else if strings.HasPrefix(path, "download/") {
 			zipHandler(w, r)
 			return
-		} else if req == "stats.json" {
+		} else if path == "stats.json" {
 			statsHandler(w, r)
 			return
-		} else if strings.HasPrefix(req, "nfo/") {
-			// XXX TEMP
-			tracklistId, _ := strconv.Atoi(strings.TrimPrefix(req, "nfo/"))
-			rel, _ := getReleaseByTracklist(tracklistId)
-			io.WriteString(w, createNfo(tracklistId, rel))
-			return
 		} else if strings.HasSuffix(r.URL.Path, "--square.jpg") {
+			log.Println(req(r), "<- \033[34m200\033[0m OK (fallback)")
 			f, err := os.Open("./image/imagefallback.jpg")
 			checkErr(err)
 			defer f.Close()
@@ -100,24 +91,47 @@ func main() {
 			return
 		}
 
-		log.Println("<- 200 OK")
-		if strings.HasSuffix(req, ".mp3") {
-			counter.IncrementPlays(req, r.RemoteAddr)
+		if !prod {
+			w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+			w.Header().Set("Pragma", "no-cache")
+			w.Header().Set("Expires", "0")
+		}
+
+		if file == fallbackFile {
+			log.Println(req(r), "<- \033[34m200\033[0m OK (fallback)")
+		} else {
+			log.Println(req(r), "<- \033[32m200\033[0m OK")
+		}
+		if strings.HasSuffix(path, ".mp3") {
+			counter.IncrementPlays(path, r.RemoteAddr)
 		}
 		http.ServeFile(w, r, file)
+
 	})
 
 	listenAddr := fmt.Sprintf("%s:%d", addr, port)
-	log.Println("listening on", listenAddr)
+	if prod {
+		log.Println("listening on", listenAddr, "in \033[32mproduction mode\033[0m")
+	} else {
+		log.Println("listening on", listenAddr, "in development mode")
+	}
 	log.Fatalln(http.ListenAndServe(listenAddr, nil))
 }
 
 func notfoundHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(404)
-	log.Println("<- 404 Not Found")
+	log.Println(req(r), "<- \033[33m404\033[0m Not Found")
 	if w.Header().Get("Content-Type") == "application/json; charset=UTF-8" {
 		io.WriteString(w, `{"error":"file not found"}`)
 	} else {
 		io.WriteString(w, "File Not Found")
 	}
+}
+
+func req(r *http.Request) string {
+	return fmt.Sprint(
+		r.Host, " ", r.RemoteAddr[:strings.LastIndex(r.RemoteAddr, ":")], " ",
+		r.Header.Get("User-Agent"),
+		"\n -> ", r.Method, " ", r.URL, "\n",
+	)
 }

@@ -17,7 +17,7 @@ const (
 
 func statsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	log.Println("<- 200 OK")
+	log.Println(req(r), "<- \033[32m200\033[0m OK")
 
 	d := getData()
 

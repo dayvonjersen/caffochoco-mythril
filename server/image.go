@@ -46,7 +46,7 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 		notfoundHandler(w, r)
 		return
 	}
-	log.Println("<- 200 OK")
+	log.Println(req(r), "<- \033[32m200\033[0m OK")
 
 	f, err := os.Open(path)
 	checkErr(err)
