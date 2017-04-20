@@ -1,4 +1,12 @@
 <?php
+/**
+ * usage: php -f find_missing_files.php
+ *
+ * Tells you which files are missing from disk based
+ * on where data.json says they should be.
+ *
+ * Returns nothing if everything is fine
+ */
 $d  = json_decode(file_get_contents('data.json'));
 $tracklists = [];
 foreach($d->tracklists as $tl) {

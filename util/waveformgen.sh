@@ -1,10 +1,14 @@
 #!/bin/bash
-
+#
+# usage: cd audio && ../util/waveformgen.sh */*.mp3
+#
+# PREREQUISITE: github.com/bbc/audiowaveform
+# PREREQUISITE: lame, soxi
+#
+# creates the waveform images for audio files
+#
 set -e
 
-dname=${1%%/*}
-# color=`vibrant ../image/$dname.jpg | awk '{if($1=="Vibrant:"||$1=="LightVibrant:") print toupper(substr($2, 2, length($2)-2))}'`FF
-# echo $dname: $color
 for f in $@; do
     fname=${f%.mp3}
     bname=${fname##*/}

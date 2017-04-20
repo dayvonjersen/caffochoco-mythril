@@ -1,4 +1,18 @@
 <?php
+//
+// usage: cd audio && php -f ../util/tagger-interactive.php */*.mp3
+//
+// XXX DON'T USE THIS ONE XXX
+//
+// PREREQUISITE: github.com/generaltso/taglib-php
+//
+// Reads tags from mp3s and lets you type in what you want them to
+// say instead. 
+//
+// I don't think it writes the album art correctly.
+//
+// Don't use it.
+//
 $id3v2 = parse_ini_file('id3v2.ini');
 $frames = ['TPE1','TIT2','TALB','TCON','COMM','TDRC'];
 

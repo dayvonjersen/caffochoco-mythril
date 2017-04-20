@@ -1,5 +1,16 @@
 <?php
-$id3v2 = parse_ini_file('id3v2.ini');
+/**
+ * usage: cd audio && php -f ../util/tagger-auto.php
+ *
+ * --> USE THIS ONE <--
+ *
+ * PREREQUISITE: github.com/generaltso/taglib-php
+ *
+ * Uses information in data.json to find and tag all releases
+ * including adding album art to the tag
+ *
+ * Alerts for missing files
+ */
 $frames = [
     'TPE1' => 'Artist',
     'TIT2' => 'Title',

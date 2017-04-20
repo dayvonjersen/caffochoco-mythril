@@ -1,5 +1,14 @@
-#!/usr/bin/env php
 <?php
+//
+// usage: cd audio && php -f ../util/audioproperties.php */*.mp3
+//
+// PREREQUISITE: github.com/generaltso/taglib-php
+//
+// This script reads audioProperties from MP3 tag
+// and prints them for usage in data.yaml
+//
+// It's kinda shit and should use soxi instead
+//
 array_shift($argv);
 foreach($argv as $arg) {
     $t = new TagLibMPEG($arg);
