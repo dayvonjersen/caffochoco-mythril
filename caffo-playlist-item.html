@@ -93,6 +93,8 @@
       }
       sorbetto-waveform {
         position: absolute;
+        top: 0;
+        left: 0;
         z-index: -1;
         height: 100%;
       }
@@ -193,7 +195,7 @@ class CaffoPlaylistItem extends Polymer.Element {
     this.notSynced     = true;
 
     player.subject.add(this);
-    
+
     Polymer.RenderStatus.afterNextRender(this, () => {
       let imageElement = document.createElement('img')
       imageElement.setAttribute('src', this.url.replace(/\.mp3$/, '.png'));
