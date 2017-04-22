@@ -89,9 +89,9 @@
 
         constructor() {
           super();
-          if('createdCallback' in elementPrototype) elementPrototype.createdCallback.call(this);
         }
         connectedCallback() {
+          if('createdCallback' in elementPrototype) elementPrototype.createdCallback.call(this);
           if('attachedCallback' in elementPrototype) elementPrototype.attachedCallback.call(this);
         }
         disconnectedCallback() {
@@ -104,6 +104,7 @@
     </script>
     <script src='/js/sorbetto-waveform.js'></script>
     <script src='/js/sorbetto-spektrum.js'></script>
+    <script src='/js/fit-text.js'></script>
     <script>
     function formatTime(time, isNegative) {
       var h, m, s, ret;

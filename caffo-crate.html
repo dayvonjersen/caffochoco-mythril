@@ -201,6 +201,7 @@ class CaffoCrate extends Polymer.Element {
     setTimeout(() => {
       this.$.stack.lastElementChild.classList.remove('flipforward__container--animate');
       this.$.stack.insertBefore(this.$.stack.removeChild(this.$.stack.lastElementChild), this.$.stack.firstChild);
+      this.$.stack.lastElementChild.firstElementChild.resize();
     }, 200);
   }
 
@@ -209,6 +210,7 @@ class CaffoCrate extends Polymer.Element {
     this.$.stack.appendChild(this.$.stack.removeChild(this.$.stack.firstElementChild));
     setTimeout(() => {
       this.$.stack.lastElementChild.classList.remove('flipforward__container--animate');
+      this.$.stack.lastElementChild.firstElementChild.resize();
     }, 10);
   }
 
