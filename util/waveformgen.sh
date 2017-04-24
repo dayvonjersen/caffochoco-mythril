@@ -14,7 +14,7 @@ for f in $@; do
     bname=${fname##*/}
     duration=`soxi -D "$f"`
     lame --decode --mp3input "$f" /tmp/$bname.wav && 
-        audiowaveform -i "/tmp/$bname.wav" -o "$fname.png" --no-axis-labels --background-color 00000000 --waveform-color ffffffff -e $duration -w 1200 -h 200 &
+        audiowaveform -i "/tmp/$bname.wav" -o "$fname.png" --no-axis-labels --background-color 00000000 --waveform-color ffffffff -e $duration -w 1200 -h 200 && rm "/tmp/$bname.wav" &
     echo "-- OK --"
 done
 wait;
