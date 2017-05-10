@@ -140,12 +140,21 @@ var Z = {
             if(++animationIndex > animations.length-1) animationIndex = 0;
             if(audioElement.paused) {
               if(!canvas.width || !canvas.height) resizeFn();
-              requestAnimationFrame(draw);
 
               canvasCtx.clearRect(0,0,canvas.width,canvas.height);
               animations[animationIndex]();
+
+              requestRender();
             }
         });
+
+        var lastUpdate = new Date();
+        var frameRate = 1000/60;
+        function requestRender() {
+            if(new Date() - lastUpdate > frameRate) {
+                requestAnimationFrame(draw);
+            }
+        }
 
         function draw() {
             if(audioElement.paused) {
@@ -155,10 +164,11 @@ var Z = {
             analyser.getByteTimeDomainData(oscDataArray);
             analyser.getByteFrequencyData(dataArray);
             if(!canvas.width || !canvas.height) resizeFn();
-            requestAnimationFrame(draw);
 
             canvasCtx.clearRect(0,0,canvas.width,canvas.height);
             animations[animationIndex]();
+
+            requestRender();
         }
         source.connect(analyser);
         analyser.connect(audioCtx.destination);

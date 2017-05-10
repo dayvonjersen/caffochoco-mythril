@@ -312,12 +312,22 @@ class CaffoApp extends Polymer.Element {
           this._notFound();
           break;
         }
+        [].forEach.call(this.$.crate.shadowRoot.querySelectorAll("caffo-record"), (record) => {
+          if(record.url == name) {
+            record.classList.add("nowPlaying");
+          } else {
+            record.classList.remove("nowPlaying");
+          }
+        });
         this.$.drawer.open();
         this.$.crate.classList.add('rotated');
         this._found();
         break;
 
       case '':
+        [].forEach.call(this.$.crate.shadowRoot.querySelectorAll("caffo-record"), (record) => {
+          record.classList.remove("nowPlaying");
+        });
         this.$.drawer.close();
         this.$.crate.classList.remove('rotated');
         if(player) {

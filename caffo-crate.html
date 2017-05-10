@@ -198,27 +198,32 @@ class CaffoCrate extends Polymer.Element {
 
   _advance() {
     this.$.stack.lastElementChild.classList.add('flipforward__container--animate');
+    this.$.stack.lastElementChild.firstElementChild.classList.remove('front');
     setTimeout(() => {
       this.$.stack.lastElementChild.classList.remove('flipforward__container--animate');
       this.$.stack.insertBefore(this.$.stack.removeChild(this.$.stack.lastElementChild), this.$.stack.firstChild);
+      this.$.stack.lastElementChild.firstElementChild.classList.add('front');
       this.$.stack.lastElementChild.firstElementChild.resize();
     }, 200);
   }
 
   _previous() {
+    this.$.stack.lastElementChild.firstElementChild.classList.remove('front');
     this.$.stack.firstElementChild.classList.add('flipforward__container--animate');
     this.$.stack.appendChild(this.$.stack.removeChild(this.$.stack.firstElementChild));
     setTimeout(() => {
       this.$.stack.lastElementChild.classList.remove('flipforward__container--animate');
+      this.$.stack.lastElementChild.firstElementChild.classList.add('front');
       this.$.stack.lastElementChild.firstElementChild.resize();
     }, 10);
   }
 
   _render() {
+    let name = this.route.path.replace('/release/', '');
     this.$.stack.innerHTML = '';
     this.releases.forEach((item, i) => {
       let record = document.createElement('caffo-record');
-      record.setAttribute('class',  'flipforward__item');
+      record.setAttribute('class',  'flipforward__item' + (name == item.url ? ' nowPlaying':''));
       record.setAttribute('artist', item.artist);
       record.setAttribute('title',  item.title);
       record.setAttribute('year',   item.year);
@@ -230,6 +235,7 @@ class CaffoCrate extends Polymer.Element {
       containerElement.appendChild(record);
       this.$.stack.appendChild(containerElement);
     });
+    this.$.stack.lastElementChild.firstElementChild.classList.add('front');
     this.$.prevButton.disabled = (this.releases.length < 2);
     this.$.nextButton.disabled = (this.releases.length < 2);
   }
