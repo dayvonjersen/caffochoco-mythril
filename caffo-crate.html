@@ -147,6 +147,28 @@
         --iron-icon-width: .8rem;
         --iron-icon-height: .8rem;
       }
+      video {
+        position: absolute;
+        top: 6.58em;
+        left: 0;
+        width: 100%;
+        box-shadow: 0 0 0 100vmin rgba(0, 0, 0, 0.61),
+                    5px 0 20px -5px rgba(0, 0, 0, 1),
+                    -5px 0 20px -5px rgba(0, 0, 0, 1);
+      }
+      h1 {
+        order: -1;
+        z-index: 1;
+        color: #fff;
+        font-size: 18px;
+        margin-bottom: -1.5em;
+      }
+      h1 a {
+        color: var(--darkvibrant);
+      }
+      h1 a:hover {
+        text-decoration: none;
+      }
     </style>
     <paper-tabs id='tabs' selected='{{selectedTab}}' on-iron-select='_tabChanged'>
       <paper-tab data-category='all'>ALL</paper-tab>
@@ -155,6 +177,7 @@
       <paper-tab data-category='single'>SINGLES</paper-tab>
       <paper-tab data-category='remix'>REMIXES</paper-tab>
       <paper-tab data-category='mashup'>MASHUPS</paper-tab>
+      <paper-tab data-category='video'>VIDEOS</paper-tab>
     </paper-tabs>
 
     <div class='container'>
@@ -243,6 +266,25 @@ class CaffoCrate extends Polymer.Element {
   _tabChanged(event, details) {
     this._setReleases();
     let category = details.item.dataset.category;
+    if(category == 'video') {
+      this.$.stack.innerHTML = '';
+      this.$.prevButton.disabled = true;
+      this.$.nextButton.disabled = true;
+
+      let containerElement = this.shadowRoot.querySelector('.container');
+      let h1Element = document.createElement('h1');
+      h1Element.innerHTML = `dj set for <a href="https://www.electronicrhythm.com/" target="_blank">Electronic Rhythm</a> Underground Movement Show 11/2012`;
+      containerElement.appendChild(h1Element);
+      let videoElement = document.createElement("video");
+      videoElement.setAttribute('src', '/video/electronicrhythm.com-underground-movement-show.webm');
+      videoElement.setAttribute('controls', '');
+      containerElement.appendChild(videoElement);
+      return;
+    } else {
+      [].forEach.call(this.shadowRoot.querySelectorAll('video, h1'), (childElement) => {
+        childElement.parentElement.removeChild(childElement);
+      });
+    }
     if(category != 'all') {
       this.releases = this.releases.filter(r => r.category == category);
     }

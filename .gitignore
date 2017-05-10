@@ -10,3 +10,5 @@ data.json
 data.yaml
 .cache/
 util/vendor/
+video
+!video/.keep
