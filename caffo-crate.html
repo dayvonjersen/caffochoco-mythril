@@ -260,6 +260,7 @@
     </div>
   </template>
   <script>
+let finishedFlip = true;
 class CaffoCrate extends Polymer.Element {
   static get is() { return 'caffo-crate' }
   static get properties() {
@@ -295,14 +296,31 @@ class CaffoCrate extends Polymer.Element {
   }
 
   _advance() {
-    this.$.stack.lastElementChild.classList.add('flipforward__container--animate');
-    this.$.stack.lastElementChild.firstElementChild.classList.remove('front');
-    setTimeout(() => {
-      this.$.stack.lastElementChild.classList.remove('flipforward__container--animate');
-      this.$.stack.insertBefore(this.$.stack.removeChild(this.$.stack.lastElementChild), this.$.stack.firstChild);
-      this.$.stack.lastElementChild.firstElementChild.classList.add('front');
-      this.$.stack.lastElementChild.firstElementChild.resize();
-    }, 200);
+    let flip = () => {
+      if(!finishedFlip) {
+        //setTimeout(flip, 0);
+        return;
+      }
+      let lastElement = this.$.stack.lastElementChild;
+      lastElement.classList.add('flipforward__container--animate');
+      lastElement.firstElementChild.classList.remove('front');
+      finishedFlip = false;
+      setTimeout(() => {
+        lastElement = this.$.stack.removeChild(this.$.stack.lastElementChild);
+        this.$.stack.insertBefore(lastElement, this.$.stack.firstChild);
+        this.$.stack.lastElementChild.firstElementChild.classList.add('front');
+        this.$.stack.lastElementChild.firstElementChild.resize();
+        finishedFlip = true;
+        for(let i = this.$.stack.childElementCount-2; i >= 0; i--) {
+          this.$.stack.children.item(i).firstElementChild.resize();
+        }
+      }, 200);
+
+      setTimeout(() => {
+        lastElement.classList.remove('flipforward__container--animate');
+      }, 400)
+    };
+    flip();
   }
 
   _previous() {
@@ -325,13 +343,13 @@ class CaffoCrate extends Polymer.Element {
       html = `
       <div class='flipforward__container'>
         <caffo-record
-          class='flipforward__item'${name == item.url ? ' nowPlaying':''}
-          artist='${item.artist}'
-          title='${item.title}'
-          year='${item.year}'
-          genre='${item.genre}'
-          url='${item.url}'
-          image='/image/${item.url}--square.jpg'>
+          class="flipforward__item${name == item.url ? ' nowPlaying':''}"
+          artist="${item.artist}"
+          title="${item.title}"
+          year="${item.year}"
+          genre="${item.genre}"
+          url="${item.url}"
+          image="/image/${item.url}--square.jpg">
         </caffo-record>
       </div>${html}`;
       i++;
@@ -422,7 +440,8 @@ class CaffoCrate extends Polymer.Element {
     this.genres = [];
     years.forEach(year => this.years.push(year));
     genres.forEach(genre => this.genres.push(genre));
-    this.genres.sort((a,b) => a.length - b.length)
+    this.genres.sort((a,b) => a.length - b.length);
+    [].forEach.call(this.$.filter.querySelectorAll("input"), (inputElement) => inputElement.checked = false);
 
     this._render();
   }

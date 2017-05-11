@@ -30,7 +30,7 @@
       .record-top-label {
         font-size: 1.3333rem;
         font-weight: bold;
-        padding: 1rem;
+        padding: .2rem .5rem;
         position: absolute;
         width: 100%;
         top: 0;
@@ -140,7 +140,7 @@
 
       :host(.nowPlaying) .record > .record-vinyl,
       :host(.nowPlaying) .record > .record-center-label {
-        transform: translate3d(100vw, 0px, 0px) rotateZ(40deg) !important;
+        transform: translate3d(200vw, 0px, 0px) rotateZ(40deg) !important;
       }
 
       /*svg*/.record-cover {
@@ -251,6 +251,7 @@ class CaffoRecord extends Polymer.Element {
   connectedCallback() {
     super.connectedCallback();
     this.$.cover.querySelector('image').setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image);
+    this.resize();
   }
 
   resize() {
