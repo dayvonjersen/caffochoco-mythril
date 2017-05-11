@@ -169,6 +169,49 @@
       h1 a:hover {
         text-decoration: none;
       }
+
+      .filter {
+        position: absolute;
+        height: 100%;
+        width: 33.3333%;
+        top: 32px;
+        left: -33.3333%;
+      }
+      .filter fieldset {
+        border: 0;
+        margin-bottom: 2rem;
+        text-align: justify;
+        display: block;
+        max-width: 100%;
+      }
+      .filter legend {
+        color: #fff;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 9px;
+      }
+      .filter fieldset div {
+        display: inline-block;
+        margin: 3px 1px;
+      }
+      .filter input {
+        display: none;
+      }
+      .filter label {
+        cursor: pointer;
+        color: #fff;
+        font-size: 12px;
+        border: 1px solid;
+        border-radius: 3px;
+        padding: 3px 5px;
+        white-space: nowrap;
+      }
+      .filter input:checked ~ label {
+        background: hotpink;
+      }
+      .gone {
+        display: none;
+      }
     </style>
     <paper-tabs id='tabs' selected='{{selectedTab}}' on-iron-select='_tabChanged'>
       <paper-tab data-category='all'>ALL</paper-tab>
@@ -181,6 +224,30 @@
     </paper-tabs>
 
     <div class='container'>
+      <form class='filter' id='filter'>
+        <fieldset>
+          <legend>filter by year</legend>
+        <dom-repeat items='[[years]]'>
+          <template>
+            <div>
+              <input on-change='_filter' type='checkbox' id$='year_[[index]]' name$='year_[[index]]' value$=[[item]]>
+              <label for$='year_[[index]]'>[[item]]</label>
+            </div>
+          </template>
+        </dom-repeat>
+      </fieldset>
+      <fieldset>
+        <legend>filter by genre</legend>
+        <dom-repeat items='[[genres]]'>
+          <template>
+            <div>
+              <input on-change='_filter' type='checkbox' id$='genre_[[index]]' name$='genre_[[index]]' value$=[[item]]>
+              <label for$='genre_[[index]]'>[[item]]</label>
+            </div>
+          </template>
+        </dom-repeat>
+      </fieldset>
+      </form>
       <div class='stack' id='stack' on-click='_clickHandler'></div>
       <nav>
         <paper-button id='prevButton' class='navButton' on-click='_previous' elevation='2'>
@@ -201,6 +268,14 @@ class CaffoCrate extends Polymer.Element {
         type: Object,
         notify: true
       },
+      years: {
+        type: Array,
+        notify: true,
+      },
+      genres: {
+        type: Array,
+        notify: true,
+      }
     }
   }
   static get config() {
@@ -244,7 +319,7 @@ class CaffoCrate extends Polymer.Element {
   _render() {
     let name = this.route.path.replace('/release/', '');
     this.$.stack.innerHTML = '';
-    this.releases.forEach((item, i) => {
+    this.releases.forEach((item) => {
       let record = document.createElement('caffo-record');
       record.setAttribute('class',  'flipforward__item' + (name == item.url ? ' nowPlaying':''));
       record.setAttribute('artist', item.artist);
@@ -258,15 +333,46 @@ class CaffoCrate extends Polymer.Element {
       containerElement.appendChild(record);
       this.$.stack.appendChild(containerElement);
     });
-    this.$.stack.lastElementChild.firstElementChild.classList.add('front');
+    if(this.releases.length) {
+      this.$.stack.lastElementChild.firstElementChild.classList.add('front');
+    }
     this.$.prevButton.disabled = (this.releases.length < 2);
     this.$.nextButton.disabled = (this.releases.length < 2);
+  }
+
+  _filter() {
+    let category = this.$.tabs.selectedItem.dataset.category;
+    if(category == 'video') return;
+
+    this._setReleases();
+    if(category != 'all') {
+      this.releases = this.releases.filter(r => r.category == category);
+    }
+
+    let years = [];
+    [].forEach.call(this.$.filter.querySelectorAll('input[name^="year"]'), inputElement => {
+      if(inputElement.checked) years.push(parseInt(inputElement.value));
+    })
+    if(years.length) {
+      this.releases = this.releases.filter(r => years.includes(r.year));
+    }
+
+    let genres = [];
+    [].forEach.call(this.$.filter.querySelectorAll('input[name^="genre"]'), inputElement => {
+      if(inputElement.checked) genres.push(inputElement.value);
+    })
+    if(genres.length) {
+      this.releases = this.releases.filter(r => genres.includes(r.genre));
+    }
+
+    this._render();
   }
 
   _tabChanged(event, details) {
     this._setReleases();
     let category = details.item.dataset.category;
     if(category == 'video') {
+      this.$.filter.classList.add('gone');
       this.$.stack.innerHTML = '';
       this.$.prevButton.disabled = true;
       this.$.nextButton.disabled = true;
@@ -284,10 +390,24 @@ class CaffoCrate extends Polymer.Element {
       [].forEach.call(this.shadowRoot.querySelectorAll('video, h1'), (childElement) => {
         childElement.parentElement.removeChild(childElement);
       });
+      this.$.filter.classList.remove('gone');
     }
     if(category != 'all') {
       this.releases = this.releases.filter(r => r.category == category);
     }
+
+    let years = new Set();
+    let genres = new Set();
+    this.releases.forEach((item) => {
+      years.add(item.year);
+      genres.add(item.genre);
+    });
+    this.years = [];
+    this.genres = [];
+    years.forEach(year => this.years.push(year));
+    genres.forEach(genre => this.genres.push(genre));
+    this.genres.sort((a,b) => a.length - b.length)
+
     this._render();
   }
 
