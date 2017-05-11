@@ -318,24 +318,40 @@ class CaffoCrate extends Polymer.Element {
 
   _render() {
     let name = this.route.path.replace('/release/', '');
-    this.$.stack.innerHTML = '';
-    this.releases.forEach((item) => {
-      let record = document.createElement('caffo-record');
-      record.setAttribute('class',  'flipforward__item' + (name == item.url ? ' nowPlaying':''));
-      record.setAttribute('artist', item.artist);
-      record.setAttribute('title',  item.title);
-      record.setAttribute('year',   item.year);
-      record.setAttribute('genre',  item.genre);
-      record.setAttribute('url',    item.url);
-      record.setAttribute('image',  `/image/${item.url}--square.jpg`);
-      let containerElement = document.createElement('div');
-      containerElement.setAttribute('class', 'flipforward__container');
-      containerElement.appendChild(record);
-      this.$.stack.appendChild(containerElement);
-    });
-    if(this.releases.length) {
-      this.$.stack.lastElementChild.firstElementChild.classList.add('front');
+    let html = '';
+    let i = 0;
+    for(let j = this.releases.length-1; j >= 0; j--) {
+      let item = this.releases[j];
+      html = `
+      <div class='flipforward__container'>
+        <caffo-record
+          class='flipforward__item'${name == item.url ? ' nowPlaying':''}
+          artist='${item.artist}'
+          title='${item.title}'
+          year='${item.year}'
+          genre='${item.genre}'
+          url='${item.url}'
+          image='/image/${item.url}--square.jpg'>
+        </caffo-record>
+      </div>${html}`;
+      i++;
+      if(i == 10) {
+        this.$.stack.innerHTML = html;
+        html = '';
+      }
     }
+    if(i < 10) {
+      this.$.stack.innerHTML = html;
+    }
+    Polymer.RenderStatus.afterNextRender(this, () => {
+      if(i > 10) {
+        this.$.stack.insertAdjacentHTML("afterbegin", html);
+      }
+      if(this.releases.length) {
+        this.$.stack.lastElementChild.firstElementChild.classList.add('front');
+      }
+    });
+
     this.$.prevButton.disabled = (this.releases.length < 2);
     this.$.nextButton.disabled = (this.releases.length < 2);
   }

@@ -250,13 +250,7 @@ class CaffoRecord extends Polymer.Element {
 
   connectedCallback() {
     super.connectedCallback();
-  }
-
-  ready() {
-    super.ready();
-    Polymer.RenderStatus.afterNextRender(this, () => {
-      this.$.cover.querySelector('image').setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image);
-    });
+    this.$.cover.querySelector('image').setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.image);
   }
 
   resize() {
