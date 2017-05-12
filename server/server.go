@@ -20,9 +20,9 @@ var counter *Counter
 
 func main() {
 	var (
-		addr string
-		port int
-		prod bool
+		addr          string
+		port          int
+		prod, nocache bool
 	)
 	flag.StringVar(
 		&addr,
@@ -41,6 +41,12 @@ func main() {
 		"prod",
 		false,
 		"production mode",
+	)
+	flag.BoolVar(
+		&nocache,
+		"nocache",
+		false,
+		"disable caching",
 	)
 	flag.Parse()
 
@@ -91,7 +97,7 @@ func main() {
 			return
 		}
 
-		if !prod {
+		if nocache {
 			w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 			w.Header().Set("Pragma", "no-cache")
 			w.Header().Set("Expires", "0")
