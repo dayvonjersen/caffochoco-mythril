@@ -257,7 +257,7 @@
         </dom-repeat>
       </fieldset>
       </form>
-      <div class='stack' id='stack' on-click='_clickHandler'></div>
+      <div class='stack' id='stack'></div>
       <nav>
         <paper-button id='prevButton' class='navButton' on-click='_previous' elevation='2'>
           <iron-icon src='/svg/chevron-left.svg'></iron-icon>&ensp;PREV
@@ -297,9 +297,16 @@ class CaffoCrate extends Polymer.Element {
   }
 
   _clickHandler(event) {
-      if(event.target.parentElement instanceof CaffoRecord
-      && event.target.parentElement.parentElement === this.$.stack.lastElementChild) {
-      this.set('route.path', '/release/'+event.target.parentElement.getAttribute('url'));
+    let recordElement = event.target;
+    let parentElement = recordElement.parentElement;
+    do {
+        if(recordElement instanceof CaffoRecord) break;
+        recordElement = parentElement;
+        parentElement = recordElement.parentElement;
+    } while(parentElement !== null);
+
+    if(parentElement === this.$.stack.lastElementChild) {
+      this.set('route.path', '/release/'+recordElement.getAttribute('url'));
     } else {
       this._advance()
     }
@@ -378,6 +385,10 @@ class CaffoCrate extends Polymer.Element {
       if(this.releases.length) {
         this.$.stack.lastElementChild.firstElementChild.classList.add('front');
       }
+      [].forEach.call(this.$.stack.querySelectorAll("caffo-record"), (recordElement) => {
+          recordElement.addEventListener("click", this._clickHandler.bind(this));
+          recordElement.resize();
+      });
     });
 
     this.$.prevButton.disabled = (this.releases.length < 2);
