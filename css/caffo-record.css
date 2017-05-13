@@ -1,0 +1,200 @@
+caffo-record {
+    display: block;
+    position: relative;
+    user-select: none;
+}
+caffo-record * {
+    box-sizing: border-box;
+}
+caffo-record .record {
+    width: 300px;
+    height: 300px;
+    text-align: center;
+    border: 1px solid;
+    position: relative;
+    border-style: none;
+    cursor: pointer;
+    z-index: 1;
+}
+@media (min-width: 1024px) {
+    caffo-record .record {
+        width: 33.3333vmin;
+        height: 33.3333vmin;
+    }
+}
+caffo-record .record-top-label {
+    font-size: 1.3333rem;
+    font-weight: bold;
+    padding: .2rem .5rem;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    min-height: 72px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    z-index: 2;
+    overflow: hidden;
+    pointer-events: none;
+}
+caffo-record .record-center-label {
+    position: absolute;
+    top: 33.3333%;
+    left: 33.3333%;
+    width: 33.3333%;
+    height: 33.3333%;
+    border-radius: 50%;
+    box-shadow: inset 2px 2px 5px #999;
+    transition: all .2s ease-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    z-index: 1;
+    background: #fff;
+}
+caffo-record .record-center-label::after {
+    content: '';
+    background-color: #000;
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex: 0 0 auto;
+    margin-left: 2px;
+}
+caffo-record .record-bottom-label {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: .5rem .8rem;
+    display: flex;
+    justify-content: space-between;
+    z-index: 2;
+}
+caffo-record .record-top-label,
+caffo-record .record-bottom-label {
+    color: #fff;
+    text-shadow: -1px 0px 0 #000,
+    0px -1px 0 #000,
+    0px 0px 0 #000,
+    0px 1px 0 #000,
+    1px 0px 0 #000;
+}
+caffo-record .record-vinyl {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: repeating-radial-gradient(#020202, #0c0c0c 3px, #000000 3px);
+    border-radius: 50%;
+    transform: translate3d(0px, 0px, 0px) rotateZ(0deg);
+
+    pointer-events: none;
+}
+caffo-record .record,
+caffo-record .record-vinyl,
+caffo-record .record-center-label {
+    transition: transform 800ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
+}
+
+caffo-record .record-vinyl::after {
+    content: '';
+    background: linear-gradient(65deg, rgba(255,255,255,0) 50%, rgba(0,0,0,0.5) 100%);
+    box-shadow: inset 0px 1px 1px rgba(255,255,255,0.2),
+    inset -1px 1px 2px rgba(135,126,125,0.1),
+    inset 0px 0px 2px 10px rgba(55,55,55,0.1),
+    inset 0px 0px 2px 5px rgba(25,25,25,0.1),
+    inset 0px 0px 1px 20px rgba(25,25,25,0.1);
+    background-size: 100% 100%;
+    border-radius: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+}
+caffo-record.front .record:hover {
+    transform: translateX(-5%);
+}
+caffo-record.front .record:hover > .record-vinyl,
+caffo-record.front .record:hover > .record-center-label {
+    transform: translate3d(150px, 0px, 0px) rotateZ(40deg);
+}
+@media (min-width: 1024px) {
+    caffo-record.front .record:hover > .record-vinyl,
+    caffo-record.front .record:hover > .record-center-label {
+        transform: translate3d(16.6667vmin, 0px, 0px) rotateZ(40deg);
+    }
+}
+caffo-record.front .record:hover .record-center-label {
+    box-shadow: none;
+}
+
+caffo-record.nowPlaying .record > .record-vinyl,
+caffo-record.nowPlaying .record > .record-center-label {
+    transform: translate3d(200vw, 0px, 0px) rotateZ(40deg) !important;
+}
+
+caffo-record /*svg*/.record-cover {
+    display: block;
+    position:absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 2;
+    mask: url(#cutout);
+    pointer-events: none;
+}
+caffo-record svg image {
+    width: 100%;
+    height: 100%;
+}
+caffo-record fit-text {
+    display: block;
+}
+caffo-record fit-text svg {
+    width: 100%;
+    height: 100%;
+    max-height: 36px;
+    fill: currentColor;
+    overflow: visible;
+}
+caffo-record fit-text text {
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: inherit;
+    text-anchor: middle;
+}
+
+caffo-record .recommended {
+    background: linear-gradient(to right, #ee0979, #ff6a00);
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0px 10px 5px -7px rgba(47, 47, 47, 0.37);
+    border-radius: 0 5px;
+
+    position: absolute;
+    z-index: 3;
+    top: -0.6667rem;
+    right: -0.5rem;
+    font-size: 10px;
+    padding: 2px 8px;
+}
+caffo-record .recommended::after {
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 24px;
+    right: 0px;
+    border-top: 0.5rem solid #bb5c18;
+    border-right: 0.5rem solid transparent;
+}
+caffo-record .recommended img {
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    margin-right: .25em;
+}

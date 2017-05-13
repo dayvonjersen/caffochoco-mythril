@@ -72,7 +72,7 @@
     <script src='/bower_components/webcomponentsjs/webcomponents-lite.js'></script>
     <script>
     function Register(elementName, elementTag, elementPrototype, elementTemplate) {
-      customElements.define(elementTag, class extends HTMLElement {
+      let elementClass = class extends HTMLElement {
         get template() {
           let fragment = document.createDocumentFragment();
           let div = fragment.appendChild(document.createElement('div'));
@@ -99,12 +99,15 @@
         }
         // TODO: attributeChangedCallback
         // TODO: childListChangedCallback
-      });
+      }
+      customElements.define(elementTag, elementClass);
+      window[elementName] = elementClass;
     }
     </script>
     <script src='/js/sorbetto-waveform.js'></script>
     <script src='/js/sorbetto-spektrum.js'></script>
     <script src='/js/fit-text.js'></script>
+    <script src='/js/caffo-record.js'></script>
     <script>
     function formatTime(time, isNegative) {
       var h, m, s, ret;
@@ -129,15 +132,6 @@
     <div class='loader'>
       <img src='/svg/rings.svg'>
     </div>
-
-    <svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 300 300' style='position:fixed;pointer-events:none'>
-      <defs>
-        <mask id='cutout' maskUnits='objectBoundingBox' maskContentUnits='objectBoundingBox'>
-          <rect width='1' height='1' fill='white'/>
-          <circle r='.1667' cx='.5' cy='.5' fill='black'/>
-        </mask>
-      </defs>
-    </svg>
 
     <script>
     fetch('/data.json')

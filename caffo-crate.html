@@ -1,11 +1,11 @@
 <link rel='import' href='/bower_components/polymer/polymer-element.html'>
 <link rel='import' href='/bower_components/paper-button/paper-button.html'>
 <link rel='import' href='/bower_components/iron-icon/iron-icon.html'>
-<link rel='import' href='/caffo-record.html'>
 <link rel='import' href='/caffo-release.html'>
 
 <dom-module id='caffo-crate'>
   <template>
+    <link rel='stylesheet' type='text/css' href='/css/caffo-record.css'>
     <style>
       :host {
         --vibrant: rgba(167,131,64,1);
@@ -213,6 +213,15 @@
         display: none;
       }
     </style>
+
+    <svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 300 300' style='position:fixed;pointer-events:none'>
+      <defs>
+        <mask id='cutout' maskUnits='objectBoundingBox' maskContentUnits='objectBoundingBox'>
+          <rect width='1' height='1' fill='white'/>
+          <circle r='.1667' cx='.5' cy='.5' fill='black'/>
+        </mask>
+      </defs>
+    </svg>
     <paper-tabs id='tabs' selected='{{selectedTab}}' on-iron-select='_tabChanged'>
       <paper-tab data-category='all'>ALL</paper-tab>
       <paper-tab data-category='album'>ALBUMS</paper-tab>
@@ -288,8 +297,9 @@ class CaffoCrate extends Polymer.Element {
   }
 
   _clickHandler(event) {
-    if(event.target.parentElement === this.$.stack.lastElementChild) {
-      this.set('route.path', '/release/'+event.target.getAttribute('url'));
+      if(event.target.parentElement instanceof CaffoRecord
+      && event.target.parentElement.parentElement === this.$.stack.lastElementChild) {
+      this.set('route.path', '/release/'+event.target.parentElement.getAttribute('url'));
     } else {
       this._advance()
     }
@@ -482,3 +492,4 @@ class CaffoCrate extends Polymer.Element {
 customElements.define(CaffoCrate.is, CaffoCrate);
   </script>
 </dom-module>
+
