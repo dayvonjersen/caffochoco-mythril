@@ -352,7 +352,7 @@ class CaffoCrate extends Polymer.Element {
   }
 
   _render() {
-    let name = this.route.path.replace('/release/', '');
+    let name = !!this.route ? this.route.path.replace('/release/', '') : '';
     let html = '';
     let i = 0;
     for(let j = this.releases.length-1; j >= 0; j--) {
@@ -470,7 +470,7 @@ class CaffoCrate extends Polymer.Element {
   _setReleases() {
     let releases = window.releases;
     releases.sort((a,b) => a.year < b.year ? -1 : 1)
-    if(this.route.path != '/') {
+    if(this.route && this.route.path != '/') {
       let path = this.route.path.replace('/release/', '');
       let selectedIndex = releases.findIndex(r => r.url == path);
       if(selectedIndex != -1) {
