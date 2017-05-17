@@ -324,14 +324,11 @@ class CaffoCrate extends Polymer.Element {
       lastElement.firstElementChild.classList.remove('front');
       finishedFlip = false;
       setTimeout(() => {
-        lastElement = this.$.stack.removeChild(this.$.stack.lastElementChild);
-        this.$.stack.insertBefore(lastElement, this.$.stack.firstChild);
+        this.$.stack.insertBefore(this.$.stack.removeChild(this.$.stack.lastElementChild), this.$.stack.firstChild);
         this.$.stack.lastElementChild.firstElementChild.classList.add('front');
         this.$.stack.lastElementChild.firstElementChild.resize();
+        this.$.stack.querySelector('.flipforward__container:nth-last-child(2) caffo-record').resize();
         finishedFlip = true;
-        for(let i = this.$.stack.childElementCount-2; i >= 0; i--) {
-          this.$.stack.children.item(i).firstElementChild.resize();
-        }
       }, 200);
 
       setTimeout(() => {

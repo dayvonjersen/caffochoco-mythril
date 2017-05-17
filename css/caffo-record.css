@@ -2,6 +2,11 @@ caffo-record {
     display: block;
     position: relative;
     user-select: none;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+caffo-record[resolved] {
+    opacity: 1;
 }
 caffo-record * {
     box-sizing: border-box;
@@ -30,10 +35,6 @@ caffo-record .record-top-label {
     width: 100%;
     top: 0;
     min-height: 72px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-around;
     z-index: 2;
     overflow: hidden;
     pointer-events: none;

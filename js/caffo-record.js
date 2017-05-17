@@ -30,6 +30,7 @@
             this.resize = () => {
                 [].forEach.call(this.querySelectorAll('fit-text'), (fitText) => fitText.resize());
             };
+            this.setAttribute("resolved","");
             this.initialized = true;
         },
     };
