@@ -307,8 +307,9 @@ class CaffoCrate extends Polymer.Element {
 
     if(parentElement === this.$.stack.lastElementChild) {
       this.set('route.path', '/release/'+recordElement.getAttribute('url'));
+      recordElement.classList.add('nowPlaying');
     } else {
-      this._advance()
+      this._advance();
     }
   }
 
@@ -351,44 +352,40 @@ class CaffoCrate extends Polymer.Element {
     }, 10);
   }
 
+  _createRecord(item) {
+      let containerElement = document.createElement('div');
+      containerElement.setAttribute('class', 'flipforward__container');
+      let recordElement = document.createElement('caffo-record');
+      recordElement.setAttribute('class', "flipforward__item" + (name == item.url ? ' nowPlaying': '') + (this.$.stack.childElementCount == 0 ? ' front' : ''));
+      recordElement.setAttribute('artist', item.artist);
+      recordElement.setAttribute('title', item.title);
+      recordElement.setAttribute('year', item.year);
+      recordElement.setAttribute('genre', item.genre);
+      recordElement.setAttribute('url', item.url);
+      recordElement.setAttribute('image', "/image/" + item.url + "--square.jpg");
+      recordElement.addEventListener("click", this._clickHandler.bind(this));
+      containerElement.appendChild(recordElement);
+      this.$.stack.insertBefore(containerElement, this.$.stack.firstElementChild);
+      recordElement.resize();
+  }
+
   _render() {
     let name = !!this.route ? this.route.path.replace('/release/', '') : '';
-    let html = '';
+    this.$.stack.innerHTML = '';
     let i = 0;
     for(let j = this.releases.length-1; j >= 0; j--) {
-      let item = this.releases[j];
-      html = `
-      <div class='flipforward__container'>
-        <caffo-record
-          class="flipforward__item${name == item.url ? ' nowPlaying':''}"
-          artist="${item.artist}"
-          title="${item.title}"
-          year="${item.year}"
-          genre="${item.genre}"
-          url="${item.url}"
-          image="/image/${item.url}--square.jpg">
-        </caffo-record>
-      </div>${html}`;
-      i++;
-      if(i == 10) {
-        this.$.stack.innerHTML = html;
-        html = '';
-      }
+        this._createRecord(this.releases[j]);
+        i++;
+        if(i == 10) break;
     }
-    if(i < 10) {
-      this.$.stack.innerHTML = html;
-    }
+    
     Polymer.RenderStatus.afterNextRender(this, () => {
-      if(i > 10) {
-        this.$.stack.insertAdjacentHTML("afterbegin", html);
-      }
-      if(this.releases.length) {
-        this.$.stack.lastElementChild.firstElementChild.classList.add('front');
-      }
-      [].forEach.call(this.$.stack.querySelectorAll("caffo-record"), (recordElement) => {
-          recordElement.addEventListener("click", this._clickHandler.bind(this));
-          recordElement.resize();
-      });
+        for(let j = (this.releases.length - 10) - 1; j >= 0; j--) {
+            this._createRecord(this.releases[j]);
+        }
+        [].forEach.call(this.$.stack.querySelectorAll("caffo-record"), (recordElement) => {
+            recordElement.resize();
+        });
     });
 
     this.$.prevButton.disabled = (this.releases.length < 2);
@@ -396,27 +393,27 @@ class CaffoCrate extends Polymer.Element {
   }
 
   _filter() {
-    let category = this.$.tabs.selectedItem.dataset.category;
-    if(category == 'video') return;
+      let category = this.$.tabs.selectedItem.dataset.category;
+      if(category == 'video') return;
 
-    this._setReleases();
-    if(category != 'all') {
-      this.releases = this.releases.filter(r => r.category == category);
-    }
+      this._setReleases();
+      if(category != 'all') {
+          this.releases = this.releases.filter(r => r.category == category);
+      }
 
-    let years = [];
-    [].forEach.call(this.$.filter.querySelectorAll('input[name^="year"]'), inputElement => {
-      if(inputElement.checked) years.push(parseInt(inputElement.value));
-    })
-    if(years.length) {
-      this.releases = this.releases.filter(r => years.includes(r.year));
-    }
+      let years = [];
+      [].forEach.call(this.$.filter.querySelectorAll('input[name^="year"]'), inputElement => {
+          if(inputElement.checked) years.push(parseInt(inputElement.value));
+      })
+      if(years.length) {
+          this.releases = this.releases.filter(r => years.includes(r.year));
+      }
 
-    let genres = [];
-    [].forEach.call(this.$.filter.querySelectorAll('input[name^="genre"]'), inputElement => {
-      if(inputElement.checked) genres.push(inputElement.value);
-    })
-    if(genres.length) {
+      let genres = [];
+      [].forEach.call(this.$.filter.querySelectorAll('input[name^="genre"]'), inputElement => {
+          if(inputElement.checked) genres.push(inputElement.value);
+      })
+      if(genres.length) {
       this.releases = this.releases.filter(r => genres.includes(r.genre));
     }
 

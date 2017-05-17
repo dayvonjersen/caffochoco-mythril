@@ -16,7 +16,7 @@
             ["artist", "title", "year", "genre"].forEach((name) => {
                 let value = this.getAttribute(name);
                 switch(name) {
-                    case "title": value = `“${value}”`; break;
+                    case "title": value = `“${value}”`; this.removeAttribute("title"); break;
                     case "genre": value = "#"+value; break;
                 }
                 this.querySelector("."+name).textContent = value;
