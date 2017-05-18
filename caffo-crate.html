@@ -64,9 +64,6 @@
         backface-visibility: hidden;
         transform-origin: 50% -22%;
       }
-      .stack:hover > :nth-last-child(2) {
-        transform: scale(.8888) translateY(-12.6667%);
-      }
       .stack > :last-child {
         transform: scale(1);
       }
@@ -75,6 +72,9 @@
       }
       .stack > :nth-last-child(2) {
         transform: scale(0.9);
+      }
+      .stack:hover > :nth-last-child(2) {
+        transform: scale(.8888) translateY(-20.6667%);
       }
       .stack > :nth-last-child(3) {
         transform: scale(0.81);
@@ -421,6 +421,10 @@ class CaffoCrate extends Polymer.Element {
     this._setReleases();
     let category = details.item.dataset.category;
     if(category == 'video') {
+      this.previousRoute = this.route.path;
+      let app = document.querySelector("caffo-app");
+      app._closeDrawer();
+
       this.$.filter.classList.add('gone');
       this.$.stack.innerHTML = '';
       this.$.prevButton.disabled = true;
@@ -436,6 +440,10 @@ class CaffoCrate extends Polymer.Element {
       containerElement.appendChild(videoElement);
       return;
     } else {
+      if(this.previousRoute) {
+          this.set('route.path', this.previousRoute);
+          this.previousRoute = undefined;
+      }
       [].forEach.call(this.shadowRoot.querySelectorAll('video, h1'), (childElement) => {
         childElement.parentElement.removeChild(childElement);
       });
