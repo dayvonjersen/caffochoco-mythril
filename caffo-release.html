@@ -97,7 +97,6 @@
         height: 3rem;
         color: var(--lightvibrant, #555);
         border-color: var(--vibrant, red);
-        filter: drop-shadow(0 0 64px);
         cursor: pointer;
       }
       paper-icon-button {
@@ -428,8 +427,6 @@ class CaffoRelease extends Polymer.Element {
       this.$.previousBtn.classList.add('gone');
       this.$.nextBtn.classList.add('gone');
     }
-    this.$.spektrum.bars = 64;
-    this.$.spektrum.padY = 0;
   }
 
   connectedCallback() {

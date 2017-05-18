@@ -44,7 +44,7 @@ var Z = {
         analyser.smoothingTimeConstant = 0;
         var dataArray = new Uint8Array(256);
 
-        this.bars = 16;
+        this.bars = 64;
         this.padX = 1;
         this.padY = 1;
         this.blocksize = 1;
@@ -58,12 +58,8 @@ var Z = {
         for(var i = 0; i < this.bars; i++) {
             peaks[i] = 0;
         }
-        setInterval(function(){
-            for(var i = 0; i < that.bars; i++) {
-                peaks[i] = 0;
-            }
-        }, 4000);
 
+        var peakCycles = [];
         function spektrum() {
             // chrome is a "good" browser
             var cs = getComputedStyle(that);
@@ -85,7 +81,17 @@ var Z = {
                     for(var yy = 0; yy < y; yy+=that.blocksize+that.padY) {
                         canvasCtx.fillRect(x, h - yy, w, that.blocksize);
                     }
-                    if(peak > peaks[j]) peaks[j] = peak;
+                    if(peak > peaks[j]) {
+                        peaks[j] = peak;
+                        peakCycles[j] = 0;
+                    } else {
+                        peakCycles[j]++;
+                        if(peakCycles[j] >= 15) {
+                            peaks[j] *= 0.98;
+                            peaks[j] -= 0.005;
+                        }
+                        if(peaks[j] < 0.0000001) peaks[j] = 0;
+                    }
                     canvasCtx.fillStyle = cs.borderColor || that.style.borderColor || 'red';
                     canvasCtx.fillRect(x, ((1-peaks[j])*h), w, that.blocksize);
                     canvasCtx.fillStyle = cs.color;
@@ -148,10 +154,15 @@ var Z = {
             }
         });
 
-        var lastUpdate = new Date();
+        var lastUpdate = 0;
         var frameRate = 1000/60;
+        var then = new Date();
         function requestRender() {
-            if(new Date() - lastUpdate > frameRate) {
+            let now = new Date();
+            lastUpdate += now-then;
+            then = now;
+            if(lastUpdate >= frameRate) {
+                lastUpdate -= frameRate;
                 requestAnimationFrame(draw);
             }
         }
