@@ -40,4 +40,4 @@ sed -i "s/xxxxxxdollarsignequals=/$=/g" dist/index.html
 
 cat tmp/*.js > tmp/app.min.js
 sed -i "s/xxxxxxdollarsignequals=/$=/g" tmp/app.min.js
-./node_modules/uglify-js/bin/uglifyjs tmp/app.min.js | ./node_modules/uglify-js/bin/uglifyjs -c -m > dist/app.min.js
+./node_modules/uglify-js/bin/uglifyjs tmp/app.min.js | ./node_modules/uglify-js/bin/uglifyjs -c > dist/app.min.js

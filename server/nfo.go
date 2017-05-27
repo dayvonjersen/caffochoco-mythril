@@ -3,8 +3,10 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"html/template"
+	"math"
+	"regexp"
 	"strings"
+	"text/template"
 	"unicode/utf8"
 
 	"./strip"
@@ -16,6 +18,20 @@ func strpad(s string, l int) string {
 		return s + strings.Repeat(" ", amt)
 	}
 	return s
+}
+
+func strcenter(s string, max int) string {
+	amt := max - utf8.RuneCountInString(s)
+	var left, right int
+	if amt%2 == 0 {
+		left = amt / 2
+		right = left
+	} else {
+		amt := float64(amt) / 2
+		left = int(math.Floor(amt))
+		right = int(math.Ceil(amt))
+	}
+	return strings.Repeat(" ", left) + s + strings.Repeat(" ", right)
 }
 
 func strwrap(s string, l int, prefix, postfix string, noprefixfirst, nopostfixfirst bool) string {
@@ -59,10 +75,22 @@ func strwrap(s string, l int, prefix, postfix string, noprefixfirst, nopostfixfi
 	return strings.Join(parts, "\n")
 }
 
-func formattime(t int) string {
+func formatTime(t int) string {
 	m := t / 60
 	s := t % 60
 	return fmt.Sprintf("%02d:%02d", m, s)
+}
+
+var byteUnits = [4]string{"", "K", "M", "G"}
+
+func formatBytes(bytes int) string {
+	b := float64(bytes)
+	u := 0
+	for b >= 1024 {
+		u++
+		b /= 1024
+	}
+	return fmt.Sprintf("%.1f %sB", b, byteUnits[u])
 }
 
 func renderTemplate(filename string, data interface{}) string {
@@ -73,8 +101,11 @@ func renderTemplate(filename string, data interface{}) string {
 	return buf.String()
 }
 
+var htmlentitiesre = regexp.MustCompile(`&.*?;`)
+
 func createNfo(tracklistId int, rel release) string {
 	tdata := struct {
+		Url,
 		Release, Artist, Title, Genre, Encoder,
 		Quality, About, NumTracks, Length, Size string
 		numTracks, length, size int
@@ -87,18 +118,19 @@ func createNfo(tracklistId int, rel release) string {
 		Tracks: []struct {
 			Num, Title, Time string
 		}{},
-		Size: strings.Repeat(" ", 56),
 	}
-	tdata.TracklistTitle = strpad(strings.ToUpper(rel.Tracklists[tracklistId].Title), 45)
-	tdata.Release = strwrap(fmt.Sprintf("%03d dayvonjersen.com/releases/%s", tracklistId, rel.Url), 56, "║                     ", " ║", true, false)
+	tdata.TracklistTitle = strcenter(strings.ToUpper(rel.Tracklists[tracklistId].Title), 78)
+	tdata.Url = strcenter("https://music.dayvonjersen.com/release/"+rel.Url, 78)
+	tdata.Release = strwrap(fmt.Sprintf("%02d", tracklistId), 56, "║                     ", " ║", true, false)
 	tdata.Artist = strpad(rel.Artist, 56)
 	tdata.Title = strpad(rel.Title, 56)
 	tdata.Genre = strpad(rel.Genre, 56)
 	tdata.Encoder = strpad("LAME", 56)
 	tdata.Quality = strpad("320kbps MP3", 56)
-	tdata.About = strwrap(rel.About, 55, "║           ", "            ║", false, false)
+	tdata.About = strwrap(htmlentitiesre.ReplaceAllString(rel.About, ""), 55, "║           ", "            ║", false, false)
 	tdata.HasArt = fileExists("./image/" + rel.Url + ".jpg")
 	i := 1
+	size := 0
 	for _, t := range rel.Tracklists[tracklistId].TrackIds {
 		track := rel.Tracklists[tracklistId].Tracks[t]
 		tdata.numTracks++
@@ -106,10 +138,10 @@ func createNfo(tracklistId int, rel release) string {
 
 		title := track.Title
 		if len(title) > 44 {
-			title = title[:44] + " " + formattime(track.Length) + " ║           ║\n" + strwrap(title[44:], 45, "║          ║    ",
-				"      ║           ║", false, false)
+			title = title[:44] + " " + formatTime(track.Length) + " ║           ║\n" +
+				strwrap(title[44:], 45, "║          ║    ", "      ║           ║", false, false)
 		} else {
-			title = strpad(title, 45) + formattime(track.Length) + " ║           ║"
+			title = strpad(title, 45) + formatTime(track.Length) + " ║           ║"
 		}
 
 		tdata.Tracks = append(tdata.Tracks, struct {
@@ -117,10 +149,13 @@ func createNfo(tracklistId int, rel release) string {
 		}{
 			fmt.Sprintf("%02d", i),
 			title,
-			formattime(track.Length),
+			formatTime(track.Length),
 		})
+		i++
+		size += fileSize("./audio/" + rel.Url + "/" + track.File)
 	}
+	tdata.Size = strpad(formatBytes(size), 56)
 	tdata.NumTracks = strpad(fmt.Sprintf("%d", tdata.numTracks), 56)
-	tdata.Length = strpad(formattime(tdata.length), 56)
-	return renderTemplate("nfo.tmpl", tdata)
+	tdata.Length = strpad(formatTime(tdata.length), 56)
+	return renderTemplate("./server/nfo.tmpl", tdata)
 }

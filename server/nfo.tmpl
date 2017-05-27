@@ -20,7 +20,7 @@ c  'kXd..kMMMMMMMMMMMMMMMk..dXXXXXXXXXXx:..xMMMMMMMMMMMMMMMMMMk..dXXXXXXXXXx.  l
   'kXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx.  
   .kXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx.  
   .dXXXXKkddddddddddddddddddddddddddddddddddddddddddddddddddddx0XXXXXXXXXXXXd.  
-.  lKXXX0l'.            [    dayvonjersen.com    ]            .c0XXXXXXXXXXKc  .
+.  lKXXX0l'.         [    music.dayvonjersen.com    ]         .c0XXXXXXXXXXKc  .
 ,  ;OXXXKK0x' ................................................ .xXXXXXXXXXXO,  ;
 d. .oKXXXXX0:  .'.............................................  lKXXXXXXXXKo. .d
 K;  ,OXKXXXKd. ...............................................  :0XXXXXXXXk'  ;X
@@ -39,7 +39,10 @@ Wk.  :0XXXXX0c. ..............................................  cKXXXXXXX0:  .k
                       N0xo:,..      ........      ..,:okKN                      
                           WN0ko:,..          ..,:ok0NW                          
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║             RELEASE {{.Release}}
+║                                                                              ║
+║{{.Url}}║
+║                                                                              ║
+║            RELEASE# {{.Release}}
 ║              ARTiST {{.Artist}} ║
 ║               TiTLE {{.Title}} ║
 ║               GENRE {{.Genre}} ║
@@ -48,15 +51,13 @@ Wk.  :0XXXXX0c. ..............................................  cKXXXXXXX0:  .k
 ║             ENCODER {{.Encoder}} ║
 ║             QUALiTY {{.Quality}} ║
 ║                SiZE {{.Size}} ║
-║              COVERS  YES [{{if .HasArt}}X{{else}} {{end}}]  NO [{{if not .HasArt}}X{{else}} {{end}}]                                         ║
+║             COVERS? YES [{{if .HasArt}}X{{else}} {{end}}]  NO [{{if not .HasArt}}X{{else}} {{end}}]                                          ║
 ║                                                                              ║
+║{{.TracklistTitle}}║
 ║          ╔═══════════════════════════════════════════════════════╗           ║
-║          ║  # {{.TracklistTitle}} TIME ║           ║
 {{range .Tracks}}║          ║ {{.Num}} {{.Title}}
 {{end}}║          ╚═══════════════════════════════════════════════════════╝           ║
 ║                                                                              ║
-║                                                                              ║
 {{.About}}
-║                                                                              ║
 ║                                                                              ║
 ╚══════════════════════════════════════════════════════════════════════════════╝

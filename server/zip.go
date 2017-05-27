@@ -41,8 +41,7 @@ func zipHandler(w http.ResponseWriter, r *http.Request) {
 
 	counter.IncrementDownloads(rel.Url, r.RemoteAddr)
 
-	rname := fmt.Sprintf("%03d %s - %s-%d", tracklistId, rel.Artist, rel.Title, rel.Year)
-	rname = re.ReplaceAllString(rname, "_")
+	rname := releaseName(tracklistId, rel, true)
 
 	zipFile := rname + ".zip"
 
@@ -51,7 +50,7 @@ func zipHandler(w http.ResponseWriter, r *http.Request) {
 	if !fileExists(".cache/" + zipFile) {
 		f, err := os.Create(".cache/" + zipFile)
 		checkErr(err)
-		io.Copy(f, createZip(tracklistId, rname, rel))
+		io.Copy(f, createZip(tracklistId, rel))
 		f.Close()
 	}
 	f, err := os.Open(".cache/" + zipFile)
@@ -60,12 +59,26 @@ func zipHandler(w http.ResponseWriter, r *http.Request) {
 	io.Copy(w, f)
 }
 
+func releaseName(tracklistId int, rel release, prefix bool) string {
+	special := ""
+	tracklistTitle := rel.Tracklists[tracklistId].Title
+	if tracklistTitle != "tracklist" {
+		special = "(" + tracklistTitle + ") "
+	}
+	if !prefix {
+		tracklistId = 0
+	}
+	rname := fmt.Sprintf("%02d %s - %s %s%d[music.dayvonjersen.com]", tracklistId, rel.Artist, rel.Title, special, rel.Year)
+	rname = strings.ToLower(rname)
+	rname = re.ReplaceAllString(rname, "_")
+	return rname
+}
+
 func zipPrecache() {
 	d := getData()
 	for _, rel := range d.Releases {
 		for _, tracklistId := range rel.TracklistIds {
-			rname := fmt.Sprintf("%03d %s - %s-%d", tracklistId, rel.Artist, rel.Title, rel.Year)
-			rname = re.ReplaceAllString(rname, "_")
+			rname := releaseName(tracklistId, rel, true)
 			zipFile := ".cache/" + rname + ".zip"
 			log.Println("generating", zipFile)
 			if fileExists(zipFile) {
@@ -74,7 +87,7 @@ func zipPrecache() {
 			}
 			f, err := os.Create(zipFile)
 			checkErr(err)
-			n, _ := io.Copy(f, createZip(tracklistId, rname, rel))
+			n, _ := io.Copy(f, createZip(tracklistId, rel))
 			log.Println(n, "bytes written [ OK ]")
 			f.Close()
 		}
@@ -99,9 +112,11 @@ func crc32sum(filename string) string {
 	return fmt.Sprintf("%08x", crc32.ChecksumIEEE(b))
 }
 
-func createZip(tracklistId int, rname string, rel release) io.Reader {
+func createZip(tracklistId int, rel release) io.Reader {
 	buf := new(bytes.Buffer)
 	zw := zip.NewWriter(buf)
+
+	rname := releaseName(tracklistId, rel, false)
 
 	nfo, err := zw.CreateHeader(createZipHeader(rname + ".nfo"))
 	checkErr(err)
@@ -117,6 +132,7 @@ func createZip(tracklistId int, rname string, rel release) io.Reader {
 		track := rel.Tracklists[tracklistId].Tracks[t]
 
 		fname := fmt.Sprintf("%02d %s - %s.mp3", i, rel.Artist, track.Title)
+		fname = strings.ToLower(fname)
 		fname = re.ReplaceAllString(fname, "_")
 		i++
 

@@ -12,3 +12,5 @@ data.yaml
 util/vendor/
 video
 !video/.keep
+audio - Copy/
+desktop.ini
