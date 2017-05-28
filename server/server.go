@@ -71,7 +71,7 @@ func main() {
 
 		if prod &&
 			fileExists(dir) &&
-			(dir == "audio" || dir == "font" || dir == "image" || dir == "svg" || dir == "data.json") &&
+			(dir == "audio" || dir == "css" || dir == "font" || dir == "image" || dir == "svg" || dir == "data.json") &&
 			fileExists(path) && !isDir(path) {
 			file = path
 		} else if prod && fileExists("dist/"+dir) {

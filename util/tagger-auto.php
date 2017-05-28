@@ -68,27 +68,42 @@ foreach($d->releases as $r) {
                     foreach($tags as $frameID => $tag) {
                         echo "\t", $frames[$frameID], ': ', $tag, "\n";
                     }
-                    echo "\nWRITING TAG...\n";
                     $taglib = new TagLibMPEG($r->url .'/'.$track->file);
-                    $taglib->stripTags();
-                    $taglib->setID3v2($tags);
-                    if(file_exists('../image/'.$r->url.'.jpg')) {
-                        echo "WRITING ALBUM ART...\n";
-                        if(!isset($art[$r->url])) {
-                            $art[$r->url] = base64_encode(file_get_contents('../image/'.$r->url.'.jpg'));
-                        }
-                        $data = $art[$r->url];
-                        $taglib->setID3v2([
-                            'APIC' => [
-                                'data' => $data,
-                                'mime' => 'image/jpeg',
-                                'type' => TagLib::APIC_FRONTCOVER,
-                            ]
-                        ]);
-                    } else {
-                        echo "NO ALBUM ART\n";
+                    $id3v2 = [];
+                    foreach($taglib->getID3v2() as $frame) {
+                        $id3v2[$frame['frameID']] = $frame['data'];
                     }
-                    echo "[ OK ]\n";
+                    $same = true;
+                    foreach($tags as $field => $value) {
+                        if(!isset($id3v2[$field]) || $id3v2[$field] !== $value) {
+                            $same = false;
+                            break;
+                        }
+                    }
+                    if($same) {
+                        echo "\nUP-TO-DATE\n[SKIP]\n";
+                    } else {
+                        echo "\nWRITING TAG...\n";
+                        $taglib->stripTags();
+                        $taglib->setID3v2($tags);
+                        if(file_exists('../image/'.$r->url.'.jpg')) {
+                            echo "WRITING ALBUM ART...\n";
+                            if(!isset($art[$r->url])) {
+                                $art[$r->url] = base64_encode(file_get_contents('../image/'.$r->url.'.jpg'));
+                            }
+                            $data = $art[$r->url];
+                            $taglib->setID3v2([
+                                'APIC' => [
+                                    'data' => $data,
+                                    'mime' => 'image/jpeg',
+                                    'type' => TagLib::APIC_FRONTCOVER,
+                                ]
+                            ]);
+                        } else {
+                            echo "NO ALBUM ART\n";
+                        }
+                        echo "[ OK ]\n";
+                    }
                 }
             }
         }
