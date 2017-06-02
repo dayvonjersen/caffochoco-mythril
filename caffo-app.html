@@ -294,8 +294,8 @@ class CaffoApp extends Polymer.Element {
   }
 
   _found() {
-    if(this.$.app.classList.contains('gone')) {
-      let loader = document.querySelector('.loader');
+    let loader = document.querySelector('.loader');
+    if(this.$.app.classList.contains('gone') || !loader.classList.contains('loaded')) {
       loader.classList.remove('loaded');
       setTimeout(() => {
         loader.classList.add('loaded');
