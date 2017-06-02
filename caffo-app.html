@@ -34,7 +34,6 @@
         justify-content: center;
         align-items: center;
         width: 100vw;
-        height: 100vh;
         top: 0;
         left: 0;
         perspective: 1000px;
@@ -72,7 +71,6 @@
       header {
         color: #fff;
         display: flex;
-        position: fixed;
       }
       header a {
         color: inherit;
@@ -103,12 +101,16 @@
         display: inline-block;
       }
       footer {
-        position: fixed;
-        bottom: 0;
         font-size: 14px;
         color: #fff;
         width: 100%;
         background: linear-gradient(transparent, #000 100%);
+      }
+      @media (min-height: 720px) {
+        footer {
+          position: fixed;
+          bottom: 0;
+        }
       }
       footer a {
         color: #fff;
