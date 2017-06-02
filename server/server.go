@@ -16,8 +16,6 @@ import (
 	"strings"
 )
 
-var counter *Counter
-
 func main() {
 	var (
 		addr          string
@@ -55,9 +53,6 @@ func main() {
 		return
 	}
 
-	counter = NewCounter(".cache/caffo.db")
-	defer counter.Close()
-
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
 		fallbackFile := "index.html"
@@ -84,9 +79,6 @@ func main() {
 		} else if strings.HasPrefix(path, "download/") {
 			zipHandler(w, r)
 			return
-		} else if path == "stats.json" {
-			statsHandler(w, r)
-			return
 		} else if strings.HasSuffix(r.URL.Path, "--square.jpg") {
 			log.Println(req(r), "<- \033[34m200\033[0m OK (fallback)")
 			f, err := os.Open("./image/imagefallback.jpg")
@@ -107,9 +99,6 @@ func main() {
 			log.Println(req(r), "<- \033[34m200\033[0m OK (fallback)")
 		} else {
 			log.Println(req(r), "<- \033[32m200\033[0m OK")
-		}
-		if strings.HasSuffix(path, ".mp3") {
-			counter.IncrementPlays(path, r.RemoteAddr)
 		}
 		http.ServeFile(w, r, file)
 

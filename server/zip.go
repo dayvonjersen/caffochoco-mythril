@@ -39,8 +39,6 @@ func zipHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println(req(r), "<- \033[32m200\033[0m OK")
 	w.Header().Set("Content-Type", "application/zip")
 
-	counter.IncrementDownloads(rel.Url, r.RemoteAddr)
-
 	rname := releaseName(tracklistId, rel, true)
 
 	zipFile := rname + ".zip"
