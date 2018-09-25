@@ -57,7 +57,8 @@
         app-drawer {
           --app-drawer-width: calc(100vw - 2.5rem);
         }
-        app-drawer[opened] + .crate-container {
+        app-drawer[opened] + .crate-container,
+        app-drawer[opened] ~ footer {
           display: none;
         }
       }
