@@ -40,7 +40,11 @@
       <div class='recommended'><img src='/svg/star-fill--white.svg'>TRY ME</div>
       <div class='record-vinyl'></div>
       <svg class='record-cover' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
-        <image width='100%' height='100%' />
+        <mask id="cutout" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+          <rect width="1" height="1" fill="white"></rect>
+          <circle r=".1667" cx=".5" cy=".5" fill="black"></circle>
+        </mask>
+        <image mask="url(#cutout)" width='100%' height='100%' />
       </svg>
       <div class='record-top-label'>
         <fit-text class='artist'></fit-text>
