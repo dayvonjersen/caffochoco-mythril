@@ -1,4 +1,5 @@
 ;(function(){
+    let i = 0;
     var Z = {
         createdCallback: function() {
             if(this.initialized) return;
@@ -9,9 +10,14 @@
                 recommendedElement.parentElement.removeChild(recommendedElement);
             }
             
+            let maskId =  "cutout" + i++;
+            let maskElement = this.querySelector("mask");
+            maskElement.setAttribute("id", maskId);
+
             let imageElement = this.querySelector("image");
             let imageURL = this.getAttribute("image");
             imageElement.setAttributeNS('http://www.w3.org/1999/xlink', 'href', imageURL);
+            imageElement.setAttribute("mask", "url(#" + maskId + ")");
 
             ["artist", "title", "year", "genre"].forEach((name) => {
                 let value = this.getAttribute(name);
@@ -40,11 +46,11 @@
       <div class='recommended'><img src='/svg/star-fill--white.svg'>TRY ME</div>
       <div class='record-vinyl'></div>
       <svg class='record-cover' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
-        <mask id="cutout" maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
+        <mask maskUnits="objectBoundingBox" maskContentUnits="objectBoundingBox">
           <rect width="1" height="1" fill="white"></rect>
           <circle r=".1667" cx=".5" cy=".5" fill="black"></circle>
         </mask>
-        <image mask="url(#cutout)" width='100%' height='100%' />
+        <image width='100%' height='100%' />
       </svg>
       <div class='record-top-label'>
         <fit-text class='artist'></fit-text>
