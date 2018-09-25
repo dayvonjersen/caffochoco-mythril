@@ -39,6 +39,7 @@ var Z = {
 
         var canvasCtx = canvas.getContext("2d");
         var audioCtx = new AudioContext();
+        window.addEventListener("click", () => audioCtx.resume());
         var source = audioCtx.createMediaElementSource(audioElement);
         var analyser = audioCtx.createAnalyser();
         analyser.smoothingTimeConstant = 0;
