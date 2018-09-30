@@ -376,6 +376,7 @@ class CaffoCrate extends Polymer.Element {
       recordElement.setAttribute('genre', item.genre);
       recordElement.setAttribute('url', item.url);
       recordElement.setAttribute('image', "/image/" + item.url + "--square.jpg");
+      if(item.recommended) recordElement.setAttribute('recommended', '');
       recordElement.addEventListener("click", this._clickHandler.bind(this));
       containerElement.appendChild(recordElement);
       this.$.stack.insertBefore(containerElement, this.$.stack.firstElementChild);

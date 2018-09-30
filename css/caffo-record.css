@@ -180,7 +180,7 @@ caffo-record .recommended {
     top: -0.6667rem;
     right: -0.5rem;
     font-size: 10px;
-    padding: 2px 8px;
+    padding: 2px 8px 2px 24px;
 }
 caffo-record .recommended::after {
     content: '';
@@ -193,8 +193,8 @@ caffo-record .recommended::after {
     border-right: 0.5rem solid transparent;
 }
 caffo-record .recommended img {
-    width: 1em;
-    height: 1em;
-    vertical-align: middle;
-    margin-right: .25em;
+    position: absolute;
+    top: 2.3px;
+    left: 4px;
+    height: 16px;
 }
