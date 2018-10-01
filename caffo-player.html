@@ -2,6 +2,10 @@
 <dom-module id='caffo-player'>
   <template>
     <style>
+      * {
+        display: none;
+      }
+      /*
       :host {
         display: block;
       }
@@ -30,9 +34,6 @@
         background: #a8c5f7;
         font-weight: bold;
       }
-      label, input[type='checkbox'] {
-        display: none;
-      }
       :host(:hover) input[type='checkbox']:not(:checked) ~ audio {
         opacity: 0.7;
       }
@@ -44,6 +45,7 @@
       input[type='checkbox']:not(:checked) ~ ol {
         display: none;
       }
+      */
     </style>
     <label for='checkBox'>&emsp;debug player</label>
     <input id='checkBox' type='checkbox'><br>
