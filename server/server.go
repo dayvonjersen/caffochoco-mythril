@@ -136,8 +136,27 @@ func notfoundHandler(w http.ResponseWriter, r *http.Request) {
 
 func req(r *http.Request) string {
 	return fmt.Sprint(
-		r.Host, " ", r.RemoteAddr[:strings.LastIndex(r.RemoteAddr, ":")], " ",
-		r.Header.Get("User-Agent"),
-		"\n -> ", r.Method, " ", r.URL, "\n",
+		hostAddr(r), " <-> ", remoteAddr(r), "\n",
+		r.Header.Get("User-Agent"), "\n",
+		" -> ", r.Method, " ", r.URL, "\n",
 	)
+}
+
+func hostAddr(r *http.Request) string {
+	host := r.Header.Get("Host")
+	if host != "" {
+		return host
+	}
+	return r.Host
+}
+
+func remoteAddr(r *http.Request) string {
+	ip := r.Header.Get("X-Forwarded-For")
+	if ip != "" {
+		if strings.Contains(ip, ",") {
+			return ip[:strings.LastIndex(ip, ",")]
+		}
+		return ip
+	}
+	return r.RemoteAddr[:strings.LastIndex(r.RemoteAddr, ":")]
 }
