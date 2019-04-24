@@ -54,6 +54,16 @@
                       0px 1px 0 var(--vibrant, #000),
                       1px 0px 0 var(--vibrant, #000);
       }
+      :host(.nowplaying) .title, :host(.nowplaying) .time {
+        text-shadow: -1px 0px 0 var(--vibrant, #000),
+                      0px -1px 0 var(--vibrant, #000),
+                      0px 0px 0 var(--vibrant, #000),
+                      0px 1px 0 var(--vibrant, #000),
+                      1px 0px 0 var(--vibrant, #000),
+                      0px 0px 10px var(--vibrant, #fff),
+                      0px 0px 16px var(--vibrant, #fff),
+                      0px 0px 20px var(--vibrant, #fff);
+      }
       .hide {
         opacity: 0;
       }
@@ -103,7 +113,7 @@
         height: 100%;
       }
     </style>
-    <span class='title' title='toggle playback' on-click='_togglePlayback'>[[title]]</span>
+    <a href="#[[hashUrl]]" class='title' title='toggle playback' on-click='_togglePlayback'>[[title]]</a>
     <span class='time' title='toggle time remaining' on-click='_toggleTimeRemaining'>[[currentTime]]</span>
     <paper-slider
       title='seek to time'
@@ -124,6 +134,7 @@ class CaffoPlaylistItem extends Polymer.Element {
       title: String,
       length: Number,
       url: String,
+      hashUrl: String,
       tracklistId: Number,
     };
   }
@@ -146,6 +157,7 @@ class CaffoPlaylistItem extends Polymer.Element {
   }
 
   _togglePlayback(event) {
+    event.preventDefault();
     if(player.state.nowPlaying != this.url) {
       player.stopPlayback();
       player.load(this.url);
@@ -159,6 +171,10 @@ class CaffoPlaylistItem extends Polymer.Element {
         player.state.tracklistId = parseInt(this.tracklistId);
         this.classList.add('nowplaying');
         this.scrollIntoView();
+
+        if(location.hash.substr(1) != this.hashUrl) {
+            history.pushState("", document.title, location.pathname + "#" + this.hashUrl)
+        }
       } else {
         this.classList.remove('nowplaying');
         this.currentTime = formatTime(this.length);

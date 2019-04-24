@@ -343,6 +343,7 @@ class CaffoApp extends Polymer.Element {
         }
         this.$.release.currentTracklist = -1;
         document.title = 'discography';
+        history.pushState("", document.title, location.pathname);
         this._found();
         break;
 

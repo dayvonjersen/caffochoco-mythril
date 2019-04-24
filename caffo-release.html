@@ -265,7 +265,7 @@ class CaffoRelease extends Polymer.Element {
     let nowPlayingIndex = 0;
     tracklist.tracks.forEach((t, i) => {
       let url = this._formatUrl(t.file);
-      if(url == player.state.nowPlaying) {
+      if(t.file.replace(".mp3","") === location.hash.substr(1)) {
         nowPlayingIndex = i;
       }
       playlist.push(url);
@@ -301,6 +301,7 @@ class CaffoRelease extends Polymer.Element {
       playlistItem.setAttribute('title', item.title);
       playlistItem.setAttribute('length', item.length);
       playlistItem.setAttribute('url', this._formatUrl(item.file));
+      playlistItem.setAttribute('hash-url', item.file.replace(".mp3",""));
       this.$.tracklist.appendChild(playlistItem);
     });
     this.downloadUrl = `/download/${this.currentTracklist}`;
@@ -329,13 +330,20 @@ class CaffoRelease extends Polymer.Element {
 
       this.tracklists = this.release.tracklists;
 
+      let selectedTracklist = this.release.defaultTracklist;
+      this.tracklists.forEach(tl => tl.tracks.forEach((t, i) => {
+        if(t.file.replace(".mp3","") === location.hash.substr(1)) {
+            selectedTracklist = tl.id;
+        }
+      }));
+
       for(let i = 0; i < this.release.tracklists.length; i++) {
-        if(this.release.defaultTracklist === this.release.tracklists[i].id) {
+        if(selectedTracklist === this.release.tracklists[i].id) {
           this.selectedTab = i+1;
           break;
         }
       }
-      this._loadTracklist(this.release.defaultTracklist);
+      this._loadTracklist(selectedTracklist);
       [].forEach.call(
         this.shadowRoot.querySelectorAll('paper-tab'),
         (tab) => {
