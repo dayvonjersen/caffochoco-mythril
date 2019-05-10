@@ -3,7 +3,7 @@
     var _count = 0;
     function when(cond, func) {
         if(!!cond()) {
-            console.log("[when]", _count);
+            // console.log("[when]", _count);
             func();
         } else {
             _count++;
