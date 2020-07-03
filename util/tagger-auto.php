@@ -4,7 +4,7 @@
  *
  * --> USE THIS ONE <--
  *
- * PREREQUISITE: github.com/generaltso/taglib-php
+ * PREREQUISITE: github.com/dayvonjersen/taglib-php
  *
  * Uses information in data.json to find and tag all releases
  * including adding album art to the tag

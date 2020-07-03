@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/generaltso/vibrant"
+	"github.com/dayvonjersen/vibrant"
 
 	_ "image/jpeg"
 	_ "image/png"

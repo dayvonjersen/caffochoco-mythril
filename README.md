@@ -129,7 +129,7 @@ Then generate thumbnails using imagemagick (install imagemagick first...)
 
 #### Writing ID3v2 tags
 
-You'll need [github.com/generaltso/taglib-php](https://github.com/generaltso/taglib-php) first.
+You'll need [github.com/dayvonjersen/taglib-php](https://github.com/dayvonjersen/taglib-php) first.
 
 `cd audio && php -f ../util/tagger-auto.php`
 

@@ -2,7 +2,7 @@
 //
 // usage: cd audio && php -f ../util/audioproperties.php */*.mp3
 //
-// PREREQUISITE: github.com/generaltso/taglib-php
+// PREREQUISITE: github.com/dayvonjersen/taglib-php
 //
 // This script reads audioProperties from MP3 tag
 // and prints them for usage in data.yaml

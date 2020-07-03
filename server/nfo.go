@@ -9,7 +9,7 @@ import (
 	"text/template"
 	"unicode/utf8"
 
-	"github.com/generaltso/caffochoco-mythril/server/strip"
+	"github.com/dayvonjersen/caffochoco-mythril/server/strip"
 )
 
 func strpad(s string, l int) string {

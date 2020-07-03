@@ -4,7 +4,7 @@
 //
 // XXX DON'T USE THIS ONE XXX
 //
-// PREREQUISITE: github.com/generaltso/taglib-php
+// PREREQUISITE: github.com/dayvonjersen/taglib-php
 //
 // Reads tags from mp3s and lets you type in what you want them to
 // say instead. 
